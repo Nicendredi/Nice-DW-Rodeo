@@ -35,10 +35,11 @@ A player clicks on a character move (e.g., "Hack and Slash"). The system display
 **Acceptance Scenarios**:
 
 1. **Given** player is viewing a character sheet move, **When** player clicks on the move name, **Then** system displays: trigger, description, and resolution outcomes
-2. **Given** a move requires a dice roll (e.g., 2d6+modifier), **When** player clicks "Roll", **Then** system rolls dice, calculates modifiers, and displays result
-3. **Given** dice have been rolled, **When** result is determined, **Then** system displays the text corresponding to that result (e.g., 10+ success, 7-9 partial, 6- failure)
-4. **Given** a move has been executed, **When** move result is displayed, **Then** all players in the session see the result in real-time
+2. **Given** a move requires a dice roll with Roll20 notation (e.g., 2d6+5, 4d6k3), **When** player clicks "Roll", **Then** system rolls dice according to Roll20 syntax, calculates modifiers, and displays result
+3. **Given** dice have been rolled, **When** result is determined, **Then** system displays both individual die results (with visual breakdown showing each die value) and total result, mapped to outcome text (e.g., 10+ success, 7-9 partial, 6- failure)
+4. **Given** a move has been executed, **When** move result is displayed with Roll20 metadata (who rolled, when, visibility settings), **Then** all players in the session see the result in real-time with proper permission enforcement
 5. **Given** a move has additional text (aftermath/consequence text), **When** result is displayed, **Then** the additional text is appended to the result
+6. **Given** a move supports Advantage/Disadvantage mechanics, **When** player rolls with advantage or disadvantage, **Then** system rolls twice and uses appropriate result (highest for advantage, lowest for disadvantage)
 
 ---
 
@@ -98,6 +99,10 @@ Players in the same campaign/session see character sheet updates, move results, 
 - What happens when a player modifies a sheet while another player is editing it (concurrent edits)?
 - How does the system handle invalid dice rolls (e.g., rolling negative dice)?
 - What if a move has no result text for a particular outcome (incomplete move definition)?
+- How does the system handle invalid Roll20 notation syntax (e.g., malformed dice expressions)?
+- What happens when a dice pool modifier would result in rolling zero or negative dice?
+- How are exploding dice (d20!) handled—do they continue until a non-max roll or stop after one extra roll?
+- What is the maximum number of dice that can be rolled in a single expression (DoS protection)?
 - How does the system behave if a move is edited by the GM while a player is viewing it?
 - What happens when a shared sheet is unshared (should editing be revoked immediately)?
 - How are dice roll histories stored and accessed (audit trail)?
@@ -118,6 +123,12 @@ Players in the same campaign/session see character sheet updates, move results, 
 - **FR-008**: System MUST display result text corresponding to dice outcome (success, partial, failure paths)
 - **FR-009**: System MUST display additional text (aftermath/consequence) appended to move result
 - **FR-010**: System MUST show move results to all participants in a session in real-time
+- **FR-010a**: System MUST support Roll20 dice notation (e.g., `2d6+5`, `4d6k3`, `d20!`) for flexible dice expressions
+- **FR-010b**: System MUST display individual die roll results with visual breakdown (e.g., "[4][6]+2 = 12") before showing final total
+- **FR-010c**: System MUST support Advantage/Disadvantage mechanics (roll multiple dice pools and select best or worst outcome)
+- **FR-010d**: System MUST support inline rolls in move descriptions using Roll20-style syntax (e.g., `/roll 2d6+mod`)
+- **FR-010e**: System MUST track roll metadata (who rolled, when, result visibility setting) for audit and replay purposes
+- **FR-010f**: System MUST support dice pool mechanics (e.g., Vampire: The Masquerade style) where players roll X dice and count successes
 - **FR-011**: System MUST allow players to share their character sheet with specific other players or GMs
 - **FR-012**: System MUST enforce share permissions (view-only vs. editable)
 - **FR-013**: System MUST allow GMs to view and edit any character sheet in their campaign
@@ -142,6 +153,7 @@ Players in the same campaign/session see character sheet updates, move results, 
 - **NFR-007**: Sensitive user data (passwords, emails) are encrypted at rest
 - **NFR-008**: Session data accessible by authorized users only
 - **NFR-009**: Players can create custom moves with auto-approval; system can flag or quarantine moves that violate balance guidelines for admin review
+- **NFR-010**: Roll20 notation parser MUST handle standard XdY±Z format, modifiers, exploding dice (d20!), keep-highest (4d6k3), and dice pool mechanics with clear error messages for invalid syntax
 
 ### Key Entities
 
@@ -149,10 +161,10 @@ Players in the same campaign/session see character sheet updates, move results, 
   - Attributes: name, class (Fighter, Thief, Cleric, etc.), STR, DEX, CON, INT, WIS, CHA, HP, armor, status (active, archived, deleted)
   
 - **Move**: Represents a Dungeon World move that can be triggered during play; contains trigger, description, and resolution outcomes
-  - Attributes: name, trigger (what prompts the move), description, dice_formula (e.g., 2d6+mod), outcomes (success/partial/failure text), aftermath_text
+  - Attributes: name, trigger (what prompts the move), description, dice_formula (e.g., 2d6+mod), roll20_notation (e.g., 2d6+5, 4d6k3, d20!), notation_style (roll20_standard, advantage_disadvantage, dice_pool), outcomes (success/partial/failure text), aftermath_text
   
-- **Dice Roll Result**: Represents the outcome of executing a move
-  - Attributes: move_id, character_sheet_id, dice_rolled, result_type (success/partial/failure), result_text, aftermath_text, timestamp, executed_by (player or GM)
+- **Dice Roll Result**: Represents the outcome of executing a move with full Roll20 metadata
+  - Attributes: move_id, character_sheet_id, dice_rolled, individual_die_results (e.g., [3, 4] for 2d6), modifiers_applied, total_result, result_type (success/partial/failure), result_text, aftermath_text, roll20_notation_used, timestamp, executed_by (player or GM), visibility (public/private/gm_only), advantage_disadvantage_applied (if applicable)
   
 - **Player**: System user who creates and plays characters
   - Attributes: user_id, email, name, campaigns (list of campaigns they're in)
@@ -206,6 +218,7 @@ Players in the same campaign/session see character sheet updates, move results, 
 - Q1: How should concurrent edits be handled? → A: Conflict resolution UI - show players conflicting changes and allow them to choose which version to keep
 - Q2: How long should character sheets and dice roll history be retained? → A: Archive logs of previous sessions (implement archival system rather than indefinite retention or deletion)
 - Q3: Should players be able to create custom moves? → A: Yes, players can create moves auto-approved (no admin approval required; system can flag problematic moves for review)
+- Q4: Which Roll20 dice conventions should be supported? → A: All 6 - Dice Notation, Roll Result Display, Advantage/Disadvantage, Inline Rolls, Roll Metadata, Dice Pool
 
 ## Assumptions
 
