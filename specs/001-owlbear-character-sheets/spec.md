@@ -35,11 +35,13 @@ A player clicks on a character move (e.g., "Hack and Slash"). The system display
 **Acceptance Scenarios**:
 
 1. **Given** player is viewing a character sheet move, **When** player clicks on the move name, **Then** system displays: trigger, description, and resolution outcomes
-2. **Given** a move requires a dice roll with Roll20 notation (e.g., 2d6+5, 4d6k3), **When** player clicks "Roll", **Then** system rolls dice according to Roll20 syntax, calculates modifiers, and displays result
-3. **Given** dice have been rolled, **When** result is determined, **Then** system displays both individual die results (with visual breakdown showing each die value) and total result, mapped to outcome text (e.g., 10+ success, 7-9 partial, 6- failure)
-4. **Given** a move has been executed, **When** move result is displayed with Roll20 metadata (who rolled, when, visibility settings), **Then** all players in the session see the result in real-time with proper permission enforcement
-5. **Given** a move has additional text (aftermath/consequence text), **When** result is displayed, **Then** the additional text is appended to the result
-6. **Given** a move supports Advantage/Disadvantage mechanics, **When** player rolls with advantage or disadvantage, **Then** system rolls twice and uses appropriate result (highest for advantage, lowest for disadvantage)
+2. **Given** a player's `language_preference` is set to French and a French translation exists for the move description/result, **When** the move is viewed or executed, **Then** the UI displays the translated move description and result text in French
+3. **Given** a player's `language_preference` is English or a French translation is missing, **When** the move is viewed or executed, **Then** the UI displays the English text (fallback) and logs the missing translation for administrative review
+4. **Given** a move requires a dice roll with Roll20 notation (e.g., `2d6+5`, `4d6k3`), **When** player clicks "Roll", **Then** system rolls dice according to Roll20 syntax, calculates modifiers, and displays result
+5. **Given** dice have been rolled, **When** result is determined, **Then** system displays both individual die results (with visual breakdown showing each die value) and total result, mapped to outcome text (e.g., 10+ success, 7-9 partial, 6- failure) in the player's preferred language (or fallback)
+6. **Given** a move has been executed, **When** move result is displayed with Roll20 metadata (who rolled, when, visibility settings), **Then** all players in the session see the result in real-time with proper permission enforcement and localized interface text as appropriate
+7. **Given** a move has additional text (aftermath/consequence text), **When** result is displayed, **Then** the additional text is appended to the result and localized where translations exist
+8. **Given** a move supports Advantage/Disadvantage mechanics, **When** player rolls with advantage or disadvantage, **Then** system rolls twice and uses appropriate result (highest for advantage, lowest for disadvantage)
 
 ---
 
@@ -108,6 +110,11 @@ Players in the same campaign/session see character sheet updates, move results, 
 - How are dice roll histories stored and accessed (audit trail)?
 - What if a player loses connection mid-move (partial state recovery)?
 - How do permissions cascade when a sheet is shared indirectly (A shares with B, B shares with C)?
+ - How are missing translations handled at runtime? (UI must fall back to English and log/report missing entries)
+ - What happens if only part of a move is translated (e.g., French title present but result texts missing)? (fallback per-field required)
+ - How should users report incorrect translations? (Provide a reporting mechanism tied to move or string)
+ - Are localized move descriptions allowed to differ in length significantly (UI layout concerns)? (UI must allow for variable-length strings)
+ - How are pluralization and gender handled in French translations (localization rules)? (strings must support ICU/pluralization formats where appropriate)
 
 ## Requirements *(mandatory)*
 
