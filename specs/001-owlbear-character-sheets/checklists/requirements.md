@@ -42,6 +42,7 @@
   - NFR-004: Conflict resolution UI for concurrent edits
   - NFR-005: Archival mechanism for data older than 1 year
   - NFR-009: Custom move creation and flagging system
+  - NFR-011: Internationalization support (English/French) with translation fallbacks
 
 - **Recommended Next Steps**:
   1. ✅ Clarification phase complete

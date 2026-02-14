@@ -154,6 +154,7 @@ Players in the same campaign/session see character sheet updates, move results, 
 - **NFR-008**: Session data accessible by authorized users only
 - **NFR-009**: Players can create custom moves with auto-approval; system can flag or quarantine moves that violate balance guidelines for admin review
 - **NFR-010**: Roll20 notation parser MUST handle standard XdY±Z format, modifiers, exploding dice (d20!), keep-highest (4d6k3), and dice pool mechanics with clear error messages for invalid syntax
+ - **NFR-011**: The system MUST support internationalization (i18n) for English and French. Interface strings, move descriptions, and result texts must be localizable. Translation fallbacks: missing translations default to English.
 
 ### Key Entities
 
@@ -168,6 +169,7 @@ Players in the same campaign/session see character sheet updates, move results, 
   
 - **Player**: System user who creates and plays characters
   - Attributes: user_id, email, name, campaigns (list of campaigns they're in)
+  - Preferences: language_preference ("en" or "fr"), timezone
   
 - **Game Master (GM)**: System user who manages a campaign and has elevated permissions over all sheets
   - Attributes: user_id, email, name, campaigns_run (list of campaigns they GM)
@@ -189,6 +191,8 @@ Players in the same campaign/session see character sheet updates, move results, 
 - GM can override any move result and change persists for all viewers
 - All Dungeon World classes, moves, and mechanics from SRD are correctly represented
 - Dice roll outcomes correctly map to result text (10+ = success, 7-9 = partial, 6- = failure)
+- UI respects player language preference and presents interface text in English or French as selected
+- Translations fall back to English if a French string is missing
 
 ### Performance Success Indicators
 
