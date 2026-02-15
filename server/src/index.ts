@@ -151,6 +151,20 @@ app.post('/api/roll', (req, res) => {
 
 function parseDiceExpression(expr: string, seed?: number | string) {
   try {
+    // basic safety: clamp total dice count to prevent DoS via huge expressions
+    const MAX_DICE = 100
+    try {
+      const diceRegex = /([0-9]+)\s*d\s*[0-9]+/gi
+      let totalDice = 0
+      let m: RegExpExecArray | null
+      while ((m = diceRegex.exec(expr)) !== null) {
+        const c = parseInt(m[1], 10)
+        totalDice += Number.isFinite(c) ? c : 0
+        if (totalDice > MAX_DICE) return { valid: false, error: `too many dice (>${MAX_DICE})` }
+      }
+    } catch (e) {
+      // fallthrough to parser errors below
+    }
     // If a seed is provided, create a seeded PRNG and pass to DiceRoller
     let randFn: (() => number) | undefined = undefined
     if (seed !== undefined && seed !== null) {
