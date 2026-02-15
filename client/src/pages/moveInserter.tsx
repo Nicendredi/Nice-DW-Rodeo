@@ -25,7 +25,7 @@ export default function MoveInserter({ onInsert }: Props) {
   }
 
   return (
-    <div>
+    <>
       <button onClick={() => setOpen((v) => !v)}>Insert Stored Move</button>
       {open && (
         <section role="dialog" aria-label="Insert stored move" style={{ border: '1px solid #ddd', padding: 8, marginTop: 8 }}>
@@ -36,6 +36,6 @@ export default function MoveInserter({ onInsert }: Props) {
           <button style={{ marginLeft: 8 }} onClick={handleInsert}>Insert</button>
         </section>
       )}
-    </div>
+    </>
   )
 }

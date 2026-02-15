@@ -55,15 +55,21 @@ export default function Moves(): JSX.Element {
   return (
     <section>
       <h4 style={{ display: 'none' }}>Stored Moves</h4>
+
       {loading ? <p>Loading…</p> : (
-        <ul>
+        <>
           {moves.map((m) => (
-            <li key={m.id}>
-              <button onClick={() => { /* insertion handled by parent MoveInserter or CharacterSheet */ }}>{m.name_en}</button>
+            <details key={m.id} open={editing?.id === m.id}>
+              <summary>{m.name_en}</summary>
+              <p>{m.description_en}</p>
+              <aside>
               <div><small>{m.dice_expression ?? ''} {m.created_at ? `• ${new Date(m.created_at).toLocaleString()}` : ''}</small></div>
-            </li>
+              </aside>
+              <button style={{ marginLeft: 8 }} onClick={() => setEditing(m)}>Edit</button>
+              <button style={{ marginLeft: 8 }} onClick={() => handleDelete(m.id)}>Delete</button>
+            </details>
           ))}
-        </ul>
+        </>
       )}
 
       <nav aria-label="compendium filters">
@@ -76,22 +82,17 @@ export default function Moves(): JSX.Element {
       </nav>
 
       {editing && (
-        <section style={{ marginTop: 12, borderTop: '1px solid #ddd', paddingTop: 12 }} aria-labelledby="edit-move-heading">
+        <form  style={{ marginTop: 12, borderTop: '1px solid #ddd', paddingTop: 12 }} aria-labelledby="edit-move-heading">
           <h3 id="edit-move-heading">Edit Move</h3>
-          <div>
-            <label>Name EN: <input value={editing.name_en || ''} onChange={(e) => setEditing({ ...editing, name_en: e.target.value })} /></label>
-          </div>
-          <div>
-            <label>Dice Expression: <input value={editing.dice_expression || ''} onChange={(e) => setEditing({ ...editing, dice_expression: e.target.value })} /></label>
-          </div>
-          <div>
-            <label>Description EN: <input value={editing.description_en || ''} onChange={(e) => setEditing({ ...editing, description_en: e.target.value })} /></label>
-          </div>
-          <div style={{ marginTop: 8 }}>
-            <button onClick={handleSaveEdit}>Save</button>
-            <button style={{ marginLeft: 8 }} onClick={() => setEditing(null)}>Cancel</button>
-          </div>
-        </section>
+          <label htmlFor="edit-move-name">Name EN:</label>
+          <input id="edit-move-name" value={editing.name_en || ''} onChange={(e) => setEditing({ ...editing, name_en: e.target.value })} />
+          <label htmlFor="edit-move-dice">Dice Expression:</label>
+          <input id="edit-move-dice" value={editing.dice_expression || ''} onChange={(e) => setEditing({ ...editing, dice_expression: e.target.value })} />
+          <label htmlFor="edit-move-desc">Description EN:</label>
+          <input id="edit-move-desc" value={editing.description_en || ''} onChange={(e) => setEditing({ ...editing, description_en: e.target.value })} />
+          <button onClick={handleSaveEdit}>Save</button>
+          <button style={{ marginLeft: 8 }} onClick={() => setEditing(null)}>Cancel</button>
+        </form>
       )}
     </section>
   )

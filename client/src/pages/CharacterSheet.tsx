@@ -132,7 +132,7 @@ export default function CharacterSheet({ sheet, onSave, onDelete }: Props): JSX.
       <section aria-labelledby="moves" className="card" style={{ marginTop: 12 }}>
         <h2 id="moves">Moves</h2>
         {(draft.moves && Array.isArray(draft.moves) && draft.moves.length > 0) ? (
-          <div>
+          <>
             {draft.moves.map((m, i) => {
               const mv: any = typeof m === 'string' ? { name: m } : m
               const isOpen = openIndices.has(i)
@@ -156,17 +156,15 @@ export default function CharacterSheet({ sheet, onSave, onDelete }: Props): JSX.
                 </details>
               )
             })}
-          </div>
+          </>
         ) : (
           <p>No moves yet</p>
         )}
-        <div style={{ marginTop: 8 }}>
+        <aside style={{ marginTop: 8 }}>
           <input placeholder="move text" value={newMove} onChange={(e) => setNewMove(e.target.value)} />
           <button style={{ marginLeft: 8 }} onClick={addMove}>Add Local Move</button>
-        </div>
-        <div style={{ marginTop: 8 }}>
           <MoveInserter onInsert={(mv: any) => setDraft((d) => ({ ...d, moves: [...(Array.isArray(d.moves) ? d.moves : []), mv] }))} />
-        </div>
+        </aside>
       </section>
 
       <footer style={{ marginTop: 8 }}>
