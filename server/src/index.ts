@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import { readJson, writeJson } from './db/jsonStore'
 import crypto from 'crypto'
+import { DiceRoller } from '@3d-dice/dice-roller-parser'
 
 const app = express()
 app.use(cors())
@@ -122,6 +123,72 @@ app.delete('/api/moves/:id', (req, res) => {
   writeJson('moves', moves)
   res.json(removed[0])
 })
+
+// Roll endpoints
+app.post('/api/moves/:id/roll', (req, res) => {
+  const moves = readJson('moves')
+  const move = moves.find((m: any) => m.id === req.params.id)
+  const expression = (req.body && req.body.expression) || (move && (move.dice_expression || move.dice))
+  if (!expression) return res.status(400).json({ error: 'no dice expression' })
+
+  const seed = req.body && req.body.seed
+  const parsed = parseDiceExpression(String(expression), seed)
+  if (!parsed.valid) return res.status(400).json({ error: parsed.error })
+
+  const rollRecord = createRollRecord(req.params.id, String(expression), parsed.detail, parsed.total)
+  res.json(rollRecord)
+})
+
+app.post('/api/roll', (req, res) => {
+  const expression = req.body && req.body.expression
+  if (!expression) return res.status(400).json({ error: 'no dice expression' })
+  const seed = req.body && req.body.seed
+  const parsed = parseDiceExpression(String(expression), seed)
+  if (!parsed.valid) return res.status(400).json({ error: parsed.error })
+  const rollRecord = createRollRecord(null, String(expression), parsed.detail, parsed.total)
+  res.json(rollRecord)
+})
+
+function parseDiceExpression(expr: string, seed?: number | string) {
+  try {
+    // If a seed is provided, create a seeded PRNG and pass to DiceRoller
+    let randFn: (() => number) | undefined = undefined
+    if (seed !== undefined && seed !== null) {
+      // simple 32-bit seed from string/number
+      const n = typeof seed === 'number' ? seed : [...String(seed)].reduce((a, c) => a * 31 + c.charCodeAt(0), 0)
+      randFn = mulberry32(n >>> 0)
+    }
+
+    const roller = randFn ? new DiceRoller(randFn) : new DiceRoller()
+    const rollObj = roller.roll(String(expr))
+    // try to extract a total value (property names vary by implementation)
+    const total = (rollObj && (rollObj.value || rollObj.Value || rollObj.total)) ?? null
+    return { valid: true, detail: rollObj, total }
+  } catch (err: any) {
+    return { valid: false, error: err && err.message ? err.message : String(err) }
+  }
+}
+
+// Mulberry32 PRNG for deterministic tests
+function mulberry32(a: number) {
+  return function () {
+    a |= 0
+    a = (a + 0x6d2b79f5) | 0
+    let t = Math.imul(a ^ (a >>> 15), 1 | a)
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+  }
+}
+
+function createRollRecord(moveId: string | null, expression: string, rolls: number[], total: number) {
+  const roll_history = readJson('roll_history')
+  const id = (crypto as any).randomUUID()
+  const now = new Date().toISOString()
+  const rec = { id, move_id: moveId, expression, rolls, total, created_at: now }
+  roll_history.push(rec)
+  writeJson('roll_history', roll_history)
+  return rec
+}
 
 const port = process.env.PORT ? Number(process.env.PORT) : 4000
 app.listen(port, () => {
