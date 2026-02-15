@@ -4,6 +4,21 @@ This file breaks the implementation plan into GitHub-issue-sized tasks with acce
 
 Priority order: MVP tasks first, then i18n, real-time, and optional 3D features.
 
+## Task Status
+
+- [x] T1 — Scaffold frontend (Vite + React + TypeScript)
+- [x] T2 — Scaffold backend (Node + Express + TypeScript)
+- [ ] T3 — Implement database models & migrations
+- [ ] T4 — Implement sheet CRUD and move definition UI
+- [ ] T5 — Integrate dice parser client and server
+- [ ] T6 — Implement server-side roll auditing and anti-cheat
+- [ ] T7 — Add WebSocket real-time broadcasts
+- [ ] T8 — Integrate i18n in frontend and API
+- [ ] T9 — Admin translation UI and missing-translation reporting
+- [ ] T10 — Tests and CI
+- [ ] T11 — Three.js + Rapier dice animation component (optional)
+- [ ] T12 — Security review and production readiness
+
 ---
 
 ## T1 — Scaffold frontend (Vite + React + TypeScript)
