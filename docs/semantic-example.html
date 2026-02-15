@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Nice DW — Semantic Character Sheet Example</title>
+  <style>
+    :root{
+      --bg:#0f172a; --fg:#e6eef8; --muted:rgba(255,255,255,0.06);
+      --surface: rgba(255,255,255,0.02); --card:#0b1220; --gap:16px; --radius:8px;
+    }
+    html,body{height:100%;}
+    body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--fg);margin:0;padding:1rem}
+    header.site{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:var(--gap)}
+    nav.primary a{color:var(--fg);text-decoration:none;margin-right:12px}
+    .layout{display:grid;grid-template-columns:260px 1fr 320px;gap:var(--gap);align-items:start}
+    nav.secondary, aside.compendium, main article, footer.site-footer, section.card, details{background:var(--surface);padding:12px;border-radius:var(--radius);border:1px solid var(--muted)}
+    main{background:transparent}
+    h1,input[name="name"]{font-size:1.25rem}
+    input,textarea,select,button{font:inherit;color:inherit}
+    input,textarea,select{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:6px;border-radius:6px}
+    button{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);padding:6px 10px;border-radius:6px;color:var(--fg);cursor:pointer}
+    button:hover{background:rgba(255,255,255,0.06)}
+    details summary{cursor:pointer;padding:8px;background:rgba(255,255,255,0.03);display:flex;justify-content:space-between;align-items:center}
+    .meta dl{display:flex;gap:16px;margin:8px 0}
+    #toasts{position:fixed;right:16px;bottom:16px}
+    .toast{background:#111827;color:#fff;padding:10px 14px;border-radius:8px;margin-top:8px}
+    @media (max-width:980px){ .layout{grid-template-columns:1fr; } nav.secondary{order:1} main{order:2} aside.compendium{order:3} }
+  </style>
+</head>
+<body>
+  <header class="site" role="banner">
+    <div></div>
+    <nav class="primary" aria-label="Main navigation">
+      <a href="#sheets">Sheets</a>
+      <a href="#moves">Moves</a>
+      <a href="#settings">Settings</a>
+    </nav>
+    <form aria-label="Locale selector" method="get" style="margin-left:auto">
+      <label for="locale" class="sr-only">Locale</label>
+      <select id="locale" name="locale" aria-label="Locale">
+        <option value="en">English</option>
+        <option value="fr">Français</option>
+      </select>
+    </form>
+  </header>
+
+  <section class="layout" role="application">
+    <nav class="secondary" aria-label="Sheets navigation">
+      <h3>Sheets</h3>
+      <form id="create-sheet" action="#" method="post" onsubmit="event.preventDefault(); createSheet()">
+        <label for="new-sheet">New sheet</label>
+        <input id="new-sheet" name="name" placeholder="New sheet name" />
+        <button type="submit">Create</button>
+      </form>
+
+      <h4>Available</h4>
+      <ul>
+        <li><a href="#sheet-nicolas" data-sheet-id="nicolas-0001">Nicolas</a></li>
+        <li><a href="#sheet-ivan" data-sheet-id="nicendredi-0001">Ivan</a></li>
+        <li><a href="#sheet-ivan2" data-sheet-id="nicendredi-0001">Ivan-2</a></li>
+      </ul>
+    </nav>
+
+    <main id="main" role="main" aria-labelledby="sheet-title">
+      <article aria-labelledby="sheet-title">
+        <header>
+          <h1 id="sheet-title">
+            <input name="name" value="Nicolas" aria-label="Character name" />
+          </h1>
+          <section class="meta" aria-label="sheet metadata">
+            <dl>
+              <dt>Created</dt><dd>2026-02-15T04:13</dd>
+              <dt>Owner</dt><dd>Nicolas</dd>
+              <dt>Campaign</dt><dd>Rodeo</dd>
+            </dl>
+          </section>
+        </header>
+
+        <section aria-labelledby="attributes" class="card">
+          <h2 id="attributes">Attributes</h2>
+          <ul>
+            <li><label>Force <input type="number" value="16" /></label></li>
+            <li><label>Dex <input type="number" value="12" /></label></li>
+          </ul>
+          <form onsubmit="event.preventDefault(); alert('add attribute')">
+            <label for="attr-key">Key</label>
+            <input id="attr-key" name="attr-key" placeholder="key" />
+            <label for="attr-val">Value</label>
+            <input id="attr-val" name="attr-val" placeholder="value" style="width:80px" />
+            <button type="submit">Add</button>
+          </form>
+        </section>
+
+        <section aria-labelledby="moves" class="card">
+          <h2 id="moves">Moves</h2>
+
+          <details open>
+            <summary><strong>Hack &amp; Slash</strong><small> — 2d6+1</small></summary>
+            <label for="desc-1">Description</label>
+            <textarea id="desc-1" rows="3" style="width:100%">Physical attack.</textarea>
+            <label for="dice-1">Dice expression</label>
+            <input id="dice-1" value="2d6+1" />
+          </details>
+
+          <details>
+            <summary><strong>Bardé d'acier</strong></summary>
+            <label for="desc-2">Description</label>
+            <textarea id="desc-2" rows="3" style="width:100%">Armor move.</textarea>
+          </details>
+
+          <form onsubmit="event.preventDefault(); alert('add move')">
+            <label for="move-name">Move</label>
+            <input id="move-name" name="move-name" placeholder="move text" />
+            <button type="submit">Add Local Move</button>
+          </form>
+        </section>
+
+        <footer>
+          <button onclick="alert('save')">Save</button>
+          <button onclick="alert('delete')">Delete</button>
+        </footer>
+      </article>
+    </main>
+
+    <aside class="compendium" aria-label="Move compendium">
+      <h3>Compendium</h3>
+      <ul>
+        <li><button onclick="alert('insert hack')">Hack &amp; Slash — 2d6+1</button></li>
+        <li><button onclick="alert('insert bard')">Bardé d'acier</button></li>
+      </ul>
+      <nav aria-label="compendium filters">
+        <h4>Filters</h4>
+        <form onsubmit="event.preventDefault(); alert('filter')">
+          <label for="filter-name">Name</label>
+          <input id="filter-name" name="filter" />
+          <button type="submit">Apply</button>
+        </form>
+      </nav>
+    </aside>
+
+  </section>
+
+  <output id="toasts" aria-live="polite" aria-atomic="true"></output>
+
+  <footer class="site-footer" role="contentinfo">
+    <p>Nice Dungeon World — Example layout · 2026</p>
+  </footer>
+
+  <script>
+    function createSheet(){
+      const out = document.getElementById('toasts');
+      const el = document.createElement('div'); el.className='toast'; el.textContent='Created (example)'; out.appendChild(el);
+      setTimeout(()=>el.remove(),3500);
+    }
+  </script>
+</body>
+</html>
