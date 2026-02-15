@@ -16,6 +16,19 @@ app.get('/api/sheets', (_req, res) => {
   res.json(sheets)
 })
 
+// Users API (read-only for now)
+app.get('/api/users', (_req, res) => {
+  const users = readJson('users')
+  res.json(users)
+})
+
+app.get('/api/users/:id', (req, res) => {
+  const users = readJson('users')
+  const user = users.find((u: any) => u.id === req.params.id)
+  if (!user) return res.status(404).json({ error: 'not found' })
+  res.json(user)
+})
+
 app.get('/api/sheets/:id', (req, res) => {
   const sheets = readJson('character_sheets')
   const sheet = sheets.find((s: any) => s.id === req.params.id)

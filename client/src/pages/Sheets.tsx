@@ -9,6 +9,7 @@ type Props = {
 
 export default function Sheets({ onSelect, onChange, reloadToken }: Props): JSX.Element {
   const [sheets, setSheets] = useState<any[]>([])
+  const [users, setUsers] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
   const [newName, setNewName] = useState('')
 
@@ -17,6 +18,15 @@ export default function Sheets({ onSelect, onChange, reloadToken }: Props): JSX.
     try {
       const data = await listSheets()
       setSheets(Array.isArray(data) ? data : [])
+      try {
+        const ures = await fetch('/api/users')
+        if (ures.ok) {
+          const ujson = await ures.json()
+          setUsers(Array.isArray(ujson) ? ujson : [])
+        }
+      } catch (e) {
+        // ignore user load errors
+      }
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err)
@@ -65,13 +75,16 @@ export default function Sheets({ onSelect, onChange, reloadToken }: Props): JSX.
         <p>Loading…</p>
       ) : (
         <ul>
-          {sheets.map((s) => (
-            <li key={s.id}>
-              <strong style={{ cursor: 'pointer' }} onClick={() => onSelect?.(s)}>{s.name}</strong> — <small>{s.id}</small>
-              <button onClick={() => navigator.clipboard?.writeText(s.id)} style={{ marginLeft: 8 }}>Copy ID</button>
-              <button onClick={() => handleDelete(s.id)} style={{ marginLeft: 8 }}>Delete</button>
-            </li>
-          ))}
+          {sheets.map((s) => {
+            const owner = users.find((u) => u.id === s.owner_id)
+            const ownerName = owner ? (owner.name || owner.display_name || owner.id) : (s.owner_id || '—')
+            return (
+              <li key={s.id}>
+                <strong style={{ cursor: 'pointer' }} onClick={() => onSelect?.(s)}>{s.name}</strong> — <small>{ownerName}</small>
+                <button onClick={() => handleDelete(s.id)} style={{ marginLeft: 8 }}>Delete</button>
+              </li>
+            )
+          })}
         </ul>
       )}
     </section>
