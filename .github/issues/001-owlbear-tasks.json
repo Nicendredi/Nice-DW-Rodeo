@@ -86,6 +86,7 @@
     "id": "T13",
     "title": "T13 — Customize speckit.taskstoissues agent for repo",
     "body": "Description:\n\nPersonalize the `speckit.taskstoissues` agent to support local fallback behavior, add `config.yaml`, and move helper scripts under `.github/agents/speckit.taskstoissues/`. This task is independent of feature implementation tasks and is intended to improve agent ergonomics for future specs.\n\nAcceptance Criteria:\n- The agent spec (`.github/agents/speckit.taskstoissues.agent.md`) documents the fallback behaviour and references `config.yaml` and local scripts.\n- `config.yaml` exists at `.github/agents/speckit.taskstoissues/config.yaml` with sane defaults.\n- Helper scripts are present under `.github/agents/speckit.taskstoissues/scripts/` and are referenced by the agent spec.\n- A new issue or documentation file describing how to run the local fallback is present at `.github/agents/speckit.taskstoissues/README.md`.\n\nEstimate: 1 day\n\nSource: repo maintenance",
-    "labels": ["spec", "1d", "agent"]
+    "labels": ["spec", "1d", "agent"],
+    "completed": true
   }
 ]
