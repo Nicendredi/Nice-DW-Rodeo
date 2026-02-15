@@ -1,0 +1,9 @@
+.github/
+.vscode/
+specs/
+scripts/
+tests/
+docs/
+.gitignore
+*.md
+*.log
