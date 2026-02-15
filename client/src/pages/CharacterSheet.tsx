@@ -26,6 +26,7 @@ export default function CharacterSheet({ sheet, onSave, onDelete }: Props): JSX.
   const [newAttrKey, setNewAttrKey] = useState('')
   const [newAttrVal, setNewAttrVal] = useState<string | number>('')
   const [newMove, setNewMove] = useState('')
+  const [openIndices, setOpenIndices] = useState<Set<number>>(new Set())
 
   useEffect(() => {
     setDraft(sheet || { name: '', attributes: {}, moves: [] })
@@ -65,12 +66,32 @@ export default function CharacterSheet({ sheet, onSave, onDelete }: Props): JSX.
     })
   }
 
+  function toggleOpen(idx: number) {
+    setOpenIndices((prev) => {
+      const next = new Set(prev)
+      if (next.has(idx)) next.delete(idx)
+      else next.add(idx)
+      return next
+    })
+  }
+
+  function updateMoveField(idx: number, field: 'description' | 'dice_expression' | 'name', value: string) {
+    setDraft((d) => {
+      const movesArr = Array.isArray(d.moves) ? [...d.moves] : []
+      const cur = movesArr[idx]
+      const obj = typeof cur === 'string' ? { name: cur } : { ...(cur as any) }
+      ;(obj as any)[field] = value
+      movesArr[idx] = obj
+      return { ...d, moves: movesArr }
+    })
+  }
+
   function update<K extends keyof Sheet>(k: K, v: Sheet[K]) {
     setDraft((d) => ({ ...d, [k]: v }))
   }
 
   return (
-    <section>
+    <section className="cdw-character-sheet">
       <h2>{sheet ? 'Edit Sheet' : 'New Sheet'}</h2>
 
       {draft.created_at && (
@@ -117,14 +138,31 @@ export default function CharacterSheet({ sheet, onSave, onDelete }: Props): JSX.
       <fieldset style={{ marginTop: 12 }}>
         <legend>Moves</legend>
         {(draft.moves && draft.moves.length > 0) ? (
-          <ul>
-            {draft.moves.map((m, i) => (
-              <li key={`${(m as any)?.id ?? m}-${i}`}>
-                <strong>{typeof m === 'string' ? m : (m as any).name}</strong>
-                <button style={{ marginLeft: 8 }} onClick={() => removeMove(i)}>Remove</button>
-              </li>
-            ))}
-          </ul>
+          <div>
+            {draft.moves.map((m, i) => {
+              const mv: any = typeof m === 'string' ? { name: m } : m
+              const isOpen = openIndices.has(i)
+              return (
+                <details key={`${mv.id ?? mv.name}-${i}`} open={isOpen} onToggle={() => toggleOpen(i)}>
+                  <summary>
+                    <strong>{mv.name}</strong>
+                    <div>
+                      <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); removeMove(i) }}>Delete</button>
+                    </div>
+                  </summary>
+                  <div>
+                    <div style={{ marginBottom: 8 }}>
+                      <label style={{ display: 'block' }}>Description:</label>
+                      <textarea value={mv.description || ''} onChange={(e) => updateMoveField(i, 'description', e.target.value)} rows={3} style={{ width: '100%' }} />
+                    </div>
+                    <div>
+                      <label>Dice Expression: <input value={mv.dice_expression || ''} onChange={(e) => updateMoveField(i, 'dice_expression', e.target.value)} /></label>
+                    </div>
+                  </div>
+                </details>
+              )
+            })}
+          </div>
         ) : (
           <p>No moves yet</p>
         )}

@@ -7,6 +7,7 @@ export default function Moves(): JSX.Element {
   const [editing, setEditing] = useState<StoredMove | null>(null)
   const [newName, setNewName] = useState('')
   const [newDesc, setNewDesc] = useState('')
+  const [newDice, setNewDice] = useState('')
 
   async function load() {
     setLoading(true)
@@ -26,9 +27,10 @@ export default function Moves(): JSX.Element {
   async function handleCreate() {
     if (!newName.trim()) return
     try {
-      await createMove({ name_en: newName.trim(), description_en: newDesc.trim() })
+      await createMove({ name_en: newName.trim(), description_en: newDesc.trim() || null, dice_expression: newDice.trim() || null })
       setNewName('')
       setNewDesc('')
+      setNewDice('')
       await load()
     } catch (err) { console.error(err) }
   }
@@ -55,6 +57,7 @@ export default function Moves(): JSX.Element {
       <h2>Stored Moves</h2>
       <div style={{ marginBottom: 12 }}>
         <input placeholder="name" value={newName} onChange={(e) => setNewName(e.target.value)} />
+        <input placeholder="dice expr" value={newDice} onChange={(e) => setNewDice(e.target.value)} style={{ marginLeft: 8, width: 120 }} />
         <input placeholder="description" value={newDesc} onChange={(e) => setNewDesc(e.target.value)} style={{ marginLeft: 8 }} />
         <button style={{ marginLeft: 8 }} onClick={handleCreate}>Create Move</button>
       </div>
@@ -62,9 +65,12 @@ export default function Moves(): JSX.Element {
         <ul>
           {moves.map((m) => (
             <li key={m.id}>
-              <strong>{m.name_en}</strong> — <small>{m.id}</small>
-              <button style={{ marginLeft: 8 }} onClick={() => setEditing(m)}>Edit</button>
-              <button style={{ marginLeft: 8 }} onClick={() => handleDelete(m.id)}>Delete</button>
+              <strong>{m.name_en}</strong>
+              <div><small>{m.dice_expression ?? ''} {m.created_at ? `• ${new Date(m.created_at).toLocaleString()}` : ''}</small></div>
+              <div>
+                <button style={{ marginLeft: 8 }} onClick={() => setEditing(m)}>Edit</button>
+                <button style={{ marginLeft: 8 }} onClick={() => handleDelete(m.id)}>Delete</button>
+              </div>
             </li>
           ))}
         </ul>
@@ -75,6 +81,9 @@ export default function Moves(): JSX.Element {
           <h3>Edit Move</h3>
           <div>
             <label>Name EN: <input value={editing.name_en || ''} onChange={(e) => setEditing({ ...editing, name_en: e.target.value })} /></label>
+          </div>
+          <div>
+            <label>Dice Expression: <input value={editing.dice_expression || ''} onChange={(e) => setEditing({ ...editing, dice_expression: e.target.value })} /></label>
           </div>
           <div>
             <label>Description EN: <input value={editing.description_en || ''} onChange={(e) => setEditing({ ...editing, description_en: e.target.value })} /></label>
