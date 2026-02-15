@@ -28,3 +28,15 @@ git config --get remote.origin.url
 
 > [!CAUTION]
 > UNDER NO CIRCUMSTANCES EVER CREATE ISSUES IN REPOSITORIES THAT DO NOT MATCH THE REMOTE URL
+
+---
+
+Agent local fallback
+
+This agent supports a local fallback mode when a GitHub MCP server is not available. If present, the agent reads `.github/agents/speckit.taskstoissues/config.yaml` to determine `preferred_method` and fallback policy. Local helper scripts live in `.github/agents/speckit.taskstoissues/scripts/` and can be used to create issues directly with the `gh` CLI.
+
+Behavior summary:
+- If `preferred_method: mcp` the agent will try MCP first (short timeout).
+- If MCP fails and `auto_fallback: true` the agent validates local prerequisites (`gh` + PowerShell/`pwsh`) and either runs the local scripts automatically when `auto_run_local: true` or prints exact commands for the user to run.
+
+The presence of `config.yaml` enables this fallback; when absent the agent keeps the original MCP-only behaviour.

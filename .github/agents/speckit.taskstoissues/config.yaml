@@ -1,0 +1,6 @@
+preferred_method: mcp
+# mcp | local
+auto_fallback: true
+auto_run_local: false
+local_script_dir: scripts
+dry_run: true

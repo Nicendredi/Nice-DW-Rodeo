@@ -1,0 +1,91 @@
+[
+  {
+    "id": "T1",
+    "title": "T1 — Scaffold frontend (Vite + React + TypeScript)",
+    "body": "Description:\n\nInitialize a Vite + React + TypeScript project, add ESLint/Prettier configs, TypeScript base tsconfig, and a small component structure (Pages: Home, Sheets, Campaign, CharacterSheet).\n\nAcceptance Criteria:\n- `package.json`, `vite.config.ts`, `tsconfig.json` present\n- `src/main.tsx`, `src/App.tsx`, `src/pages/CharacterSheet.tsx` exist and compile\n- Lint and build pass locally\n\nEstimate: 1 day\n\nSource: specs/001-owlbear-character-sheets/tasks.md",
+    "labels": ["spec", "1d", "mvp"]
+  },
+  {
+    "id": "T2",
+    "title": "T2 — Scaffold backend (Node + Express + TypeScript)",
+    "body": "Description:\n\nInitialize Node + TypeScript backend with Express, basic routing, and CORS. Add DB connection scaffolding and environment config.\n\nAcceptance Criteria:\n- `package.json`, `tsconfig.json` for backend present\n- Basic `/api/health` endpoint returns 200\n- Backend starts locally and connects to configured DB (or a mocked DB)\n\nEstimate: 1 day\n\nSource: specs/001-owlbear-character-sheets/tasks.md",
+    "labels": ["spec", "1d", "mvp"]
+  },
+  {
+    "id": "T3",
+    "title": "T3 — Implement database models & migrations",
+    "body": "Description:\n\nImplement DB schema for Users, Campaigns, CharacterSheets, Moves, RollHistory, Translations, SharePermissions, AuditLogs. Provide migrations (e.g., with Knex or TypeORM).\n\nAcceptance Criteria:\n- Migration scripts exist and run against a local DB\n- Tables/collections created match sketch in `plan.md`\n\nEstimate: 1-2 days\n\nSource: specs/001-owlbear-character-sheets/tasks.md",
+    "labels": ["spec", "1-2d", "mvp"],
+    "depends_on": ["T2"]
+  },
+  {
+    "id": "T4",
+    "title": "T4 — Implement sheet CRUD and move definition UI",
+    "body": "Description:\n\nCRUD for character sheets and moves in frontend + backend. Moves should support localized fields (en/fr) in the model.\n\nAcceptance Criteria:\n- Create/Read/Update/Delete endpoints for sheets and moves\n- Frontend pages/forms to create and edit sheets and moves\n- Localized fields (`name.en`, `name.fr`, `description.en`, `description.fr`) persisted\n\nEstimate: 2-3 days\n\nSource: specs/001-owlbear-character-sheets/tasks.md",
+    "labels": ["spec", "2-3d", "mvp"],
+    "depends_on": ["T1", "T2", "T3"]
+  },
+  {
+    "id": "T5",
+    "title": "T5 — Integrate dice parser client and server",
+    "body": "Description:\n\nAdd a vetted dice parser library or implement a parser that supports Roll20 notation (XdY±Z, k, !, advantage/disadvantage, dice pools). Clamp max dice and validate input.\n\nAcceptance Criteria:\n- Client can execute a roll and display individual die results + total\n- Server exposes a `/api/moves/:id/roll` endpoint that returns authoritative roll results and stores them in RollHistory\n- Parser validates input and rejects malformed expressions with clear error messages\n\nEstimate: 2 days\n\nSource: specs/001-owlbear-character-sheets/tasks.md",
+    "labels": ["spec", "2d", "mvp"],
+    "depends_on": ["T1", "T2"]
+  },
+  {
+    "id": "T6",
+    "title": "T6 — Implement server-side roll auditing and anti-cheat",
+    "body": "Description:\n\nServer reproduces/validates rolls, optionally using seeds or signed client payloads to verify client-side rolls.\n\nAcceptance Criteria:\n- RollHistory persisted with full metadata\n- Server verifies/replicates client roll when a client-provided seed is present\n\nEstimate: 1-2 days\n\nSource: specs/001-owlbear-character-sheets/tasks.md",
+    "labels": ["spec", "1-2d", "mvp"],
+    "depends_on": ["T5"]
+  },
+  {
+    "id": "T7",
+    "title": "T7 — Add WebSocket real-time broadcasts",
+    "body": "Description:\n\nAdd WebSocket (Socket.IO or ws) integration. Broadcast sheet updates and `move:executed` events to session participants.\n\nAcceptance Criteria:\n- Clients can subscribe to session channels and receive move executions in real-time\n- Tests show broadcast arrival for multiple simulated clients\n\nEstimate: 1-2 days\n\nSource: specs/001-owlbear-character-sheets/tasks.md",
+    "labels": ["spec", "1-2d", "mvp"],
+    "depends_on": ["T2", "T5"]
+  },
+  {
+    "id": "T8",
+    "title": "T8 — Integrate i18n in frontend and API",
+    "body": "Description:\n\nAdd `react-i18next` to the frontend with `src/locales/en/*.json` and `src/locales/fr/*.json`. Backend should return localized fields and expose missing-translation flags.\n\nAcceptance Criteria:\n- UI strings switch when `language_preference` is changed\n- API returns localized move descriptions based on `lang` query or `Accept-Language` header, with `translation_missing` flagged when falling back to English\n\nEstimate: 2 days\n\nSource: specs/001-owlbear-character-sheets/tasks.md",
+    "labels": ["spec", "2d", "mvp"],
+    "depends_on": ["T1", "T2"]
+  },
+  {
+    "id": "T9",
+    "title": "T9 — Admin translation UI and missing-translation reporting",
+    "body": "Description:\n\nAdd a small admin UI to view and edit missing translations and a report view listing strings needing translation.\n\nAcceptance Criteria:\n- Admin can view all `translation_missing` entries and add a `fr` translation that is persisted\n- New translations take effect in UI without full redeploy (or documented workflow)\n\nEstimate: 1-2 days\n\nSource: specs/001-owlbear-character-sheets/tasks.md",
+    "labels": ["spec", "1-2d", "mvp"],
+    "depends_on": ["T8"]
+  },
+  {
+    "id": "T10",
+    "title": "T10 — Tests and CI",
+    "body": "Description:\n\nAdd unit tests for dice parser, i18n fallback behavior, permission checks, and integration tests for roll API + WebSocket broadcasting. Add CI pipeline (GitHub Actions) to run tests.\n\nAcceptance Criteria:\n- Automated tests cover critical paths and pass in CI\n- PRs are validated by CI\n\nEstimate: 1-2 days\n\nSource: specs/001-owlbear-character-sheets/tasks.md",
+    "labels": ["spec", "1-2d", "mvp"],
+    "depends_on": ["T1","T2","T3","T4","T5","T6","T7"]
+  },
+  {
+    "id": "T11",
+    "title": "T11 — Three.js + Rapier dice animation component (optional)",
+    "body": "Description:\n\nImplement a lazy-loaded 3D dice animation component that uses Three.js and Rapier for physics. Provide a non-3D fallback for low-power devices.\n\nAcceptance Criteria:\n- Dice animation can be triggered and produces a deterministic result matching the authoritative roll\n- Component is lazy-loaded and does not increase initial bundle size significantly\n\nEstimate: 2-3 days\n\nSource: specs/001-owlbear-character-sheets/tasks.md",
+    "labels": ["spec", "2-3d", "optional"],
+    "depends_on": ["T1","T5"]
+  },
+  {
+    "id": "T12",
+    "title": "T12 — Security review and production readiness",
+    "body": "Description:\n\nPenetration checklist, rate-limiting for roll endpoints, DoS protections (max dice), auditing and logging configuration, secrets management, and secure deployment pipeline.\n\nAcceptance Criteria:\n- Rate limits in place for roll endpoints\n- Secrets are not stored in repo\n- Logging and audit trails configured and tested\n\nEstimate: 1-2 days\n\nSource: specs/001-owlbear-character-sheets/tasks.md",
+    "labels": ["spec", "1-2d", "mvp"],
+    "depends_on": ["T1","T2","T3","T4","T5","T6","T7"]
+  }
+  ,
+  {
+    "id": "T13",
+    "title": "T13 — Customize speckit.taskstoissues agent for repo",
+    "body": "Description:\n\nPersonalize the `speckit.taskstoissues` agent to support local fallback behavior, add `config.yaml`, and move helper scripts under `.github/agents/speckit.taskstoissues/`. This task is independent of feature implementation tasks and is intended to improve agent ergonomics for future specs.\n\nAcceptance Criteria:\n- The agent spec (`.github/agents/speckit.taskstoissues.agent.md`) documents the fallback behaviour and references `config.yaml` and local scripts.\n- `config.yaml` exists at `.github/agents/speckit.taskstoissues/config.yaml` with sane defaults.\n- Helper scripts are present under `.github/agents/speckit.taskstoissues/scripts/` and are referenced by the agent spec.\n- A new issue or documentation file describing how to run the local fallback is present at `.github/agents/speckit.taskstoissues/README.md`.\n\nEstimate: 1 day\n\nSource: repo maintenance",
+    "labels": ["spec", "1d", "agent"]
+  }
+]
