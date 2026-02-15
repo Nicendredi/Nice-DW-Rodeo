@@ -66,26 +66,30 @@ export default function Sheets({ onSelect, onChange, reloadToken }: Props): JSX.
 
   return (
     <section>
-      <h2>Sheets</h2>
-      <div style={{ marginBottom: 12 }}>
-        <input value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="New sheet name" />
-        <button onClick={handleCreate} style={{ marginLeft: 8 }}>Create</button>
-      </div>
+      <h3>Sheets</h3>
+      <form id="create-sheet" action="#" method="post" onSubmit={(e) => { e.preventDefault(); handleCreate() }} style={{ marginBottom: 12 }}>
+        <label htmlFor="new-sheet">New sheet</label>
+        <input id="new-sheet" name="name" value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="New sheet name" />
+        <button type="submit" style={{ marginLeft: 8 }}>Create</button>
+      </form>
       {loading ? (
         <p>Loading…</p>
       ) : (
-        <ul>
+        <>
+          <h4>Available</h4>
+          <ul>
           {sheets.map((s) => {
             const owner = users.find((u) => u.id === s.owner_id)
             const ownerName = owner ? (owner.name || owner.display_name || owner.id) : (s.owner_id || '—')
             return (
               <li key={s.id}>
-                <strong style={{ cursor: 'pointer' }} onClick={() => onSelect?.(s)}>{s.name}</strong> — <small>{ownerName}</small>
+                <a href={`#sheet-${s.id}`} data-sheet-id={s.id} onClick={(e) => { e.preventDefault(); onSelect?.(s) }}>{s.name}</a> — <small>{ownerName}</small>
                 <button onClick={() => handleDelete(s.id)} style={{ marginLeft: 8 }}>Delete</button>
               </li>
             )
           })}
-        </ul>
+          </ul>
+        </>
       )}
     </section>
   )

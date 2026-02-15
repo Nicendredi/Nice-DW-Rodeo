@@ -123,3 +123,9 @@ If you'd like, I can now:
 - Or scaffold the frontend (option from previous step)
 
 Which do you want next?
+
+---
+
+## Additional work (implementation note)
+
+- [x] T3b — Rework client HTML to match `docs/semantic-example.html` (integrated semantic layout into `client/src/App.tsx` and updated `client/index.html`)

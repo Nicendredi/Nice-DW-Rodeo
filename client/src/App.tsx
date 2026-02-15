@@ -42,23 +42,39 @@ export default function App(): JSX.Element {
   }
 
   return (
-    <div className="app">
-      <header className="app-header">
-        <h1>Nice DW Rodeo — Character Sheets</h1>
+    <>
+      <header className="site" role="banner">
+        <div />
+        <nav className="primary" aria-label="Main navigation">
+          <a href="#sheets">Sheets</a>
+          <a href="#moves">Moves</a>
+          <a href="#settings">Settings</a>
+        </nav>
       </header>
-      <main style={{ display: 'flex', gap: 24 }}>
-        <div style={{ flex: '0 0 33%', display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <div style={{ flex: '1 1 auto', overflow: 'auto' }}>
-            <Sheets onSelect={(s) => setSelected(s)} onChange={(c) => setSelected(c ?? undefined)} reloadToken={sheetsReload} />
-          </div>
-          <div style={{ flex: '1 1 auto', overflow: 'auto' }}>
-            <Moves />
-          </div>
-        </div>
-        <aside style={{ flex: 1 }}>
-          <CharacterSheet sheet={selected} onSave={handleSave} onDelete={handleDelete} />
+
+      <section className="layout" role="application">
+        <nav className="secondary" aria-label="Sheets navigation">
+          <h3>Sheets</h3>
+          <Sheets onSelect={(s) => setSelected(s)} onChange={(c) => setSelected(c ?? undefined)} reloadToken={sheetsReload} />
+        </nav>
+
+        <main id="main" role="main" aria-labelledby="sheet-title">
+          <article aria-labelledby="sheet-title">
+            <CharacterSheet sheet={selected} onSave={handleSave} onDelete={handleDelete} />
+          </article>
+        </main>
+
+        <aside className="compendium" aria-label="Move compendium">
+          <h3>Compendium</h3>
+          <Moves />
         </aside>
-      </main>
-    </div>
+      </section>
+
+      <output id="toasts" aria-live="polite" aria-atomic="true"></output>
+
+      <footer className="site-footer" role="contentinfo">
+        <p>Nice Dungeon World — Example layout · 2026</p>
+      </footer>
+    </>
   )
 }

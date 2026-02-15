@@ -54,31 +54,30 @@ export default function Moves(): JSX.Element {
 
   return (
     <section>
-      <h2>Stored Moves</h2>
-      <div style={{ marginBottom: 12 }}>
-        <input placeholder="name" value={newName} onChange={(e) => setNewName(e.target.value)} />
-        <input placeholder="dice expr" value={newDice} onChange={(e) => setNewDice(e.target.value)} style={{ marginLeft: 8, width: 120 }} />
-        <input placeholder="description" value={newDesc} onChange={(e) => setNewDesc(e.target.value)} style={{ marginLeft: 8 }} />
-        <button style={{ marginLeft: 8 }} onClick={handleCreate}>Create Move</button>
-      </div>
+      <h4 style={{ display: 'none' }}>Stored Moves</h4>
       {loading ? <p>Loading…</p> : (
         <ul>
           {moves.map((m) => (
             <li key={m.id}>
-              <strong>{m.name_en}</strong>
+              <button onClick={() => { /* insertion handled by parent MoveInserter or CharacterSheet */ }}>{m.name_en}</button>
               <div><small>{m.dice_expression ?? ''} {m.created_at ? `• ${new Date(m.created_at).toLocaleString()}` : ''}</small></div>
-              <div>
-                <button style={{ marginLeft: 8 }} onClick={() => setEditing(m)}>Edit</button>
-                <button style={{ marginLeft: 8 }} onClick={() => handleDelete(m.id)}>Delete</button>
-              </div>
             </li>
           ))}
         </ul>
       )}
 
+      <nav aria-label="compendium filters">
+        <h4>Filters</h4>
+        <form onSubmit={(e) => { e.preventDefault(); /* filter logic */ }}>
+          <label htmlFor="filter-name">Name</label>
+          <input id="filter-name" name="filter" />
+          <button type="submit">Apply</button>
+        </form>
+      </nav>
+
       {editing && (
-        <div style={{ marginTop: 12, borderTop: '1px solid #ddd', paddingTop: 12 }}>
-          <h3>Edit Move</h3>
+        <section style={{ marginTop: 12, borderTop: '1px solid #ddd', paddingTop: 12 }} aria-labelledby="edit-move-heading">
+          <h3 id="edit-move-heading">Edit Move</h3>
           <div>
             <label>Name EN: <input value={editing.name_en || ''} onChange={(e) => setEditing({ ...editing, name_en: e.target.value })} /></label>
           </div>
@@ -92,7 +91,7 @@ export default function Moves(): JSX.Element {
             <button onClick={handleSaveEdit}>Save</button>
             <button style={{ marginLeft: 8 }} onClick={() => setEditing(null)}>Cancel</button>
           </div>
-        </div>
+        </section>
       )}
     </section>
   )

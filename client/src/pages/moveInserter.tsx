@@ -28,13 +28,13 @@ export default function MoveInserter({ onInsert }: Props) {
     <div>
       <button onClick={() => setOpen((v) => !v)}>Insert Stored Move</button>
       {open && (
-        <div style={{ border: '1px solid #ddd', padding: 8, marginTop: 8 }}>
+        <section role="dialog" aria-label="Insert stored move" style={{ border: '1px solid #ddd', padding: 8, marginTop: 8 }}>
           <select value={selected ?? ''} onChange={(e) => setSelected(e.target.value || null)}>
             <option value="">-- select move --</option>
             {moves.map((m) => <option key={m.id} value={m.id}>{m.name_en || m.name || m.id}</option>)}
           </select>
           <button style={{ marginLeft: 8 }} onClick={handleInsert}>Insert</button>
-        </div>
+        </section>
       )}
     </div>
   )
