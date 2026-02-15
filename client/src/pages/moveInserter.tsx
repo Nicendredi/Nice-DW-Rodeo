@@ -18,8 +18,8 @@ export default function MoveInserter({ onInsert }: Props) {
     if (!selected) return
     const mv = moves.find((x) => x.id === selected)
     if (!mv) return
-    // insert a local copy
-    onInsert({ id: mv.id, name: mv.name_en || mv.name || 'Move', description: mv.description_en })
+    // insert a local copy, include dice expression and description
+    onInsert({ id: mv.id, name: mv.name_en || mv.name || 'Move', description: mv.description_en || mv.description || '', dice_expression: mv.dice_expression || '' })
     setOpen(false)
     setSelected(null)
   }
