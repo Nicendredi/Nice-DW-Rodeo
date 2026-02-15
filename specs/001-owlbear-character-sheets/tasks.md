@@ -8,7 +8,7 @@ Priority order: MVP tasks first, then i18n, real-time, and optional 3D features.
 
 - [x] T1 — Scaffold frontend (Vite + React + TypeScript)
 - [x] T2 — Scaffold backend (Node + Express + TypeScript)
-- [ ] T3 — Implement database models & migrations
+- [x] T3 — Implement database models & migrations
 - [ ] T4 — Implement sheet CRUD and move definition UI
 - [ ] T5 — Integrate dice parser client and server
 - [ ] T6 — Implement server-side roll auditing and anti-cheat
