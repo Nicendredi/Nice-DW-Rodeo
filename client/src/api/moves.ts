@@ -47,3 +47,25 @@ export async function deleteMove(id: string) {
   if (!res.ok) throw new Error('Delete failed')
   return res.json()
 }
+
+export async function rollMove(id: string, expression?: string, seed?: number | string) {
+  const body: any = { expression }
+  if (seed !== undefined) body.seed = seed
+  const res = await fetch(`${BASE}/moves/${encodeURIComponent(id)}/roll`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  })
+  if (!res.ok) throw new Error('Roll failed')
+  return res.json() as Promise<any>
+}
+
+export async function rollExpression(expression: string) {
+  const res = await fetch(`${BASE}/roll`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ expression })
+  })
+  if (!res.ok) throw new Error('Roll failed')
+  return res.json() as Promise<any>
+}
