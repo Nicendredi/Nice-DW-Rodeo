@@ -1,0 +1,15 @@
+{
+  "name": "nice-dw-monolith",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev:client": "npm --workspace client run dev",
+    "dev:server": "npm --workspace server run dev",
+    "dev": "echo 'Run `npm run dev:client` and `npm run dev:server` in separate terminals'",
+    "lint": "echo 'Run lint in workspace: npm --workspace client run lint'"
+  }
+}
