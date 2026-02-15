@@ -60,6 +60,56 @@ app.delete('/api/sheets/:id', (req, res) => {
   res.json(removed[0])
 })
 
+// Moves API
+app.get('/api/moves', (_req, res) => {
+  const moves = readJson('moves');
+  res.json(moves);
+});
+
+app.get('/api/moves/:id', (req, res) => {
+  const moves = readJson('moves');
+  const move = moves.find((m: any) => m.id === req.params.id);
+  if (!move) return res.status(404).json({ error: 'not found' });
+  res.json(move);
+});
+
+app.post('/api/moves', (req, res) => {
+  const moves = readJson('moves')
+  const id = (crypto as any).randomUUID()
+  const now = new Date().toISOString()
+  const move = {
+    id,
+    name_en: req.body.name_en || req.body.name || 'Untitled',
+    name_fr: req.body.name_fr || null,
+    description_en: req.body.description_en || req.body.description || null,
+    description_fr: req.body.description_fr || null,
+    dice_expression: req.body.dice_expression || null,
+    created_at: now
+  }
+  moves.push(move)
+  writeJson('moves', moves)
+  res.status(201).json(move)
+})
+
+app.put('/api/moves/:id', (req, res) => {
+  const moves = readJson('moves')
+  const idx = moves.findIndex((m: any) => m.id === req.params.id)
+  if (idx === -1) return res.status(404).json({ error: 'not found' })
+  const updated = { ...moves[idx], ...req.body, id: moves[idx].id }
+  moves[idx] = updated
+  writeJson('moves', moves)
+  res.json(updated)
+})
+
+app.delete('/api/moves/:id', (req, res) => {
+  let moves = readJson('moves')
+  const idx = moves.findIndex((m: any) => m.id === req.params.id)
+  if (idx === -1) return res.status(404).json({ error: 'not found' })
+  const removed = moves.splice(idx, 1)
+  writeJson('moves', moves)
+  res.json(removed[0])
+})
+
 const port = process.env.PORT ? Number(process.env.PORT) : 4000
 app.listen(port, () => {
   // eslint-disable-next-line no-console
