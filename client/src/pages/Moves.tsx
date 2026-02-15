@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { listMoves, createMove, updateMove, deleteMove, StoredMove } from '../api/moves'
+import { listMoves, createMove, updateMove, deleteMove, rollMove, StoredMove } from '../api/moves'
 
 export default function Moves(): JSX.Element {
   const [moves, setMoves] = useState<StoredMove[]>([])
   const [loading, setLoading] = useState(false)
   const [editing, setEditing] = useState<StoredMove | null>(null)
+  const [lastRolls, setLastRolls] = useState<Record<string, any>>({})
   const [newName, setNewName] = useState('')
   const [newDesc, setNewDesc] = useState('')
   const [newDice, setNewDice] = useState('')
@@ -65,8 +66,25 @@ export default function Moves(): JSX.Element {
               <aside>
               <div><small>{m.dice_expression ?? ''} {m.created_at ? `• ${new Date(m.created_at).toLocaleString()}` : ''}</small></div>
               </aside>
-              <button style={{ marginLeft: 8 }} onClick={() => setEditing(m)}>Edit</button>
-              <button style={{ marginLeft: 8 }} onClick={() => handleDelete(m.id)}>Delete</button>
+                  <button style={{ marginLeft: 8 }} onClick={() => setEditing(m)}>Edit</button>
+                  <button style={{ marginLeft: 8 }} onClick={() => handleDelete(m.id)}>Delete</button>
+                  {m.id && (
+                    <button style={{ marginLeft: 8 }} onClick={async () => {
+                      try {
+                        const res = await rollMove(m.id!, m.dice_expression || undefined)
+                        setLastRolls(prev => ({ ...prev, [m.id!]: res }))
+                      } catch (err) { console.error(err) }
+                    }}>Roll</button>
+                  )}
+                  <details style={{ border: 'none', boxShadow: 'none', padding: 0, margin: '0.5em 0 0 1em' }}>
+                    <summary style={{ background: '#222', color: '#fff', padding: '4px 6px', borderRadius: 4 }}>Last roll (raw data)</summary>
+                    {m.id && lastRolls[m.id] && (
+                      <div style={{ marginTop: 8, padding: 8 }}>
+                        <div><strong>Result:</strong> {String(lastRolls[m.id].total ?? lastRolls[m.id].value ?? '')}</div>
+                        <pre style={{ whiteSpace: 'pre-wrap', fontSize: 12 }}>{JSON.stringify(lastRolls[m.id].rolls ?? lastRolls[m.id].detail ?? lastRolls[m.id], null, 2)}</pre>
+                      </div>
+                    )}
+                  </details>
             </details>
           ))}
         </>
