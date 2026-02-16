@@ -56,3 +56,28 @@ export function createRollRecord(moveId: string | null, expression: string, roll
   writeJson('roll_history', roll_history)
   return rec
 }
+
+export function verifyAndRecord(moveId: string | null, expression: string, seed: any, clientTotal: any, clientDetail: any) {
+  // Replay authoritative roll using seed if provided
+  const parsed = parseDiceExpression(String(expression), seed)
+  const serverTotal = parsed.valid ? parsed.total : null
+  const verified = parsed.valid && (clientTotal !== undefined && clientTotal !== null) ? Number(clientTotal) === Number(serverTotal) : false
+
+  const meta = {
+    client_total: clientTotal ?? null,
+    client_detail: clientDetail ?? null,
+    server_total: serverTotal,
+    server_detail: parsed.detail ?? null,
+    verified
+  }
+
+  const rec = createRollRecord(moveId, expression, meta.server_detail ?? meta.client_detail ?? parsed.detail, meta.server_total ?? (clientTotal ?? null))
+  // augment stored record with verification metadata
+  const roll_history = readJson('roll_history')
+  const idx = roll_history.findIndex((r: any) => r.id === rec.id)
+  if (idx !== -1) {
+    roll_history[idx] = { ...roll_history[idx], verification: meta }
+    writeJson('roll_history', roll_history)
+  }
+  return { record: roll_history[idx], verification: meta }
+}

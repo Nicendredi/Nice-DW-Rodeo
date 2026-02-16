@@ -2,7 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import { readJson, writeJson } from './db/jsonStore'
 import crypto from 'crypto'
-import { parseDiceExpression, createRollRecord } from './dice'
+import { parseDiceExpression, createRollRecord, verifyAndRecord } from './dice'
 
 const app = express()
 app.use(cors())
@@ -130,8 +130,16 @@ app.post('/api/moves/:id/roll', (req, res) => {
   const move = moves.find((m: any) => m.id === req.params.id)
   const expression = (req.body && req.body.expression) || (move && (move.dice_expression || move.dice))
   if (!expression) return res.status(400).json({ error: 'no dice expression' })
-
   const seed = req.body && req.body.seed
+  const clientTotal = req.body && (req.body.client_total ?? req.body.clientTotal)
+  const clientDetail = req.body && (req.body.client_detail ?? req.body.clientDetail)
+
+  if (clientTotal !== undefined) {
+    // verify client-provided result by replaying using seed
+    const out = verifyAndRecord(req.params.id, String(expression), seed, clientTotal, clientDetail)
+    return res.json({ verification: out.verification, record: out.record })
+  }
+
   const parsed = parseDiceExpression(String(expression), seed)
   if (!parsed.valid) return res.status(400).json({ error: parsed.error })
 
@@ -143,6 +151,14 @@ app.post('/api/roll', (req, res) => {
   const expression = req.body && req.body.expression
   if (!expression) return res.status(400).json({ error: 'no dice expression' })
   const seed = req.body && req.body.seed
+  const clientTotal = req.body && (req.body.client_total ?? req.body.clientTotal)
+  const clientDetail = req.body && (req.body.client_detail ?? req.body.clientDetail)
+
+  if (clientTotal !== undefined) {
+    const out = verifyAndRecord(null, String(expression), seed, clientTotal, clientDetail)
+    return res.json({ verification: out.verification, record: out.record })
+  }
+
   const parsed = parseDiceExpression(String(expression), seed)
   if (!parsed.valid) return res.status(400).json({ error: parsed.error })
   const rollRecord = createRollRecord(null, String(expression), parsed.detail, parsed.total)

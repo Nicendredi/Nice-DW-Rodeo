@@ -6,7 +6,8 @@
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "start": "node dist/index.js",
     "migrate": "ts-node src/db/runMigrations.ts",
-    "test:parser": "ts-node src/test-parser.ts"
+    "test:parser": "ts-node src/test-parser.ts",
+    "test:verify": "ts-node src/test-verify.ts"
   },
   "dependencies": {
     "express": "^4.18.2",
