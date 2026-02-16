@@ -53,6 +53,48 @@ export default function Moves(): JSX.Element {
     } catch (err) { console.error(err) }
   }
 
+  function renderRollDetail(detail: any) {
+    if (!detail) return <div style={{ fontStyle: 'italic' }}>No detail</div>
+
+    // If the detail includes a dice array produced by the parser
+    const dice = Array.isArray(detail.dice) ? detail.dice : detail.dice ?? undefined
+
+    // Fallback: if detail is an object with `value` and `rolls` fields, show JSON
+    if (!detail.dice && detail.rolls && !Array.isArray(detail.rolls)) {
+      return <pre style={{ whiteSpace: 'pre-wrap', fontSize: 12 }}>{JSON.stringify(detail, null, 2)}</pre>
+    }
+
+    // If `dice` exists and is an array, produce a readable breakdown
+    if (Array.isArray(detail.dice)) {
+      const parts = detail.dice.map((d: any, idx: number) => {
+        if (d.type === 'number' || (d.value !== undefined && d.die === undefined)) {
+          return (<span key={idx}>{String(d.value)}</span>)
+        }
+        // die group
+        const count = d.count?.value ?? d.count ?? 1
+        const faces = d.die?.value ?? (d.die ?? {}).value ?? ''
+        const rolls = Array.isArray(d.rolls) ? d.rolls.map((r: any) => r.roll ?? r.value ?? r).join(', ') : String(d.value ?? '')
+        return (
+          <span key={idx}>{count}d{faces}: [{rolls}]</span>
+        )
+      })
+
+      // include ops and total if present
+      return (
+        <div style={{ fontSize: 13 }}>
+          <div style={{ marginBottom: 6 }}>{parts.reduce((acc: any[], cur: any, i: number) => acc.concat(i === 0 ? [cur] : [acc.pop(), ' + ', cur]), [] as any[])}</div>
+          {detail.ops && Array.isArray(detail.ops) && (
+            <div style={{ color: '#666', fontSize: 12 }}>ops: {detail.ops.join(' ')}</div>
+          )}
+          <div style={{ marginTop: 6 }}><strong>Computed:</strong> {String(detail.value ?? detail.total ?? '')}</div>
+        </div>
+      )
+    }
+
+    // Default fallback: pretty JSON
+    return <pre style={{ whiteSpace: 'pre-wrap', fontSize: 12 }}>{JSON.stringify(detail, null, 2)}</pre>
+  }
+
   return (
     <section>
       <h4 style={{ display: 'none' }}>Stored Moves</h4>
@@ -77,11 +119,13 @@ export default function Moves(): JSX.Element {
                     }}>Roll</button>
                   )}
                   <details style={{ border: 'none', boxShadow: 'none', padding: 0, margin: '0.5em 0 0 1em' }}>
-                    <summary style={{ background: '#222', color: '#fff', padding: '4px 6px', borderRadius: 4 }}>Last roll (raw data)</summary>
+                    <summary style={{ background: '#222', color: '#fff', padding: '4px 6px', borderRadius: 4 }}>Last roll</summary>
                     {m.id && lastRolls[m.id] && (
                       <div style={{ marginTop: 8, padding: 8 }}>
                         <div><strong>Result:</strong> {String(lastRolls[m.id].total ?? lastRolls[m.id].value ?? '')}</div>
-                        <pre style={{ whiteSpace: 'pre-wrap', fontSize: 12 }}>{JSON.stringify(lastRolls[m.id].rolls ?? lastRolls[m.id].detail ?? lastRolls[m.id], null, 2)}</pre>
+                        <div style={{ marginTop: 8 }}>
+                          {renderRollDetail(lastRolls[m.id].rolls ?? lastRolls[m.id].detail ?? lastRolls[m.id])}
+                        </div>
                       </div>
                     )}
                   </details>
