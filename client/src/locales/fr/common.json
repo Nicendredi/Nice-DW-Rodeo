@@ -1,0 +1,12 @@
+{
+  "sheets": "Fiches",
+  "moves": "Actions",
+  "settings": "Paramètres",
+  "compendium": "Compendium",
+  "created": "Créé",
+  "deleted": "Supprimé",
+  "roll": "Lancer",
+  "delete": "Supprimer",
+  "add_move": "Ajouter un mouvement",
+  "no_moves": "Aucun mouvement"
+}

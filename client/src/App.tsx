@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import Sheets from './pages/Sheets'
 import CharacterSheet, { Sheet } from './pages/CharacterSheet'
 import { createSheet, updateSheet, deleteSheet as apiDelete } from './api/sheets'
 import Moves from './pages/Moves'
 
 export default function App(): JSX.Element {
+  const { t, i18n } = useTranslation()
   const [selected, setSelected] = useState<Sheet | undefined>(undefined)
   const [sheetsReload, setSheetsReload] = useState(0)
 
@@ -46,10 +48,17 @@ export default function App(): JSX.Element {
       <header className="site" role="banner">
         <div />
         <nav className="primary" aria-label="Main navigation">
-          <a href="#sheets">Sheets</a>
-          <a href="#moves">Moves</a>
-          <a href="#settings">Settings</a>
+          <a href="#sheets">{t('sheets')}</a>
+          <a href="#moves">{t('moves')}</a>
+          <a href="#settings">{t('settings')}</a>
         </nav>
+        <div style={{ marginLeft: 12 }}>
+          <label htmlFor="lang-select">Lang:</label>
+          <select id="lang-select" value={i18n.language} onChange={(e) => i18n.changeLanguage(e.target.value)} style={{ marginLeft: 8 }}>
+            <option value="en">EN</option>
+            <option value="fr">FR</option>
+          </select>
+        </div>
       </header>
 
       <section className="layout" role="application">

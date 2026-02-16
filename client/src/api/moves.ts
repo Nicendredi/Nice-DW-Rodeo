@@ -10,14 +10,16 @@ export interface StoredMove {
 
 const BASE = '/api'
 
+import i18n from 'i18next'
+
 export async function listMoves() {
-  const res = await fetch(`${BASE}/moves`)
+  const res = await fetch(`${BASE}/moves?lang=${encodeURIComponent(i18n.language)}`, { headers: { 'Accept-Language': i18n.language } })
   if (!res.ok) throw new Error('Failed to fetch moves')
   return res.json() as Promise<StoredMove[]>
 }
 
 export async function getMove(id: string) {
-  const res = await fetch(`${BASE}/moves/${encodeURIComponent(id)}`)
+  const res = await fetch(`${BASE}/moves/${encodeURIComponent(id)}?lang=${encodeURIComponent(i18n.language)}`, { headers: { 'Accept-Language': i18n.language } })
   if (!res.ok) throw new Error('Not found')
   return res.json() as Promise<StoredMove>
 }

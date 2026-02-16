@@ -2,11 +2,25 @@ import express from 'express'
 import cors from 'cors'
 import { readJson, writeJson } from './db/jsonStore'
 import crypto from 'crypto'
+import http from 'http'
+import { Server as IOServer } from 'socket.io'
 import { parseDiceExpression, createRollRecord, verifyAndRecord } from './dice'
 
 const app = express()
 app.use(cors())
 app.use(express.json())
+
+// create HTTP server and attach Socket.IO
+const httpServer = http.createServer(app)
+const io = new IOServer(httpServer, { cors: { origin: '*' } })
+
+io.on('connection', (socket) => {
+  // eslint-disable-next-line no-console
+  console.log('socket connected', socket.id)
+  socket.on('join', (room) => {
+    socket.join(room)
+  })
+})
 
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok' })
@@ -77,14 +91,28 @@ app.delete('/api/sheets/:id', (req, res) => {
 // Moves API
 app.get('/api/moves', (_req, res) => {
   const moves = readJson('moves');
-  res.json(moves);
+  const lang = String((_req.query && _req.query.lang) || (_req.headers['accept-language'] || '')).split(',')[0].slice(0,2)
+  if (!lang || lang === 'en') return res.json(moves)
+  // map localized fields
+  const localized = moves.map((m: any) => {
+    const name = m.name_fr || m.name_en
+    const description = m.description_fr || m.description_en
+    const translation_missing = !m.name_fr || !m.description_fr
+    return { ...m, name, description, translation_missing }
+  })
+  res.json(localized)
 });
 
 app.get('/api/moves/:id', (req, res) => {
   const moves = readJson('moves');
   const move = moves.find((m: any) => m.id === req.params.id);
   if (!move) return res.status(404).json({ error: 'not found' });
-  res.json(move);
+  const lang = String((req.query && req.query.lang) || (req.headers['accept-language'] || '')).split(',')[0].slice(0,2)
+  if (!lang || lang === 'en') return res.json(move)
+  const name = move.name_fr || move.name_en
+  const description = move.description_fr || move.description_en
+  const translation_missing = !move.name_fr || !move.description_fr
+  res.json({ ...move, name, description, translation_missing })
 });
 
 app.post('/api/moves', (req, res) => {
@@ -137,6 +165,8 @@ app.post('/api/moves/:id/roll', (req, res) => {
   if (clientTotal !== undefined) {
     // verify client-provided result by replaying using seed
     const out = verifyAndRecord(req.params.id, String(expression), seed, clientTotal, clientDetail)
+    // broadcast verification and move executed to subscribers
+    io.emit('move:executed', { move_id: req.params.id, verification: out.verification, record: out.record })
     return res.json({ verification: out.verification, record: out.record })
   }
 
@@ -144,6 +174,7 @@ app.post('/api/moves/:id/roll', (req, res) => {
   if (!parsed.valid) return res.status(400).json({ error: parsed.error })
 
   const rollRecord = createRollRecord(req.params.id, String(expression), parsed.detail, parsed.total)
+  io.emit('move:executed', { move_id: req.params.id, record: rollRecord })
   res.json(rollRecord)
 })
 
@@ -156,19 +187,21 @@ app.post('/api/roll', (req, res) => {
 
   if (clientTotal !== undefined) {
     const out = verifyAndRecord(null, String(expression), seed, clientTotal, clientDetail)
+    io.emit('move:executed', { move_id: null, verification: out.verification, record: out.record })
     return res.json({ verification: out.verification, record: out.record })
   }
 
   const parsed = parseDiceExpression(String(expression), seed)
   if (!parsed.valid) return res.status(400).json({ error: parsed.error })
   const rollRecord = createRollRecord(null, String(expression), parsed.detail, parsed.total)
+  io.emit('move:executed', { move_id: null, record: rollRecord })
   res.json(rollRecord)
 })
 
 // parseDiceExpression and createRollRecord are provided by ./dice
 
 const port = process.env.PORT ? Number(process.env.PORT) : 4000
-app.listen(port, () => {
+httpServer.listen(port, () => {
   // eslint-disable-next-line no-console
   console.log(`Server listening on http://localhost:${port}`)
 })
