@@ -28,6 +28,7 @@ export default function CharacterSheet({ sheet, onSave, onDelete }: Props): JSX.
   const [newAttrVal, setNewAttrVal] = useState<string | number>('')
   const [newMove, setNewMove] = useState('')
   const [openIndices, setOpenIndices] = useState<Set<number>>(new Set())
+  const [lastRolls, setLastRolls] = useState<Record<string, any>>({})
 
   useEffect(() => {
     setDraft(sheet || { name: '', attributes: {}, moves: [] })
@@ -89,7 +90,7 @@ export default function CharacterSheet({ sheet, onSave, onDelete }: Props): JSX.
     return out
   }
 
-  async function handleRollMove(mv: any) {
+  async function handleRollMove(mv: any, idx?: number) {
     try {
       let result
       if (mv.id) {
@@ -102,24 +103,47 @@ export default function CharacterSheet({ sheet, onSave, onDelete }: Props): JSX.
         alert('No dice expression')
         return
       }
-
-      const out = document.getElementById('toasts')
-      const values = flattenRolls(result.rolls)
-      const repr = values.length ? values.join(', ') : (result.rolls && JSON.stringify(result.rolls)) || ''
-      if (out) {
-        const el = document.createElement('div')
-        el.className = 'toast'
-        el.textContent = `Rolled ${result.expression}: [${repr}] => ${result.total ?? result.value ?? ''}`
-        out.appendChild(el)
-        setTimeout(() => el.remove(), 5000)
-      } else {
-        alert(JSON.stringify(result))
-      }
+      // store for UI rendering
+      const key = mv.id ?? `local-${idx ?? Math.random().toString(36).slice(2)}`
+      setLastRolls((p) => ({ ...p, [key]: result }))
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err)
       alert('Roll failed')
     }
+  }
+
+  function renderRollDetail(detail: any) {
+    if (!detail) return <div style={{ fontStyle: 'italic' }}>No detail</div>
+
+    if (detail.dice && Array.isArray(detail.dice)) {
+      const parts = detail.dice.map((d: any, idx: number) => {
+        if (d.type === 'number' || (d.value !== undefined && d.die === undefined)) {
+          return (<span key={idx}>{String(d.value)}</span>)
+        }
+        const count = d.count?.value ?? d.count ?? 1
+        const faces = d.die?.value ?? (d.die ?? {}).value ?? ''
+        const rolls = Array.isArray(d.rolls) ? d.rolls.map((r: any) => r.roll ?? r.value ?? r).join(', ') : String(d.value ?? '')
+        return (
+          <div key={idx}>{count}d{faces}: [{rolls}]</div>
+        )
+      })
+      return (
+        <div style={{ fontSize: 13 }}>
+          <div>{parts}</div>
+          {detail.ops && Array.isArray(detail.ops) && (
+            <div style={{ color: '#666', fontSize: 12 }}>ops: {detail.ops.join(' ')}</div>
+          )}
+          <div style={{ marginTop: 6 }}><strong>Computed:</strong> {String(detail.value ?? detail.total ?? '')}</div>
+        </div>
+      )
+    }
+
+    if (detail.rolls && !Array.isArray(detail.rolls)) {
+      return <pre style={{ whiteSpace: 'pre-wrap', fontSize: 12 }}>{JSON.stringify(detail, null, 2)}</pre>
+    }
+
+    return <pre style={{ whiteSpace: 'pre-wrap', fontSize: 12 }}>{JSON.stringify(detail, null, 2)}</pre>
   }
 
   function toggleOpen(idx: number) {
@@ -206,8 +230,18 @@ export default function CharacterSheet({ sheet, onSave, onDelete }: Props): JSX.
                     </div>
                     <div>
                             <label>Dice Expression: <input value={mv.dice_expression || ''} onChange={(e) => updateMoveField(i, 'dice_expression', e.target.value)} /></label>
-                            <button style={{ marginLeft: 8 }} onClick={() => handleRollMove(mv)}>Roll</button>
+                            <button style={{ marginLeft: 8 }} onClick={() => handleRollMove(mv, i)}>Roll</button>
                     </div>
+                    { (mv.id || true) && (
+                      <div style={{ marginTop: 8 }}>
+                        { lastRolls[mv.id ?? `local-${i}`] && (
+                          <div style={{ borderTop: '1px solid #eee', paddingTop: 8 }}>
+                            <div><strong>Result:</strong> {String(lastRolls[mv.id ?? `local-${i}`].total ?? lastRolls[mv.id ?? `local-${i}`].value ?? '')}</div>
+                            <div style={{ marginTop: 6 }}>{renderRollDetail(lastRolls[mv.id ?? `local-${i}`].rolls ?? lastRolls[mv.id ?? `local-${i}`].detail ?? lastRolls[mv.id ?? `local-${i}`])}</div>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </details>
               )
