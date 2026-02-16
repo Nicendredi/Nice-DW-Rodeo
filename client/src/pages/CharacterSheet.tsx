@@ -220,6 +220,7 @@ export default function CharacterSheet({ sheet, onSave, onDelete }: Props): JSX.
                   <summary>
                     <strong>{mv.name}</strong>
                     <div>
+                      <button style={{ marginLeft: 8 }} onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleRollMove(mv, i) }}>Roll</button>
                       <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); removeMove(i) }}>Delete</button>
                     </div>
                   </summary>
@@ -228,10 +229,9 @@ export default function CharacterSheet({ sheet, onSave, onDelete }: Props): JSX.
                       <label style={{ display: 'block' }}>Description:</label>
                       <textarea value={mv.description || ''} onChange={(e) => updateMoveField(i, 'description', e.target.value)} rows={3} style={{ width: '100%' }} />
                     </div>
-                    <div>
-                            <label>Dice Expression: <input value={mv.dice_expression || ''} onChange={(e) => updateMoveField(i, 'dice_expression', e.target.value)} /></label>
-                            <button style={{ marginLeft: 8 }} onClick={() => handleRollMove(mv, i)}>Roll</button>
-                    </div>
+                        <div>
+                          <label>Dice Expression: <input value={mv.dice_expression || ''} onChange={(e) => updateMoveField(i, 'dice_expression', e.target.value)} /></label>
+                        </div>
                     { (mv.id || true) && (
                       <div style={{ marginTop: 8 }}>
                         { lastRolls[mv.id ?? `local-${i}`] && (
