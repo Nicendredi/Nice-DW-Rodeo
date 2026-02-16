@@ -10,7 +10,7 @@ Priority order: MVP tasks first, then i18n, real-time, and optional 3D features.
 - [x] T2 — Scaffold backend (Node + Express + TypeScript)
 - [x] T3 — Implement database models & migrations
  - [x] T4 — Implement sheet CRUD and move definition UI
-- [ ] T5 — Integrate dice parser client and server
+- [x] T5 — Integrate dice parser client and server
 - [ ] T6 — Implement server-side roll auditing and anti-cheat
 - [ ] T7 — Add WebSocket real-time broadcasts
 - [ ] T8 — Integrate i18n in frontend and API
