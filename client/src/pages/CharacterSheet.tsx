@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import MoveInserter from './moveInserter'
 
 export type Sheet = {
@@ -23,6 +24,7 @@ type Props = {
 }
 
 export default function CharacterSheet({ sheet, onSave, onDelete }: Props): JSX.Element {
+  const { t } = useTranslation()
   const [draft, setDraft] = useState<Sheet>(sheet || { name: '', attributes: {}, moves: [] })
   const [newAttrKey, setNewAttrKey] = useState('')
   const [newAttrVal, setNewAttrVal] = useState<string | number>('')
@@ -177,7 +179,7 @@ export default function CharacterSheet({ sheet, onSave, onDelete }: Props): JSX.
           <input aria-label="Character name" value={draft.name} onChange={(e) => update('name', e.target.value)} style={{ fontSize: '1.25rem', width: '100%' }} />
         </h1>
         <section className="meta" aria-label="sheet metadata" style={{ marginTop: 8 }}>
-          {draft.created_at && <div><small>Created: {draft.created_at}</small></div>}
+          {draft.created_at && <div><small>{t('created')}: {draft.created_at}</small></div>}
           <dl style={{ display: 'flex', gap: 16, marginTop: 8 }}>
             <dt>Owner</dt>
             <dd><input value={draft.owner_id ?? ''} onChange={(e) => update('owner_id', e.target.value || null)} /></dd>
@@ -188,7 +190,7 @@ export default function CharacterSheet({ sheet, onSave, onDelete }: Props): JSX.
       </header>
 
       <section aria-labelledby="attributes" className="card" style={{ marginTop: 12 }}>
-        <h2 id="attributes">Attributes</h2>
+        <h2 id="attributes">{t('attributes')}</h2>
         {(draft.attributes && Object.keys(draft.attributes).length > 0) ? (
           <ul>
             {Object.entries(draft.attributes).map(([k, v]) => (
@@ -199,17 +201,17 @@ export default function CharacterSheet({ sheet, onSave, onDelete }: Props): JSX.
             ))}
           </ul>
         ) : (
-          <p>No attributes yet</p>
+          <p>{t('no_attributes')}</p>
         )}
         <div style={{ marginTop: 8 }}>
-          <input placeholder="key" value={newAttrKey} onChange={(e) => setNewAttrKey(e.target.value)} />
-          <input placeholder="value" style={{ width: 80, marginLeft: 8 }} value={String(newAttrVal)} onChange={(e) => setNewAttrVal(e.target.value)} />
-          <button style={{ marginLeft: 8 }} onClick={addAttribute}>Add</button>
+          <input placeholder={t('attr_key')} value={newAttrKey} onChange={(e) => setNewAttrKey(e.target.value)} />
+          <input placeholder={t('attr_value')} style={{ width: 80, marginLeft: 8 }} value={String(newAttrVal)} onChange={(e) => setNewAttrVal(e.target.value)} />
+          <button style={{ marginLeft: 8 }} onClick={addAttribute}>{t('add')}</button>
         </div>
       </section>
 
       <section aria-labelledby="moves" className="card" style={{ marginTop: 12 }}>
-        <h2 id="moves">Moves</h2>
+        <h2 id="moves">{t('moves')}</h2>
         {(draft.moves && Array.isArray(draft.moves) && draft.moves.length > 0) ? (
           <>
             {draft.moves.map((m, i) => {
@@ -248,19 +250,19 @@ export default function CharacterSheet({ sheet, onSave, onDelete }: Props): JSX.
             })}
           </>
         ) : (
-          <p>No moves yet</p>
+          <p>{t('no_moves')}</p>
         )}
         <aside style={{ marginTop: 8 }}>
-          <input placeholder="move text" value={newMove} onChange={(e) => setNewMove(e.target.value)} />
-          <button style={{ marginLeft: 8 }} onClick={addMove}>Add Local Move</button>
+          <input placeholder={t('move_text')} value={newMove} onChange={(e) => setNewMove(e.target.value)} />
+          <button style={{ marginLeft: 8 }} onClick={addMove}>{t('add_move')}</button>
           <MoveInserter onInsert={(mv: any) => setDraft((d) => ({ ...d, moves: [...(Array.isArray(d.moves) ? d.moves : []), mv] }))} />
         </aside>
       </section>
 
       <footer style={{ marginTop: 8 }}>
-        <button onClick={() => onSave && onSave(draft)}>Save</button>
+        <button onClick={() => onSave && onSave(draft)}>{t('save')}</button>
         {sheet?.id && onDelete && (
-          <button style={{ marginLeft: 8 }} onClick={() => onDelete(sheet.id!)}>Delete</button>
+          <button style={{ marginLeft: 8 }} onClick={() => onDelete(sheet.id!)}>{t('delete')}</button>
         )}
       </footer>
     </article>

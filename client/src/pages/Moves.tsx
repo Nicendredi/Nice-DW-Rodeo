@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { listMoves, createMove, updateMove, deleteMove, rollMove, StoredMove } from '../api/moves'
 
 export default function Moves(): JSX.Element {
+  const { t } = useTranslation()
   const [moves, setMoves] = useState<StoredMove[]>([])
   const [loading, setLoading] = useState(false)
   const [editing, setEditing] = useState<StoredMove | null>(null)
@@ -46,7 +48,7 @@ export default function Moves(): JSX.Element {
   }
 
   async function handleDelete(id?: string) {
-    if (!id || !confirm('Delete stored move?')) return
+    if (!id || !confirm(t('confirm_delete_move'))) return
     try {
       await deleteMove(id)
       await load()
@@ -54,7 +56,7 @@ export default function Moves(): JSX.Element {
   }
 
   function renderRollDetail(detail: any) {
-    if (!detail) return <div style={{ fontStyle: 'italic' }}>No detail</div>
+    if (!detail) return <div style={{ fontStyle: 'italic' }}>{t('no_detail')}</div>
 
     // If the detail includes a dice array produced by the parser
     const dice = Array.isArray(detail.dice) ? detail.dice : detail.dice ?? undefined
@@ -97,26 +99,26 @@ export default function Moves(): JSX.Element {
 
   return (
     <section>
-      <h4 style={{ display: 'none' }}>Stored Moves</h4>
+      <h4 style={{ display: 'none' }}>{t('stored_moves')}</h4>
 
-      {loading ? <p>Loading…</p> : (
+      {loading ? <p>{t('loading')}</p> : (
         <>
           {moves.map((m) => (
             <details key={m.id} open={editing?.id === m.id}>
-              <summary>{m.name_en}</summary>
-              <p>{m.description_en}</p>
+              <summary>{m.name ?? m.name_en}</summary>
+              <p>{m.description ?? m.description_en}</p>
               <aside>
               <div><small>{m.dice_expression ?? ''} {m.created_at ? `• ${new Date(m.created_at).toLocaleString()}` : ''}</small></div>
               </aside>
                   <button style={{ marginLeft: 8 }} onClick={() => setEditing(m)}>Edit</button>
-                  <button style={{ marginLeft: 8 }} onClick={() => handleDelete(m.id)}>Delete</button>
+                  <button style={{ marginLeft: 8 }} onClick={() => handleDelete(m.id)}>{t('delete')}</button>
                   {m.id && (
                     <button style={{ marginLeft: 8 }} onClick={async () => {
                       try {
                         const res = await rollMove(m.id!, m.dice_expression || undefined)
                         setLastRolls(prev => ({ ...prev, [m.id!]: res }))
                       } catch (err) { console.error(err) }
-                    }}>Roll</button>
+                    }}>{t('roll')}</button>
                   )}
                   <details style={{ border: 'none', boxShadow: 'none', padding: 0, margin: '0.5em 0 0 1em' }}>
                     <summary style={{ background: '#222', color: '#fff', padding: '4px 6px', borderRadius: 4 }}>Last roll</summary>
@@ -135,25 +137,25 @@ export default function Moves(): JSX.Element {
       )}
 
       <nav aria-label="compendium filters">
-        <h4>Filters</h4>
+        <h4>{t('filters')}</h4>
         <form onSubmit={(e) => { e.preventDefault(); /* filter logic */ }}>
-          <label htmlFor="filter-name">Name</label>
+          <label htmlFor="filter-name">{t('name')}</label>
           <input id="filter-name" name="filter" />
-          <button type="submit">Apply</button>
+          <button type="submit">{t('apply')}</button>
         </form>
       </nav>
 
       {editing && (
         <form  style={{ marginTop: 12, borderTop: '1px solid #ddd', paddingTop: 12 }} aria-labelledby="edit-move-heading">
-          <h3 id="edit-move-heading">Edit Move</h3>
-          <label htmlFor="edit-move-name">Name EN:</label>
+          <h3 id="edit-move-heading">{t('edit_move')}</h3>
+          <label htmlFor="edit-move-name">{t('name_en')}</label>
           <input id="edit-move-name" value={editing.name_en || ''} onChange={(e) => setEditing({ ...editing, name_en: e.target.value })} />
-          <label htmlFor="edit-move-dice">Dice Expression:</label>
+          <label htmlFor="edit-move-dice">{t('dice_expression')}</label>
           <input id="edit-move-dice" value={editing.dice_expression || ''} onChange={(e) => setEditing({ ...editing, dice_expression: e.target.value })} />
-          <label htmlFor="edit-move-desc">Description EN:</label>
+          <label htmlFor="edit-move-desc">{t('description_en')}</label>
           <input id="edit-move-desc" value={editing.description_en || ''} onChange={(e) => setEditing({ ...editing, description_en: e.target.value })} />
-          <button onClick={handleSaveEdit}>Save</button>
-          <button style={{ marginLeft: 8 }} onClick={() => setEditing(null)}>Cancel</button>
+          <button onClick={handleSaveEdit}>{t('save')}</button>
+          <button style={{ marginLeft: 8 }} onClick={() => setEditing(null)}>{t('cancel')}</button>
         </form>
       )}
     </section>

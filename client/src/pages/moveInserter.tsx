@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { listMoves } from '../api/moves'
 
 type Props = { onInsert: (move: any) => void }
 
 export default function MoveInserter({ onInsert }: Props) {
+  const { t } = useTranslation()
   const [moves, setMoves] = useState<any[]>([])
   const [open, setOpen] = useState(false)
   const [selected, setSelected] = useState<string | null>(null)
@@ -26,14 +28,14 @@ export default function MoveInserter({ onInsert }: Props) {
 
   return (
     <>
-      <button onClick={() => setOpen((v) => !v)}>Insert Stored Move</button>
+      <button onClick={() => setOpen((v) => !v)}>{t('insert_stored_move')}</button>
       {open && (
-        <section role="dialog" aria-label="Insert stored move" style={{ border: '1px solid #ddd', padding: 8, marginTop: 8 }}>
+        <section role="dialog" aria-label={t('insert_stored_move')} style={{ border: '1px solid #ddd', padding: 8, marginTop: 8 }}>
           <select value={selected ?? ''} onChange={(e) => setSelected(e.target.value || null)}>
-            <option value="">-- select move --</option>
-            {moves.map((m) => <option key={m.id} value={m.id}>{m.name_en || m.name || m.id}</option>)}
+            <option value="">{t('select_move')}</option>
+            {moves.map((m) => <option key={m.id} value={m.id}>{(m.name_en ?? m.name) || m.id}</option>)}
           </select>
-          <button style={{ marginLeft: 8 }} onClick={handleInsert}>Insert</button>
+          <button style={{ marginLeft: 8 }} onClick={handleInsert}>{t('insert')}</button>
         </section>
       )}
     </>

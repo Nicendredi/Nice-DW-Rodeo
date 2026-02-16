@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { listSheets, createSheet, deleteSheet, SheetPayload } from '../api/sheets'
 
 type Props = {
@@ -8,6 +9,7 @@ type Props = {
 }
 
 export default function Sheets({ onSelect, onChange, reloadToken }: Props): JSX.Element {
+  const { t } = useTranslation()
   const [sheets, setSheets] = useState<any[]>([])
   const [users, setUsers] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
@@ -54,7 +56,7 @@ export default function Sheets({ onSelect, onChange, reloadToken }: Props): JSX.
   }
 
   async function handleDelete(id: string) {
-    if (!confirm('Delete this sheet?')) return
+    if (!confirm(t('confirm_delete_sheet'))) return
     try {
       await deleteSheet(id)
       await load()
@@ -66,17 +68,17 @@ export default function Sheets({ onSelect, onChange, reloadToken }: Props): JSX.
 
   return (
     <section>
-      <h3>Sheets</h3>
+      <h3>{t('sheets')}</h3>
       <form id="create-sheet" action="#" method="post" onSubmit={(e) => { e.preventDefault(); handleCreate() }} style={{ marginBottom: 12 }}>
-        <label htmlFor="new-sheet">New sheet</label>
-        <input id="new-sheet" name="name" value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="New sheet name" />
-        <button type="submit" style={{ marginLeft: 8 }}>Create</button>
+        <label htmlFor="new-sheet">{t('new_sheet')}</label>
+        <input id="new-sheet" name="name" value={newName} onChange={(e) => setNewName(e.target.value)} placeholder={t('new_sheet_name')} />
+        <button type="submit" style={{ marginLeft: 8 }}>{t('create')}</button>
       </form>
       {loading ? (
         <p>Loading…</p>
       ) : (
         <>
-          <h4>Available</h4>
+          <h4>{t('available')}</h4>
           <ul>
           {sheets.map((s) => {
             const owner = users.find((u) => u.id === s.owner_id)
@@ -84,7 +86,7 @@ export default function Sheets({ onSelect, onChange, reloadToken }: Props): JSX.
             return (
               <li key={s.id}>
                 <a href={`#sheet-${s.id}`} data-sheet-id={s.id} onClick={(e) => { e.preventDefault(); onSelect?.(s) }}>{s.name}</a> — <small>{ownerName}</small>
-                <button onClick={() => handleDelete(s.id)} style={{ marginLeft: 8 }}>Delete</button>
+                <button onClick={() => handleDelete(s.id)} style={{ marginLeft: 8 }}>{t('delete')}</button>
               </li>
             )
           })}
