@@ -1,3 +1,5 @@
+import type { DiceRoll, RollVerification, RollRecord, RollResponse } from '@nice-dw-rodeo/shared'
+
 export interface StoredMove {
   id?: string
   name?: string
@@ -9,6 +11,25 @@ export interface StoredMove {
   dice_expression?: string | null
   created_at?: string
   translation_missing?: boolean
+}
+
+export type RollDetail = DiceRoll
+
+export interface RollVerificationExtended extends RollVerification {
+  verified?: boolean
+}
+
+export interface RollRecordExtended extends RollRecord {
+  verification?: RollVerificationExtended
+}
+
+export type RollResponseExtended = RollRecordExtended | { record: RollRecordExtended; verification: RollVerificationExtended }
+
+export function normalizeRollResponse(response: RollResponseExtended): RollRecordExtended {
+  if (response && typeof response === 'object' && 'record' in response) {
+    return response.record
+  }
+  return response as RollRecordExtended
 }
 
 const BASE = '/api'
@@ -62,7 +83,7 @@ export async function rollMove(id: string, expression?: string, seed?: number | 
     body: JSON.stringify(body)
   })
   if (!res.ok) throw new Error('Roll failed')
-  return res.json() as Promise<any>
+  return res.json() as Promise<RollResponseExtended>
 }
 
 export async function rollExpression(expression: string) {
@@ -72,5 +93,5 @@ export async function rollExpression(expression: string) {
     body: JSON.stringify({ expression })
   })
   if (!res.ok) throw new Error('Roll failed')
-  return res.json() as Promise<any>
+  return res.json() as Promise<RollResponseExtended>
 }

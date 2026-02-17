@@ -1,4 +1,5 @@
 import { DiceRoller } from '@3d-dice/dice-roller-parser'
+import type { DiceRoll } from '@nice-dw-rodeo/shared'
 import { readJson, writeJson } from './db/jsonStore'
 import crypto from 'crypto'
 
@@ -38,16 +39,16 @@ export function parseDiceExpression(expr: string, seed?: number | string) {
     }
 
     const roller = randFn ? new DiceRoller(randFn) : new DiceRoller()
-    const rollObj = roller.roll(String(expr))
+    const rollObj: any = roller.roll(String(expr))
     // try to extract a total value (property names vary by implementation)
     const total = (rollObj && (rollObj.value ?? null))
-    return { valid: true, detail: rollObj, total }
+    return { valid: true, detail: rollObj as DiceRoll, total }
   } catch (err: any) {
     return { valid: false, error: err && err.message ? err.message : String(err) }
   }
 }
 
-export function createRollRecord(moveId: string | null, expression: string, rolls: any, total: number) {
+export function createRollRecord(moveId: string | null, expression: string, rolls: DiceRoll | null, total: number | null) {
   const roll_history = readJson('roll_history')
   const id = (crypto as any).randomUUID()
   const now = new Date().toISOString()
@@ -57,7 +58,7 @@ export function createRollRecord(moveId: string | null, expression: string, roll
   return rec
 }
 
-export function verifyAndRecord(moveId: string | null, expression: string, seed: any, clientTotal: any, clientDetail: any) {
+export function verifyAndRecord(moveId: string | null, expression: string, seed: any, clientTotal: any, clientDetail: unknown) {
   // Replay authoritative roll using seed if provided
   const parsed = parseDiceExpression(String(expression), seed)
   const serverTotal = parsed.valid ? parsed.total : null
@@ -71,7 +72,7 @@ export function verifyAndRecord(moveId: string | null, expression: string, seed:
     verified
   }
 
-  const rec = createRollRecord(moveId, expression, meta.server_detail ?? meta.client_detail ?? parsed.detail, meta.server_total ?? (clientTotal ?? null))
+  const rec = createRollRecord(moveId, expression, (meta.server_detail ?? meta.client_detail ?? parsed.detail) as DiceRoll | null, meta.server_total ?? (clientTotal ?? null))
   // augment stored record with verification metadata
   const roll_history = readJson('roll_history')
   const idx = roll_history.findIndex((r: any) => r.id === rec.id)

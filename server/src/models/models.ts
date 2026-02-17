@@ -1,3 +1,5 @@
+import type { DiceRoll } from '@nice-dw-rodeo/shared'
+
 export interface User {
   id: string
   username: string
@@ -37,13 +39,17 @@ export interface Move {
 
 export interface RollHistory {
   id: string
-  move_id?: string
-  sheet_id?: string
-  executed_by?: string
-  dice_expression: string
-  individual_results: number[]
-  total: number
-  result_text?: { en?: string; fr?: string }
+  move_id?: string | null
+  expression: string
+  rolls: DiceRoll
+  total: number | null
+  verification?: {
+    client_total?: number | null
+    client_detail?: unknown
+    server_total?: number | null
+    server_detail?: unknown
+    verified?: boolean
+  }
   created_at?: string
 }
 

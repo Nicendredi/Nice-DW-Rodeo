@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { listMoves, createMove, updateMove, deleteMove, rollMove, StoredMove } from '../api/moves'
+import { listMoves, createMove, updateMove, deleteMove, rollMove, StoredMove, normalizeRollResponse, RollRecordExtended } from '../api/moves'
 
 export default function Moves(): JSX.Element {
   const { t, i18n } = useTranslation()
   const [moves, setMoves] = useState<StoredMove[]>([])
   const [loading, setLoading] = useState(false)
   const [editing, setEditing] = useState<StoredMove | null>(null)
-  const [lastRolls, setLastRolls] = useState<Record<string, any>>({})
+  const [lastRolls, setLastRolls] = useState<Record<string, RollRecordExtended>>({})
   const [newName, setNewName] = useState('')
   const [newDesc, setNewDesc] = useState('')
   const [newDice, setNewDice] = useState('')
@@ -132,7 +132,8 @@ export default function Moves(): JSX.Element {
                     <button style={{ marginLeft: 8 }} onClick={async () => {
                       try {
                         const res = await rollMove(m.id!, m.dice_expression || undefined)
-                        setLastRolls(prev => ({ ...prev, [m.id!]: res }))
+                        const record = normalizeRollResponse(res)
+                        setLastRolls(prev => ({ ...prev, [m.id!]: record }))
                       } catch (err) { console.error(err) }
                     }}>{t('roll')}</button>
                   )}
@@ -140,9 +141,9 @@ export default function Moves(): JSX.Element {
                     <summary style={{ background: '#222', color: '#fff', padding: '4px 6px', borderRadius: 4 }}>Last roll</summary>
                     {m.id && lastRolls[m.id] && (
                       <div style={{ marginTop: 8, padding: 8 }}>
-                        <div><strong>Result:</strong> {String(lastRolls[m.id].total ?? lastRolls[m.id].value ?? '')}</div>
+                        <div><strong>Result:</strong> {String(lastRolls[m.id].total ?? '')}</div>
                         <div style={{ marginTop: 8 }}>
-                          {renderRollDetail(lastRolls[m.id].rolls ?? lastRolls[m.id].detail ?? lastRolls[m.id])}
+                          {renderRollDetail(lastRolls[m.id].rolls ?? lastRolls[m.id])}
                         </div>
                       </div>
                     )}

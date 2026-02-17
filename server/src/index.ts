@@ -173,7 +173,7 @@ app.post('/api/moves/:id/roll', (req, res) => {
   const parsed = parseDiceExpression(String(expression), seed)
   if (!parsed.valid) return res.status(400).json({ error: parsed.error })
 
-  const rollRecord = createRollRecord(req.params.id, String(expression), parsed.detail, parsed.total)
+  const rollRecord = createRollRecord(req.params.id, String(expression), parsed.detail ?? null, parsed.total)
   io.emit('move:executed', { move_id: req.params.id, record: rollRecord })
   res.json(rollRecord)
 })
@@ -193,7 +193,7 @@ app.post('/api/roll', (req, res) => {
 
   const parsed = parseDiceExpression(String(expression), seed)
   if (!parsed.valid) return res.status(400).json({ error: parsed.error })
-  const rollRecord = createRollRecord(null, String(expression), parsed.detail, parsed.total)
+  const rollRecord = createRollRecord(null, String(expression), parsed.detail ?? null, parsed.total)
   io.emit('move:executed', { move_id: null, record: rollRecord })
   res.json(rollRecord)
 })

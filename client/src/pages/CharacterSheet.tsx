@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import type { RollRecordExtended } from '../api/moves'
 import { useTranslation } from 'react-i18next'
 import MoveInserter from './moveInserter'
 
@@ -30,7 +31,7 @@ export default function CharacterSheet({ sheet, onSave, onDelete }: Props): JSX.
   const [newAttrVal, setNewAttrVal] = useState<string | number>('')
   const [newMove, setNewMove] = useState('')
   const [openIndices, setOpenIndices] = useState<Set<number>>(new Set())
-  const [lastRolls, setLastRolls] = useState<Record<string, any>>({})
+  const [lastRolls, setLastRolls] = useState<Record<string, RollRecordExtended>>({})
 
   useEffect(() => {
     setDraft(sheet || { name: '', attributes: {}, moves: [] })
@@ -105,9 +106,11 @@ export default function CharacterSheet({ sheet, onSave, onDelete }: Props): JSX.
         alert('No dice expression')
         return
       }
+      const api = await import('../api/moves')
+      const record = api.normalizeRollResponse(result)
       // store for UI rendering
       const key = mv.id ?? `local-${idx ?? Math.random().toString(36).slice(2)}`
-      setLastRolls((p) => ({ ...p, [key]: result }))
+      setLastRolls((p) => ({ ...p, [key]: record }))
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err)
@@ -238,8 +241,8 @@ export default function CharacterSheet({ sheet, onSave, onDelete }: Props): JSX.
                       <div style={{ marginTop: 8 }}>
                         { lastRolls[mv.id ?? `local-${i}`] && (
                           <div style={{ borderTop: '1px solid #eee', paddingTop: 8 }}>
-                            <div><strong>Result:</strong> {String(lastRolls[mv.id ?? `local-${i}`].total ?? lastRolls[mv.id ?? `local-${i}`].value ?? '')}</div>
-                            <div style={{ marginTop: 6 }}>{renderRollDetail(lastRolls[mv.id ?? `local-${i}`].rolls ?? lastRolls[mv.id ?? `local-${i}`].detail ?? lastRolls[mv.id ?? `local-${i}`])}</div>
+                            <div><strong>Result:</strong> {String(lastRolls[mv.id ?? `local-${i}`].total ?? '')}</div>
+                            <div style={{ marginTop: 6 }}>{renderRollDetail(lastRolls[mv.id ?? `local-${i}`].rolls ?? lastRolls[mv.id ?? `local-${i}`])}</div>
                           </div>
                         )}
                       </div>
