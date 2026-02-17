@@ -3,156 +3,518 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Nice DW — Semantic Character Sheet Example</title>
+  <title>Nice Dungeon World Rodeo — Character Sheets &amp; Moves Manager</title>
   <style>
     :root{
       --bg:#0f172a; --fg:#e6eef8; --muted:rgba(255,255,255,0.06);
       --surface: rgba(255,255,255,0.02); --card:#0b1220; --gap:16px; --radius:8px;
+      --success:#10b981; --danger:#ef4444; --info:#3b82f6;
     }
-    html,body{height:100%;}
-    body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--fg);margin:0;padding:1rem}
-    header.site{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:var(--gap)}
-    nav.primary a{color:var(--fg);text-decoration:none;margin-right:12px}
-    .layout{display:grid;grid-template-columns:260px 1fr 320px;gap:var(--gap);align-items:start}
-    nav.secondary, aside.compendium, main article, footer.site-footer, section.card, details{background:var(--surface);padding:12px;border-radius:var(--radius);border:1px solid var(--muted)}
-    main{background:transparent}
-    h1,input[name="name"]{font-size:1.25rem}
-    input,textarea,select,button{font:inherit;color:inherit}
-    input,textarea,select{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:6px;border-radius:6px}
-    button{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);padding:6px 10px;border-radius:6px;color:var(--fg);cursor:pointer}
-    button:hover{background:rgba(255,255,255,0.06)}
-    details summary{cursor:pointer;padding:8px;background:rgba(255,255,255,0.03);display:flex;justify-content:space-between;align-items:center}
-    .meta dl{display:flex;gap:16px;margin:8px 0}
-    #toasts{position:fixed;right:16px;bottom:16px}
-    .toast{background:#111827;color:#fff;padding:10px 14px;border-radius:8px;margin-top:8px}
-    @media (max-width:980px){ .layout{grid-template-columns:1fr; } nav.secondary{order:1} main{order:2} aside.compendium{order:3} }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      margin: 0;
+      padding: 1rem;
+      line-height: 1.6;
+    }
+    header.site {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: var(--gap);
+      padding-bottom: var(--gap);
+      border-bottom: 1px solid var(--muted);
+    }
+    h1 { margin: 0; font-size: 1.5rem; }
+    nav.primary {
+      display: flex;
+      gap: 1rem;
+    }
+    nav.primary a {
+      color: var(--fg);
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+    nav.primary a:hover {
+      background: var(--muted);
+    }
+    nav.primary a:focus {
+      outline: 2px solid var(--info);
+      outline-offset: 2px;
+    }
+    .locale-selector {
+      margin-left: auto;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 260px 1fr 320px;
+      gap: var(--gap);
+      align-items: start;
+    }
+    nav.sheets-nav, aside.move-compendium, main, section.card, details {
+      background: var(--surface);
+      padding: 1rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--muted);
+    }
+    main { background: transparent; border: none; padding: 0; }
+    h1, h2, h3, h4 { margin-top: 0; margin-bottom: 0.75rem; }
+    input, textarea, select, button {
+      font: inherit;
+      color: inherit;
+    }
+    fieldset {
+      border: none;
+      padding: 0;
+      margin: 0;
+    }
+    input, textarea, select {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 0.5rem;
+      border-radius: 4px;
+      width: 100%;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline: 2px solid var(--info);
+      outline-offset: 1px;
+      border-color: var(--info);
+    }
+    button {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      color: var(--fg);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: rgba(255,255,255,0.12);
+    }
+    button:active {
+      background: rgba(255,255,255,0.15);
+    }
+    button:focus {
+      outline: 2px solid var(--info);
+      outline-offset: 2px;
+    }
+    button.primary {
+      background: var(--info);
+      color: #fff;
+      border-color: var(--info);
+    }
+    button.primary:hover {
+      background: #2563eb;
+    }
+    button.danger {
+      background: var(--danger);
+      color: #fff;
+      border-color: var(--danger);
+    }
+    button.danger:hover {
+      background: #dc2626;
+    }
+    details {
+      margin-bottom: 0.75rem;
+    }
+    details summary {
+      cursor: pointer;
+      padding: 0.75rem;
+      background: rgba(255,255,255,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 4px;
+      user-select: none;
+    }
+    details summary:hover {
+      background: rgba(255,255,255,0.08);
+    }
+    details summary:focus {
+      outline: 2px solid var(--info);
+      outline-offset: -2px;
+    }
+    details[open] summary {
+      background: rgba(255,255,255,0.1);
+    }
+    details > * + * {
+      margin-top: 0.75rem;
+    }
+    .moves-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--gap);
+      align-items: start;
+    }
+    ul { margin: 0.5rem 0; padding-left: 1.5rem; }
+    li { margin-bottom: 0.5rem; }
+    .move-list {
+      list-style: none;
+      padding-left: 0;
+      margin: 0.5rem 0;
+    }
+    .meta {
+      background: rgba(255,255,255,0.02);
+      padding: 0.75rem;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+    }
+    .meta dl {
+      display: flex;
+      gap: 1.5rem;
+      margin: 0;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .meta dt {
+      font-weight: 600;
+      color: var(--muted);
+      display: inline;
+    }
+    .meta dd {
+      margin: 0;
+      display: inline;
+    }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    .attributes-list {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      list-style: none;
+      margin: 0 0 1rem 0;
+      padding: 0;
+    }
+    .attribute-item {
+      background: rgba(255,255,255,0.05);
+      padding: 0.75rem;
+      border-radius: 4px;
+      text-align: center;
+      list-style: none;
+    }
+    .attribute-item input {
+      width: 100%;
+      text-align: center;
+    }
+    .roll-result {
+      background: rgba(59, 130, 246, 0.1);
+      border-left: 4px solid var(--info);
+      padding: 0.75rem;
+      border-radius: 2px;
+      margin-top: 0.75rem;
+      display: block;
+    }
+    output {
+      display: block;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+    #toasts {
+      position: fixed;
+      right: 1rem;
+      bottom: 1rem;
+      z-index: 1000;
+    }
+    .toast {
+      background: #111827;
+      color: #fff;
+      padding: 1rem;
+      border-radius: 4px;
+      margin-top: 0.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+    .toast.success {
+      background: var(--success);
+    }
+    .toast.error {
+      background: var(--danger);
+    }
+    footer.site-footer {
+      margin-top: var(--gap);
+      padding-top: var(--gap);
+      border-top: 1px solid var(--muted);
+      text-align: center;
+      font-size: 0.875rem;
+      color: var(--muted);
+    }
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+      nav.sheets-nav { order: 1; }
+      main { order: 2; }
+      aside.move-compendium { order: 3; }
+      .moves-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .attributes-list {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    @media (max-width: 768px) {
+      .attributes-list {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 640px) {
+      header.site {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      nav.primary {
+        flex-wrap: wrap;
+      }
+      .locale-selector {
+        margin-left: 0;
+      }
+      .moves-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
   <header class="site" role="banner">
-    <div></div>
+    <h1>Nice Dungeon World Rodeo</h1>
     <nav class="primary" aria-label="Main navigation">
-      <a href="#sheets">Sheets</a>
-      <a href="#moves">Moves</a>
-      <a href="#settings">Settings</a>
+      <a href="#sheets" aria-current="page">Character Sheets</a>
+      <a href="#moves">Move Compendium</a>
     </nav>
-    <form aria-label="Locale selector" method="get" style="margin-left:auto">
-      <label for="locale" class="sr-only">Locale</label>
-      <select id="locale" name="locale" aria-label="Locale">
-        <option value="en">English</option>
+    <form class="locale-selector" aria-label="Language selection">
+      <label for="locale" class="sr-only">Language / Langue</label>
+      <select id="locale" name="locale">
+        <option value="en" selected>English</option>
         <option value="fr">Français</option>
       </select>
     </form>
   </header>
 
-  <section class="layout" role="application">
-    <nav class="secondary" aria-label="Sheets navigation">
-      <h3>Sheets</h3>
-      <form id="create-sheet" action="#" method="post" onsubmit="event.preventDefault(); createSheet()">
-        <label for="new-sheet">New sheet</label>
-        <input id="new-sheet" name="name" placeholder="New sheet name" />
-        <button type="submit">Create</button>
+  <main class="layout">
+    <!-- Sheets Navigation Sidebar -->
+    <nav class="sheets-nav" aria-label="Character sheets navigation">
+      <h2>Character Sheets</h2>
+      <form id="create-sheet">
+        <fieldset>
+          <legend class="sr-only">Create new sheet</legend>
+          <div class="form-group">
+            <label for="new-sheet-name">New Sheet Name</label>
+            <input id="new-sheet-name" type="text" name="name" placeholder="e.g., Grimdark Paladin" required />
+          </div>
+          <button type="submit" class="primary">Create Sheet</button>
+        </fieldset>
       </form>
 
-      <h4>Available</h4>
-      <ul>
-        <li><a href="#sheet-nicolas" data-sheet-id="nicolas-0001">Nicolas</a></li>
-        <li><a href="#sheet-ivan" data-sheet-id="nicendredi-0001">Ivan</a></li>
-        <li><a href="#sheet-ivan2" data-sheet-id="nicendredi-0001">Ivan-2</a></li>
+      <h3>Available Sheets</h3>
+      <ul role="list">
+        <li><a href="#sheet-ivan">Ivan</a></li>
+        <li><a href="#sheet-ivan2">Ivan-2</a></li>
+        <li><a href="#sheet-nicolas">Nicolas</a></li>
       </ul>
     </nav>
 
-    <main id="main" role="main" aria-labelledby="sheet-title">
-      <article aria-labelledby="sheet-title">
+    <!-- Main Content Area -->
+    <main role="main" aria-labelledby="sheet-title">
+      <article>
         <header>
           <h1 id="sheet-title">
-            <input name="name" value="Nicolas" aria-label="Character name" />
+            <input type="text" name="character-name" value="Ivan-2" aria-label="Character name" />
           </h1>
-          <section class="meta" aria-label="sheet metadata">
+          <section class="meta" aria-label="Character sheet metadata">
             <dl>
-              <dt>Created</dt><dd>2026-02-15T04:13</dd>
-              <dt>Owner</dt><dd>Nicolas</dd>
-              <dt>Campaign</dt><dd>Rodeo</dd>
+              <dt>Owner</dt>
+              <dd>nicendredi-0001</dd>
+              <dt>Campaign</dt>
+              <dd>—</dd>
+              <dt>Created</dt>
+              <dd><time datetime="2026-02-15T04:00:29.555Z">2026-02-15</time></dd>
             </dl>
           </section>
         </header>
 
-        <section aria-labelledby="attributes" class="card">
-          <h2 id="attributes">Attributes</h2>
-          <ul>
-            <li><label>Force <input type="number" value="16" /></label></li>
-            <li><label>Dex <input type="number" value="12" /></label></li>
-          </ul>
-          <form onsubmit="event.preventDefault(); alert('add attribute')">
-            <label for="attr-key">Key</label>
-            <input id="attr-key" name="attr-key" placeholder="key" />
-            <label for="attr-val">Value</label>
-            <input id="attr-val" name="attr-val" placeholder="value" style="width:80px" />
-            <button type="submit">Add</button>
-          </form>
+        <!-- Attributes Section -->
+        <section class="card">
+          <h2>Attributes</h2>
+          <fieldset>
+            <legend class="sr-only">Character attributes</legend>
+            <ul class="attributes-list" role="list">
+              <li class="attribute-item">
+                <label for="attr-force" class="sr-only">Force</label>
+                <strong>Force</strong>
+                <input id="attr-force" type="number" value="16" />
+              </li>
+              <li class="attribute-item">
+                <label for="attr-constitution" class="sr-only">Constitution</label>
+                <strong>Constitution</strong>
+                <input id="attr-constitution" type="number" value="14" />
+              </li>
+              <li class="attribute-item">
+                <label for="attr-dexterity" class="sr-only">Dexterity</label>
+                <strong>Dexterity</strong>
+                <input id="attr-dexterity" type="number" value="12" />
+              </li>
+              <li class="attribute-item">
+                <label for="attr-intelligence" class="sr-only">Intelligence</label>
+                <strong>Intelligence</strong>
+                <input id="attr-intelligence" type="number" value="9" />
+              </li>
+              <li class="attribute-item">
+                <label for="attr-wisdom" class="sr-only">Wisdom</label>
+                <strong>Wisdom</strong>
+                <input id="attr-wisdom" type="number" value="11" />
+              </li>
+              <li class="attribute-item">
+                <label for="attr-charisma" class="sr-only">Charisma</label>
+                <strong>Charisma</strong>
+                <input id="attr-charisma" type="number" value="13" />
+              </li>
+            </ul>
+          </fieldset>
         </section>
 
-        <section aria-labelledby="moves" class="card">
-          <h2 id="moves">Moves</h2>
+        <!-- Moves Section -->
+        <section class="card">
+          <h2>Moves</h2>
+          <div class="moves-grid">
+            <details open>
+              <summary>
+                <strong>Hack &amp; Slash</strong>
+                <small style="color: var(--muted);"> — 2d6+2</small>
+              </summary>
+              <div class="form-group">
+                <label for="move-desc-1">Description</label>
+                <textarea id="move-desc-1" rows="3">Physical attack</textarea>
+              </div>
+              <div class="form-group">
+                <label for="move-dice-1">Dice Expression</label>
+                <input id="move-dice-1" type="text" value="2d6+2" />
+              </div>
+              <output class="roll-result" role="status" aria-live="polite">
+                <strong>Last Roll:</strong> 8 (rolled: 3, 2 + 2 modifier)
+              </output>
+              <button type="button">Roll Move</button>
+            </details>
 
-          <details open>
-            <summary><strong>Hack &amp; Slash</strong><small> — 2d6+1</small></summary>
-            <label for="desc-1">Description</label>
-            <textarea id="desc-1" rows="3" style="width:100%">Physical attack.</textarea>
-            <label for="dice-1">Dice expression</label>
-            <input id="dice-1" value="2d6+1" />
-          </details>
-
-          <details>
-            <summary><strong>Bardé d'acier</strong></summary>
-            <label for="desc-2">Description</label>
-            <textarea id="desc-2" rows="3" style="width:100%">Armor move.</textarea>
-          </details>
-
-          <form onsubmit="event.preventDefault(); alert('add move')">
-            <label for="move-name">Move</label>
-            <input id="move-name" name="move-name" placeholder="move text" />
-            <button type="submit">Add Local Move</button>
-          </form>
+            <details>
+              <summary>
+                <strong>Bardé d'acier</strong>
+                <small style="color: var(--muted);"> — Custom move</small>
+              </summary>
+              <div class="form-group">
+                <label for="move-desc-2">Description</label>
+                <textarea id="move-desc-2" rows="3">Steel armor move</textarea>
+              </div>
+              <button type="button">Roll Move</button>
+            </details>
+          </div>
         </section>
 
-        <footer>
-          <button onclick="alert('save')">Save</button>
-          <button onclick="alert('delete')">Delete</button>
+        <!-- Sheet Actions -->
+        <footer style="display: flex; gap: 1rem; margin-top: 1rem;">
+          <button class="primary">Save Changes</button>
+          <button class="danger">Delete Sheet</button>
         </footer>
       </article>
     </main>
 
-    <aside class="compendium" aria-label="Move compendium">
-      <h3>Compendium</h3>
-      <ul>
-        <li><button onclick="alert('insert hack')">Hack &amp; Slash — 2d6+1</button></li>
-        <li><button onclick="alert('insert bard')">Bardé d'acier</button></li>
+    <!-- Move Compendium Sidebar -->
+    <aside class="move-compendium" aria-label="Move compendium and filtering">
+      <h2>Move Compendium</h2>
+      
+      <form>
+        <fieldset>
+          <legend class="sr-only">Filter compendium</legend>
+          <div class="form-group">
+            <label for="filter-moves">Filter by Name</label>
+            <input id="filter-moves" type="search" placeholder="Search..." />
+          </div>
+        </fieldset>
+      </form>
+
+      <h3>Available Moves</h3>
+      <ul role="list" class="move-list">
+        <li>
+          <details>
+            <summary><strong>Hack &amp; Slash</strong></summary>
+            <article style="margin-top: 0.75rem;">
+              <dl style="margin: 0;">
+                <dt style="font-weight: 600; color: var(--muted); font-size: 0.875rem;">Expression</dt>
+                <dd style="margin: 0 0 0.5rem 0;">2d6+FOR</dd>
+              </dl>
+              <p style="margin: 0;">
+                Physical attack. When you engage an enemy in melee combat, roll.
+              </p>
+            </article>
+          </details>
+        </li>
       </ul>
-      <nav aria-label="compendium filters">
-        <h4>Filters</h4>
-        <form onsubmit="event.preventDefault(); alert('filter')">
-          <label for="filter-name">Name</label>
-          <input id="filter-name" name="filter" />
-          <button type="submit">Apply</button>
-        </form>
-      </nav>
+
+
+      <hr style="border: none; border-top: 1px solid var(--muted); margin: 1rem 0;" />
+      <h3>Localization</h3>
+      <p style="margin: 0 0 0.75rem 0; font-size: 0.875rem; color: var(--muted);">
+        Viewing moves in: <strong id="current-lang">English</strong>
+      </p>
+      <p style="margin: 0; font-size: 0.875rem;">
+        Some translations may be incomplete. Translations are managed by administrators.
+      </p>
     </aside>
+  </main>
 
-  </section>
+  <!-- Toast Notifications -->
+  <output id="toasts" aria-live="assertive" aria-atomic="true"></output>
 
-  <output id="toasts" aria-live="polite" aria-atomic="true"></output>
-
+  <!-- Site Footer -->
   <footer class="site-footer" role="contentinfo">
-    <p>Nice Dungeon World — Example layout · 2026</p>
+    <p>
+      Nice Dungeon World Rodeo — Character Sheet Manager
+      <br/>
+      <small>Built with semantic HTML and accessibility best practices</small>
+    </p>
   </footer>
 
-  <script>
-    function createSheet(){
-      const out = document.getElementById('toasts');
-      const el = document.createElement('div'); el.className='toast'; el.textContent='Created (example)'; out.appendChild(el);
-      setTimeout(()=>el.remove(),3500);
-    }
+  <script type="text/javascript">
+    // Simple example: update locale display when selector changes
+    document.getElementById('locale').addEventListener('change', function(e) {
+      const langMap = { en: 'English', fr: 'Français' };
+      document.getElementById('current-lang').textContent = langMap[e.target.value] || 'English';
+    });
+
+    // Example: sheet creation with feedback
+    document.getElementById('create-sheet').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('new-sheet-name').value;
+      const toast = document.getElementById('toasts');
+      const el = document.createElement('div');
+      el.className = 'toast success';
+      el.textContent = `Created "${name}" (example)`;
+      el.setAttribute('role', 'status');
+      toast.appendChild(el);
+      setTimeout(() => el.remove(), 3500);
+      this.reset();
+    });
   </script>
 </body>
 </html>
