@@ -176,9 +176,9 @@ export default function CharacterSheet({ sheet, onSave, onDelete }: Props): JSX.
     <article aria-labelledby="sheet-title">
       <header>
         <h1 id="sheet-title">
-          <input aria-label="Character name" value={draft.name} onChange={(e) => update('name', e.target.value)} style={{ fontSize: '1.25rem', width: '100%' }} />
+          <input aria-label={t('character_name')} value={draft.name} onChange={(e) => update('name', e.target.value)} style={{ fontSize: '1.25rem', width: '100%' }} />
         </h1>
-        <section className="meta" aria-label="sheet metadata" style={{ marginTop: 8 }}>
+        <section className="meta" aria-label={t('sheet_metadata')} style={{ marginTop: 8 }}>
           {draft.created_at && <div><small>{t('created')}: {draft.created_at}</small></div>}
           <dl style={{ display: 'flex', gap: 16, marginTop: 8 }}>
             <dt>Owner</dt>

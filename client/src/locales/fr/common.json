@@ -36,4 +36,10 @@
   "insert_stored_move": "Insérer un mouvement enregistré",
   "select_move": "-- sélectionner un mouvement --",
   "insert": "Insérer"
+  ,"character_name": "Nom du personnage"
+  ,"sheet_metadata": "Métadonnées de la fiche"
+  ,"main_navigation": "Navigation principale"
+  ,"sheets_navigation": "Navigation des fiches"
+  ,"move_compendium": "Compendium des actions"
+  ,"compendium_filters": "Filtres du compendium"
 }

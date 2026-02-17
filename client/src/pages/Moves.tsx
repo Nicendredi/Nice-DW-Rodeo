@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { listMoves, createMove, updateMove, deleteMove, rollMove, StoredMove } from '../api/moves'
 
 export default function Moves(): JSX.Element {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [moves, setMoves] = useState<StoredMove[]>([])
   const [loading, setLoading] = useState(false)
   const [editing, setEditing] = useState<StoredMove | null>(null)
@@ -25,7 +25,7 @@ export default function Moves(): JSX.Element {
     }
   }
 
-  useEffect(() => { load() }, [])
+  useEffect(() => { load() }, [i18n.language])
 
   async function handleCreate() {
     if (!newName.trim()) return
@@ -97,16 +97,32 @@ export default function Moves(): JSX.Element {
     return <pre style={{ whiteSpace: 'pre-wrap', fontSize: 12 }}>{JSON.stringify(detail, null, 2)}</pre>
   }
 
+  const locale = i18n.language.slice(0, 2)
+  function getMoveText(move: StoredMove) {
+    if (locale === 'fr') {
+      return {
+        name: move.name_fr ?? move.name_en ?? move.name ?? '',
+        description: move.description_fr ?? move.description_en ?? move.description ?? ''
+      }
+    }
+    return {
+      name: move.name_en ?? move.name_fr ?? move.name ?? '',
+      description: move.description_en ?? move.description_fr ?? move.description ?? ''
+    }
+  }
+
   return (
     <section>
       <h4 style={{ display: 'none' }}>{t('stored_moves')}</h4>
 
       {loading ? <p>{t('loading')}</p> : (
         <>
-          {moves.map((m) => (
+          {moves.map((m) => {
+            const text = getMoveText(m)
+            return (
             <details key={m.id} open={editing?.id === m.id}>
-              <summary>{m.name ?? m.name_en}</summary>
-              <p>{m.description ?? m.description_en}</p>
+              <summary>{text.name}</summary>
+              <p>{text.description}</p>
               <aside>
               <div><small>{m.dice_expression ?? ''} {m.created_at ? `• ${new Date(m.created_at).toLocaleString()}` : ''}</small></div>
               </aside>
@@ -132,11 +148,11 @@ export default function Moves(): JSX.Element {
                     )}
                   </details>
             </details>
-          ))}
+          )})}
         </>
       )}
 
-      <nav aria-label="compendium filters">
+      <nav aria-label={t('compendium_filters')}>
         <h4>{t('filters')}</h4>
         <form onSubmit={(e) => { e.preventDefault(); /* filter logic */ }}>
           <label htmlFor="filter-name">{t('name')}</label>

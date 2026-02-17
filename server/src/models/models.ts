@@ -14,20 +14,25 @@ export interface Campaign {
 
 export interface CharacterSheet {
   id: string
-  owner_id: string
-  campaign_id?: string
+  owner_id?: string | null
+  campaign_id?: string | null
   name: string
-  attributes: Record<string, number>
-  moves: string[]
+  attributes?: Record<string, number>
+  moves?: string[]
   created_at?: string
 }
 
 export interface Move {
   id: string
-  name: { en: string; fr?: string }
-  description: { en: string; fr?: string }
-  dice_expression?: string
+  name?: string
+  name_en?: string
+  name_fr?: string | null
+  description?: string | null
+  description_en?: string | null
+  description_fr?: string | null
+  dice_expression?: string | null
   created_at?: string
+  translation_missing?: boolean
 }
 
 export interface RollHistory {
@@ -40,15 +45,6 @@ export interface RollHistory {
   total: number
   result_text?: { en?: string; fr?: string }
   created_at?: string
-}
-
-export interface TranslationEntry {
-  key: string
-  context?: string
-  en?: string
-  fr?: string
-  updated_by?: string
-  updated_at?: string
 }
 
 export default {}

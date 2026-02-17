@@ -47,7 +47,7 @@ export default function App(): JSX.Element {
     <>
       <header className="site" role="banner">
         <div />
-        <nav className="primary" aria-label="Main navigation">
+        <nav className="primary" aria-label={t('main_navigation')}>
           <a href="#sheets">{t('sheets')}</a>
           <a href="#moves">{t('moves')}</a>
           <a href="#settings">{t('settings')}</a>
@@ -62,7 +62,7 @@ export default function App(): JSX.Element {
       </header>
 
       <section className="layout" role="application">
-        <nav className="secondary" aria-label="Sheets navigation">
+        <nav className="secondary" aria-label={t('sheets_navigation')}>
           <h3>Sheets</h3>
           <Sheets onSelect={(s) => setSelected(s)} onChange={(c) => setSelected(c ?? undefined)} reloadToken={sheetsReload} />
         </nav>
@@ -73,7 +73,7 @@ export default function App(): JSX.Element {
           </article>
         </main>
 
-        <aside className="compendium" aria-label="Move compendium">
+        <aside className="compendium" aria-label={t('move_compendium')}>
           <h3>Compendium</h3>
           <Moves />
         </aside>

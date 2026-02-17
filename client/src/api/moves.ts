@@ -1,11 +1,14 @@
 export interface StoredMove {
   id?: string
+  name?: string
   name_en?: string
   name_fr?: string | null
+  description?: string | null
   description_en?: string | null
   description_fr?: string | null
   dice_expression?: string | null
   created_at?: string
+  translation_missing?: boolean
 }
 
 const BASE = '/api'

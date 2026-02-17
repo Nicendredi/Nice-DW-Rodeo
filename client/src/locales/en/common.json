@@ -36,4 +36,10 @@
   "insert_stored_move": "Insert Stored Move",
   "select_move": "-- select move --",
   "insert": "Insert"
+  ,"character_name": "Character name"
+  ,"sheet_metadata": "Sheet metadata"
+  ,"main_navigation": "Main navigation"
+  ,"sheets_navigation": "Sheets navigation"
+  ,"move_compendium": "Move compendium"
+  ,"compendium_filters": "Compendium filters"
 }
