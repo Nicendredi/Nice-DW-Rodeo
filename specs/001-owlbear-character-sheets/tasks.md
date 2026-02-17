@@ -14,6 +14,7 @@ Priority order: MVP tasks first, then i18n, real-time, and optional 3D features.
 - [x] T6 — Implement server-side roll auditing and anti-cheat
 - [x] T7 — Add WebSocket real-time broadcasts
 - [x] T8 — Integrate i18n in frontend and API
+- [x] **T8b — Implement shared types for roll models**
 - [ ] T9 — Admin translation UI and missing-translation reporting
 - [ ] T10 — Tests and CI
 - [ ] T11 — Three.js + Rapier dice animation component (optional)
