@@ -37,6 +37,37 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ValidationError"
+  /api/settings:
+    get:
+      summary: Load application settings
+      responses:
+        "200":
+          description: Settings payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Settings"
+    put:
+      summary: Replace application settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Settings"
+      responses:
+        "200":
+          description: Settings saved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Settings"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationError"
   /api/i18n/{lang}/labels:
     get:
       summary: Load UI label translations
@@ -116,6 +147,7 @@ components:
             current:
               type: integer
               minimum: 0
+              description: Must be less than or equal to max.
             max:
               type: integer
               minimum: 1
@@ -152,6 +184,12 @@ components:
               maximum: 20
         notes:
           type: string
+    Settings:
+      type: object
+      required: [language]
+      properties:
+        language:
+          $ref: "#/components/schemas/LanguageCode"
     Move:
       type: object
       required: [id, name, description]

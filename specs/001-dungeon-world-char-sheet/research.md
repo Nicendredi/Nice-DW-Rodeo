@@ -12,6 +12,10 @@
 - Rationale: Spec mandates single character storage, on-blur persistence, and no backend integration.
 - Alternatives considered: IndexedDB (unnecessary complexity for single record).
 
+## Decision: Persist language preference alongside character data
+- Rationale: Spec requires language persistence and runtime switching with English fallback; a small settings payload in localStorage is sufficient.
+- Alternatives considered: Relying on browser language only (does not persist user choice).
+
 ## Decision: Validation model aligns with clarified constraints
 - Rationale: Health and damage die constraints were clarified; attributes clamp to 1..20; name required; errors shown inline on blur.
 - Alternatives considered: Allowing free-form values with warnings only (rejected by clarified requirements).

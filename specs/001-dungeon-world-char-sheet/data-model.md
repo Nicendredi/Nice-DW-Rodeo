@@ -12,7 +12,6 @@ Represents a single Dungeon World player character.
 ```json
 {
   "character": {
-    "id": "uuid | string",
     "name": "string (required, 1–100 chars)",
     "playerName": "string (optional, 0–100 chars)",
     "campaign": "string (optional, 1–100 chars)",
@@ -31,9 +30,10 @@ Represents a single Dungeon World player character.
       "charisma": "integer (required, 1–20)"
     },
     "moves": "static resources (not persisted with character)",
-    "notes": "string (optional, unlimited, for inventory, story notes, etc.)",
-    "createdAt": "ISO8601 timestamp",
-    "updatedAt": "ISO8601 timestamp"
+    "notes": "string (optional, unlimited, for inventory, story notes, etc.)"
+  },
+  "settings": {
+    "language": "enum (required, en|fr)"
   }
 }
 ```
@@ -131,10 +131,11 @@ Score   Modifier
 4. **Health:**
    - `current` ≥ 0 and ≤ `max`.
    - `max` ≥ 1.
-5. **Attributes:** each in range [1, 20] (standard D&D ability score range).
+5. **Attributes:** each in range [1, 20]; values are clamped to this range on input.
 6. **Class:** must be one of the predefined enums.
 7. **Damage die:** must be one of the predefined enums (d4–d12).
 8. **Notes:** no character limit (practical: 5000+ chars supported).
+9. **Language:** must be `en` or `fr`; fallback to English for missing keys.
 
 ---
 
@@ -145,13 +146,20 @@ Score   Modifier
 
 ---
 
+## Saving & Persistence
+
+- Character data is saved as a single JSON object in browser local storage under the key `dw-character`.
+- Language preference is saved under the key `dw-language`.
+- On load, the app attempts to restore character and language from local storage; if not found, initializes with placeholder values.
+- On field blur, the character data is validated and saved back to local storage.
+- On language change, the preference is saved and the UI updates immediately without reload.
+
 ## Sample Payload
 
 ### Minimum Valid Character
 
 ```json
 {
-  "id": "char-001",
   "name": "Thorgrim Ironfoot",
   "playerName": "Alice",
   "campaign": "The Lost Valley",
@@ -169,9 +177,7 @@ Score   Modifier
     "wisdom": 13,
     "charisma": 11
   },
-  "notes": "Thorgrim is seeking the legendary axe of Duranthax.\nCan speak Common, Dwarven, and Goblin.",
-  "createdAt": "2026-02-18T10:00:00Z",
-  "updatedAt": "2026-02-18T10:00:00Z"
+  "notes": "Thorgrim is seeking the legendary axe of Duranthax.\nCan speak Common, Dwarven, and Goblin."
 }
 ```
 
