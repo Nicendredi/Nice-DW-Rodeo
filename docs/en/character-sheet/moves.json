@@ -1,0 +1,111 @@
+{
+  "basicMoves": [
+    {
+      "id": "bm-001",
+      "name": "Hack and Slash",
+      "description": "When you attack an enemy in melee with a weapon, roll+STR. On a 10+, you hit and deal your damage. On a 7-9, you hit but the enemy gets a free attack against you or you have to choose: take the enemy's attack or deal normal damage."
+    },
+    {
+      "id": "bm-002",
+      "name": "Volley",
+      "description": "When you attack an enemy at range with a projectile weapon, roll+DEX. On a 10+, you hit and deal your damage. On a 7-9, you hit but you're in a worse position; the GM says how."
+    },
+    {
+      "id": "bm-003",
+      "name": "Defy Danger",
+      "description": "When you act despite an imminent threat or suffer a calamity, say how you try to avoid it and roll. If you do it by... +STR, +DEX, +CON, +INT, +WIS, or +CHA, depending on the action. On a 10+, you pull it off. On a 7-9, you do it but choose one consequence the GM will impose."
+    },
+    {
+      "id": "bm-004",
+      "name": "Defend",
+      "description": "When an ally makes a move, you can spend a Hold to negate the effect of one attack against them or against you. Can only be used once per instance."
+    },
+    {
+      "id": "bm-005",
+      "name": "Spout Lore",
+      "description": "When you consult your accumulated knowledge about something, roll+INT. On a 10+, the GM will tell you something interesting and useful about the subject. On a 7-9, the GM will tell you something interesting about it, but it might be obscure, incomplete, or questionable."
+    },
+    {
+      "id": "bm-006",
+      "name": "Discern Realities",
+      "description": "When you closely study a situation or person, roll+WIS. On a 10+, ask the GM 3 questions from the list below. On a 7-9, ask 1. Either way, take +1 forward when acting on the answers."
+    },
+    {
+      "id": "bm-007",
+      "name": "Parley",
+      "description": "When you have leverage on someone and make a demand, roll+CHA. On a 10+, they do what you ask if you first promise something they find worth their while. On a 7-9, they ask for something in return first. Regardless of the outcome, if you can't offer them something they want, the leveraged move fails."
+    },
+    {
+      "id": "bm-008",
+      "name": "Aid or Interfere",
+      "description": "When you help or hinder someone on a move, roll+the relevant stat tied to the move. On a 10+, they take +1 or -2 to their roll (your choice). On a 7-9, they take +1 or -1 to their roll (your choice)."
+    }
+  ],
+  "specialMoves": [
+    {
+      "id": "sm-001",
+      "name": "Last Breath",
+      "description": "When you are dying you catch a glimpse of what lies beyond the final curtain. You see visions of the dead and the afterlife. Take +1 to your next roll if you choose to come back from the brink of death."
+    },
+    {
+      "id": "sm-002",
+      "name": "Encumbrance",
+      "description": "When you make a move while carrying weight equal to or greater than Str+Con, you suffer -1 to rolls for any move that involves moving around. If your weight is more than Str+Con + 4, you can't move around at all while carrying it."
+    },
+    {
+      "id": "sm-003",
+      "name": "Make Camp",
+      "description": "When you settle in to rest and consume a ration, remove one Fatigue. If you are somewhere dangerous, decide the watch order as well. When you wake from at least a few uninterrupted hours of sleep, recover damage equal to half your max HP."
+    },
+    {
+      "id": "sm-004",
+      "name": "Take Watch",
+      "description": "When you're on watch and something approaches the camp, roll+WIS. On a 10+, you're able to wake everyone and prepare a response, everyone takes +1 forward. On a 7-9, you react just a moment too late; your companions in camp are awake but haven't had time to prepare. On a miss, whatever lurks outside the campfire's light has the drop on you."
+    },
+    {
+      "id": "sm-005",
+      "name": "Undertake a Perilous Journey",
+      "description": "When you travel through hostile territory, choose one member of the party to act as trailblazer, one as scout, and one as quartermaster. Each rolls+WIS. On a 10+, the party makes good time and encounters no trouble. On a 7-9, you make it, but the GM chooses one complication."
+    },
+    {
+      "id": "sm-006",
+      "name": "End of Session",
+      "description": "When the party reaches a point of rest or a major turning point, each character answers these questions: Did we learn anything new and important? Did we accomplish what we set out to do? Did we overcome a notable enemy or monster? Did we discover the answer to an important question? Did we discover a valuable treasure? Did we complete a successfully? For each yes, Experience. At 5 Exp, level up."
+    },
+    {
+      "id": "sm-007",
+      "name": "Level Up",
+      "description": "When you have 5 Experience points, you level up. When you level up, spend those 5 Exp and choose one option from your class list of improvements."
+    },
+    {
+      "id": "sm-008",
+      "name": "Carouse",
+      "description": "When you return triumphant and throw money around, you attract hangers-on and parasites. Lose 1d4 × 10 coin. If you spend 50 coin or more, lose an additional 1d4 × 10 coin, you take the company of 1d4 undesirable folk. You wake up: bruised and sore, missing a body part (usually not a vital one), and either broke or with a new friend."
+    },
+    {
+      "id": "sm-009",
+      "name": "Supply",
+      "description": "When you go to a settlement and buy provisions, food, tools, armor, and other common items, mark it on your map or in your notes. The Supply is a record of the armor, weapons, and supplies that you're carrying to adventure."
+    },
+    {
+      "id": "sm-010",
+      "name": "Recover",
+      "description": "When you do nothing but rest, recover up to half your max HP. If you have great library access or powerful healing magic at your disposal, recover all your HP instead."
+    },
+    {
+      "id": "sm-011",
+      "name": "Recruit",
+      "description": "When you spend time recruiting a professional retainer, be they mercenary, sage, or craftsperson, perform with them two Parley rolls. The first establishes their help. The second sets what they ask of you in return. Pay them as NPCs, by giving them a share of treasure or 1d4 coin each session."
+    },
+    {
+      "id": "sm-012",
+      "name": "Outstanding Warrants",
+      "description": "When you travel through a settlement plagued by your past, if you won't run into trouble from old enemies, old lovers, or the law, mark Exp. You may spend 50 coin to clear it all away, at least for a while."
+    },
+    {
+      "id": "sm-013",
+      "name": "Bolster",
+      "description": "When you help someone who is facing danger, roll+CON. On a 10+, they take +1 to their next roll against that danger. On a 7-9, they take +1 but you also face the danger in some way. On a miss, the danger turns on you."
+    }
+  ]
+}

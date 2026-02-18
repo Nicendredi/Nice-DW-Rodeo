@@ -1,0 +1,72 @@
+{
+  "characterInfo": {
+    "title": "Dungeon World Character Sheet",
+    "characterName": "Character Name",
+    "characterNamePlaceholder": "Enter character name",
+    "playerName": "Player Name",
+    "playerNamePlaceholder": "Enter your name",
+    "campaign": "Campaign / World",
+    "campaignPlaceholder": "Enter campaign name",
+    "class": "Class",
+    "classPlaceholder": "Select class",
+    "health": "Health",
+    "currentHealth": "Current",
+    "maxHealth": "Maximum",
+    "damageDie": "Damage Die",
+    "damageDiePlaceholder": "Select damage die"
+  },
+  "attributes": {
+    "title": "Attributes",
+    "strength": "STR",
+    "dexterity": "DEX",
+    "constitution": "CON",
+    "intelligence": "INT",
+    "wisdom": "WIS",
+    "charisma": "CHA",
+    "modifier": "mod",
+    "modifierTooltip": "Modifier = floor((attribute - 10) / 2)"
+  },
+  "basicMoves": {
+    "title": "Basic Moves",
+    "selectMove": "Select this move",
+    "unselectMove": "Unselect this move"
+  },
+  "specialMoves": {
+    "title": "Special Moves",
+    "selectMove": "Select this move",
+    "unselectMove": "Unselect this move"
+  },
+  "notes": {
+    "title": "Notes & Inventory",
+    "placeholder": "Write notes, inventory, or story details here..."
+  },
+  "buttons": {
+    "save": "Save",
+    "reset": "Reset Defaults",
+    "language": "Language"
+  },
+  "validationErrors": {
+    "nameRequired": "Character name is required",
+    "playerNameRequired": "Player name is required",
+    "classRequired": "Class is required",
+    "healthInvalid": "Current health cannot exceed maximum health",
+    "attributeInvalid": "Attribute must be between 1 and 20"
+  },
+  "classOptions": {
+    "Fighter": "Fighter",
+    "Wizard": "Wizard",
+    "Thief": "Thief",
+    "Cleric": "Cleric",
+    "Ranger": "Ranger",
+    "Paladin": "Paladin",
+    "Bard": "Bard",
+    "Druid": "Druid"
+  },
+  "damageDieOptions": {
+    "d4": "d4",
+    "d6": "d6",
+    "d8": "d8",
+    "d10": "d10",
+    "d12": "d12"
+  }
+}
