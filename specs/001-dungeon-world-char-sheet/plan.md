@@ -1,93 +1,95 @@
 # Implementation Plan: Dungeon World Character Sheet
 
-**Branch**: `001-dungeon-world-char-sheet` | **Date**: 2026-02-18 | **Spec**: specs/001-dungeon-world-char-sheet/spec.md
-**Input**: Feature specification from specs/001-dungeon-world-char-sheet/spec.md
+**Branch**: `001-dungeon-world-char-sheet` | **Date**: 2026-02-18 | **Spec**: [specs/001-dungeon-world-char-sheet/spec.md](specs/001-dungeon-world-char-sheet/spec.md)
+**Input**: Feature specification from `/specs/001-dungeon-world-char-sheet/spec.md`
+
+**Note**: This template is filled in by the `/speckit.plan` command. See `.specify/templates/plan-template.md` for the execution workflow.
 
 ## Summary
 
-Build a Vite + React single-page character sheet with localized EN/FR labels and move descriptions, on-blur persistence to browser local storage, validation and clamping per DW SRD, and full keyboard/screen-reader accessibility.
+Build a Vite + React character sheet page that renders editable character info, attributes with DW modifiers, localized moves, and notes. Persist a single character and language preference to local storage on blur with inline validation, and meet accessibility + bilingual requirements.
 
 ## Technical Context
 
-**Language/Version**: TypeScript (Vite + React)  
-**Primary Dependencies**: Vite (MIT), React (MIT), i18next (MIT), Vitest (MIT), React Testing Library (MIT)  
-**Storage**: Browser localStorage (single character record)  
-**Testing**: Vitest + React Testing Library (TDD)  
-**Target Platform**: Modern browsers (Chrome, Firefox, Safari, Edge) on desktop/tablet; primary dev on Windows with VS Code and Firefox  
-**Project Type**: Web application (single frontend)  
-**Performance Goals**: Initial render under 2s (SC-001)  
-**Constraints**: No backend, on-blur auto-save, bilingual UI strings, full a11y, open-source dependencies only  
-**Scale/Scope**: Single character, single page, static moves data
+<!--
+  ACTION REQUIRED: Replace the content in this section with the technical details
+  for the project. The structure here is presented in advisory capacity to guide
+  the iteration process.
+-->
+
+**Language/Version**: TypeScript 5.x (Vite + React), Node.js 20 LTS  
+**Primary Dependencies**: Vite, React, react-i18next, Vitest, React Testing Library  
+**Storage**: Browser localStorage (single character + language preference)  
+**Testing**: Vitest + React Testing Library  
+**Target Platform**: Modern browsers (Chrome, Firefox, Safari, Edge) on desktop + tablet  
+**Project Type**: Web application (single Vite app)  
+**Performance Goals**: Initial load under 2 seconds (SC-001)  
+**Constraints**: On-blur auto-save, inline validation, bilingual UI, WCAG 2.1 AA accessibility  
+**Scale/Scope**: Single-page sheet, single character, no backend
 
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-- UI/UX First: Design doc exists at docs/design/001-dungeon-world-char-sheet/wireframes.md.
-- Explicit Data Models: Data model defined at specs/001-dungeon-world-char-sheet/data-model.md.
-- Test-First (TDD): Plan includes test cases before implementation; tests must be added before feature code.
-- Bilingual Documentation: EN/FR i18n JSON required for labels and moves.
-- PR-at-Start: ACTION REQUIRED - open a PR before implementation begins.
-- Dependency license check: Vite (MIT), React (MIT), i18next (MIT), Vitest (MIT), React Testing Library (MIT). No non-OSS dependencies.
+The plan MUST verify the following items from the project constitution before Phase 0 completes:
 
-Mitigation: Create a draft PR prior to any implementation and link this plan and spec.
+  
+- Dependency license check (PASS):
+  - Vite (MIT)
+  - React (MIT)
+  - i18next (MIT)
+  - Vitest (MIT)
+  - React Testing Library (MIT)
+  - No non-open-source dependencies identified.
+
+
+If any gate is not met, record the mitigation and schedule for completion before implementation proceeds.
+
+**Post-Design Check**: PASS (no new dependencies or deviations introduced).
 
 ## Project Structure
 
 ### Documentation (this feature)
 
 ```text
-specs/001-dungeon-world-char-sheet/
-├── plan.md              # This file (/speckit.plan output)
-├── research.md          # Phase 0 output
-├── data-model.md        # Phase 1 output
-├── quickstart.md        # Phase 1 output
-├── contracts/           # Phase 1 output
-└── tasks.md             # Phase 2 output (/speckit.tasks)
+specs/[###-feature]/
+├── plan.md              # This file (/speckit.plan command output)
+├── research.md          # Phase 0 output (/speckit.plan command)
+├── data-model.md        # Phase 1 output (/speckit.plan command)
+├── quickstart.md        # Phase 1 output (/speckit.plan command)
+├── contracts/           # Phase 1 output (/speckit.plan command)
+└── tasks.md             # Phase 2 output (/speckit.tasks command - NOT created by /speckit.plan)
 ```
 
 ### Source Code (repository root)
+<!--
+  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
+  for this feature. Delete unused options and expand the chosen structure with
+  real paths (e.g., apps/admin, packages/something). The delivered plan must
+  not include Option labels.
+-->
 
 ```text
-public/
-
 src/
 ├── components/
 ├── data/
-│   ├── i18n/
-│   ├── moves/
-│   └── labels/
-├── pages/
+├── i18n/
 ├── styles/
-└── utils/
+├── utils/
+└── main.tsx
 
 tests/
 ├── unit/
 └── integration/
 ```
 
-**Structure Decision**: Single web app using Vite with component/page separation and dedicated data folders for localized JSON resources.
+**Structure Decision**: Single Vite React app at repo root with `src/` and `tests/`.
 
-## Phase 0: Research
+## Complexity Tracking
 
-Completed. See specs/001-dungeon-world-char-sheet/research.md.
+> **Fill ONLY if Constitution Check has violations that must be justified**
 
-## Phase 1: Design & Contracts
-
-Completed:
-- Data model updated at specs/001-dungeon-world-char-sheet/data-model.md.
-- API contract drafted at specs/001-dungeon-world-char-sheet/contracts/character-sheet.openapi.yaml.
-- Quickstart created at specs/001-dungeon-world-char-sheet/quickstart.md.
-
-## Constitution Check (Post-Design)
-
-- UI/UX First: Wireframes linked and unchanged.
-- Explicit Data Models: Data model updated to match clarified validation rules.
-- Test-First (TDD): Still required; to be satisfied in Phase 2 tasks before implementation.
-- Bilingual Documentation: i18n contract and data-model require EN/FR strings.
-- PR-at-Start: Still pending; must open before implementation.
-- Dependency license check: No changes.
-
-## Phase 2: Planning (Next Step)
-
-Run /speckit.tasks to generate task breakdown and tests-first workflow.
+| Violation | Why Needed | Simpler Alternative Rejected Because |
+|-----------|------------|-------------------------------------|
+| [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
+| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |

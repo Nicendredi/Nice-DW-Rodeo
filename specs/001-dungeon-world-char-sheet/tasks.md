@@ -24,23 +24,23 @@ A# Tasks: Dungeon World Character Sheet
 
 ### Tests for Phase 1
 
-- [ ] T001 [P] Set up Vitest + React Testing Library; verify test runner works (create dummy test that passes).
+- [ ] T000 Create PR draft for Phase 1 setup; link to plan.md and spec.md for reference.
+- [ ] T001 [P] Set up Vitest + React Testing Library; verify test runner works (create a test that checks if the Vite project has been initialized correctly : the test must fail initially).
 
 ### Implementation for Phase 1
 
 - [ ] T002 Initialize Vite project with `npm create vite@latest -- --template react character-sheet`.
-- [ ] T003 [P] Install dependencies: React, React DOM, i18next, react-i18next, TypeScript types.
+- [ ] T003 [P] Install dependencies: React, React DOM, react-i18next, TypeScript types.
 - [ ] T004 [P] Configure ESLint and Prettier for code style consistency.
-- [ ] T005 Create directory structure per plan.md: `src/components/`, `src/hooks/`, `src/utils/`, `src/localization/`, `tests/`.
+- [ ] T005 Create directory structure per plan.md: `src/components/`, `src/data/`, `src/i18n/`, `src/styles/`, `src/utils`, `tests/`.
 - [ ] T006 [P] Create `src/localization/i18n.ts` with i18next config; set up language detection (en/fr).
-- [ ] T007 [P] Create i18n JSON files:
+- [ ] T007 [P] Copy the i18n JSON files from `docs/en/character-sheet/` and `docs/fr/character-sheet/` into `src/localization/en/` and `src/localization/fr/` respectively:
   - `src/localization/en/labels.json` (field labels, button text)
   - `src/localization/en/moves.json` (move names and descriptions)
   - `src/localization/fr/labels.json` (French translations)
   - `src/localization/fr/moves.json` (French move descriptions)
 - [ ] T008 [P] Set up CSS structure: `src/styles/CharacterSheet.css`, `src/styles/responsive.css`.
 - [ ] T009 Create base `src/App.tsx` and `src/main.tsx` entry point; confirm Vite dev server starts.
-- [ ] T010 Set up `vite.config.ts` with appropriate optimizations for React development.
 
 **Checkpoint**: Vite project running, dependencies installed, i18n configured, directory structure ready. Any developer can start writing tests for user stories.
 
@@ -74,6 +74,7 @@ A# Tasks: Dungeon World Character Sheet
   - Test: `getBasicMoves()` returns array of exactly 8 moves with id, name, description.
   - Test: `getSpecialMoves()` returns array of exactly 13 universal moves.
   - Test: Basic moves include: Hack and Slash, Volley, Defy Danger, Defend, Spout Lore, Discern Realities, Parley, Aid or Interfere.
+  - Test: Special moves include: Last Breath, Encumbrance, Make Camp, Take Watch, Undertake a Perilous Journey, Level Up, End of Session, Carouse, Supply, Recover, Recruit, Outstanding Warrants, Bolster.
   - **All moves are universal; no class-specific filtering.**
   - **THESE TESTS MUST FAIL** before implementation.
 
@@ -113,7 +114,7 @@ A# Tasks: Dungeon World Character Sheet
   - Test: Form renders with fields: Character Name, Player Name, Campaign, Class, Health (current/max), Damage Die.
   - Test: Editing Character Name field updates the displayed value.
   - Test: Entering max health as 30 and current health as 27 displays "27 / 30".
-  - Test: Selecting damage die "d6" displays "d6" in the form.
+  - Test: Changing damage die from "d6" to "d10" updates the display immediately.
   - **THESE TESTS MUST FAIL** before implementation.
 
 - [ ] T018 [P] [US1] Create test file `tests/hooks/useCharacterStore.test.ts`:
@@ -125,13 +126,13 @@ A# Tasks: Dungeon World Character Sheet
 ### Implementation for US1
 
 - [ ] T019 Implement `src/hooks/useCharacterStore.ts`:
-  - Export `useCharacterStore()` hook that manages character state via React Context or Zustand.
-  - Persist to browser local storage on every update.
+  - Export `useCharacterStore()` hook that manages character state via React Context.
+  - Persist to browser local storage on blur.
   - Restore from local storage on mount.
   - Tests T018 MUST PASS.
 
 - [ ] T020 Implement `src/components/CharacterForm.tsx`:
-  - Render form with fields: Character Name, Player Name, Campaign, Class (text display), Health (two inputs), Damage Die (display).
+  - Render form with fields: Character Name, Player Name, Campaign, Class (dropdown), Health (two inputs), Damage Die (dropdown).
   - Use `useCharacterStore()` to get/set data.
   - Use i18n for labels.
   - Tests T017 MUST PASS.
@@ -169,7 +170,7 @@ A# Tasks: Dungeon World Character Sheet
 
 - [ ] T024 Implement `src/components/AttributesDisplay.tsx`:
   - Render a single-row, 6-column grid (per wireframes).
-  - Each column: abbreviation (top), modifier (middle, visually dominant), full name (below), value (bottom).
+  - Each column: abbreviation (top; read-only), modifier (middle, visually dominant; read-only), full name (below; read-only), value (bottom; editable).
   - Use `calculateModifier()` from utils; update on change.
   - Apply color coding: positive (green), negative (red), zero (gray) for modifier row.
   - Use i18n for attribute labels.
@@ -245,7 +246,7 @@ A# Tasks: Dungeon World Character Sheet
 ### Integration & Accessibility
 
 - [ ] T032 [P] Accessibility audit: test with NVDA (Windows) or VoiceOver (Mac) to ensure screen reader compatibility.
-- [ ] T033 [P] Add ARIA labels to form fields and text areas for accessibility.
+- [ ] T033 [P] Add ARIA labels to form fields and text areas for accessibility : aria-live="polite" for dynamic content like modifiers; role="alert" for error messages; ensure all inputs have associated labels.
 
 ### Responsive Design
 
@@ -265,6 +266,7 @@ A# Tasks: Dungeon World Character Sheet
 - [ ] T038 [P] Update root `README.md` with a "Character Sheet" section and link to instructions.
 - [ ] T039 Final code review: check code style (Prettier/ESLint), test coverage, performance.
 - [ ] T040 Run `npm run build` and verify production bundle size is reasonable (< 500 KB).
+- [ ] T041 Run Lighthouse performance audit; verify load time < 2s per SC-001.
 
 **Checkpoint**: Feature complete, tested, documented, and ready for production.
 
@@ -312,170 +314,3 @@ Example (US1):
 - Each user story is independently testable and deployable.
 - Commit after each completed task or logical group.
 - Use conventional commit format: `test(component): add test for X` or `feat(component): implement X`.
-  ---
-
-  ## Phase 4: User Story 2 — Display and Calculate Attributes (Priority: P1)
-
-  **Goal**: 6 attributes render with auto-calculated modifiers; editing attribute updates modifier immediately.
-
-  **Independent Test**: Enter attribute values, verify modifiers calculate correctly; refresh page, verify values persist.
-
-  ### Tests for US2
-
-  - [ ] T023 [P] [US2] Create test file `tests/integration/AttributesDisplay.test.tsx`:
-    - Test: Attributes section renders 6 attribute rows (STR, DEX, CON, INT, WIS, CHA).
-    - Test: Each row shows attribute value (input field) and modifier (calculated, read-only display).
-    - Test: Entering STR 16 displays modifier "+2".
-    - Test: Changing CON from 14 to 10 updates modifier from "+1" to "0".
-    - Test: Modifier for STR 8 displays in red (negative).
-    - Test: Modifier for STR 10 displays in gray (neutral).
-    - Test: Modifier for STR 16 displays in green (positive).
-    - **THESE TESTS MUST FAIL** before implementation.
-
-  ### Implementation for US2
-
-  - [ ] T024 Implement `src/components/AttributesDisplay.tsx`:
-    - Render a grid with 6 attributes (STR, DEX, CON, INT, WIS, CHA).
-    - Each row: full name, value input (1–18), modifier (read-only).
-    - Use `calculateModifier()` from utils; update on change.
-    - Apply color coding: positive (green), negative (red), zero (gray).
-    - Use i18n for attribute labels.
-    - Connect to `useCharacterStore()` to persist changes.
-    - Tests T023 MUST PASS.
-
-  - [ ] T025 [P] [US2] Update `src/components/CharacterSheet.tsx` to include `<AttributesDisplay />` after `<CharacterForm />`.
-
-  **Checkpoint**: User Story 2 fully functional. Attributes display with correct modifiers and persist. Proceed to US3.
-
-  ---
-
-  ## Phase 5: User Story 3 — View All Moves (Priority: P2)
-
-  **Goal**: Lists of basic and special moves display with descriptions; read-only reference.
-
-  **Independent Test**: Verify all moves render with full descriptions; refresh page; verify no state changes required.
-
-  ### Tests for US3
-
-  - [ ] T026 [P] [US3] Create test file `tests/integration/MovesSection.test.tsx`:
-    - Test: Basic moves section renders 8 moves with names and descriptions.
-    - Test: Special moves section renders 13 moves with names and descriptions.
-    - Test: Move lists are read-only (no checkboxes or inputs).
-    - **THESE TESTS MUST FAIL** before implementation.
-
-  ### Implementation for US3
-
-  - [ ] T027 Implement `src/components/MovesSection.tsx`:
-    - Render list of basic moves (from `getBasicMoves()`) with name + description.
-    - Render list of special moves (from `getSpecialMoves()`) with name + description.
-    - Use i18n for move names and descriptions.
-    - No selection or tracking state.
-    - Tests T026 MUST PASS.
-
-  - [ ] T028 [P] [US3] Update `src/components/CharacterSheet.tsx` to include `<MovesSection />` after `<AttributesDisplay />`.
-
-  **Checkpoint**: User Story 3 fully functional.
-
-  ---
-
-  ## Phase 6: User Story 4 — Free-Form Notes Section (Priority: P3)
-
-  **Goal**: Large textarea for notes; text persists to local storage.
-
-  **Independent Test**: Type notes; refresh; verify notes persist.
-
-  ### Tests for US4
-
-  - [ ] T029 [P] [US4] Create test file `tests/integration/NotesSection.test.tsx`:
-    - Test: Notes section renders with a large textarea.
-    - Test: Typing "Seeking the legendary axe" updates the field.
-    - Test: Notes text persists to store and survives refresh (500+ chars tested).
-    - **THESE TESTS MUST FAIL** before implementation.
-
-  ### Implementation for US4
-
-  - [ ] T030 Implement `src/components/NotesSection.tsx`:
-    - Render large textarea for free-form notes.
-    - Connect to `useCharacterStore()` to persist changes.
-    - Tests T029 MUST PASS.
-
-  - [ ] T031 [P] [US4] Update `src/components/CharacterSheet.tsx` to include `<NotesSection />` at the bottom.
-
-  **Checkpoint**: User Story 4 fully functional.
-
-  ---
-
-  ## Phase 7: Cross-Cutting Concerns & Polish
-
-  **Purpose**: Accessibility, responsive design, cross-browser testing, documentation.
-
-  ### Integration & Accessibility
-
-  - [ ] T032 [P] Accessibility audit: test with NVDA (Windows) or VoiceOver (Mac) to ensure screen reader compatibility.
-  - [ ] T033 [P] Add ARIA labels to form fields and text areas for accessibility.
-
-  ### Responsive Design
-
-  - [ ] T034 [P] Implement `src/styles/responsive.css` for tablet (768px–1199px) and mobile (< 768px).
-     - Test layout on iPad (landscape/portrait) and Android tablet.
-     - Stack attributes into a 3x2 grid; allow moves sections to scroll.
-
-  ### Cross-Browser Testing
-
-  - [ ] T035 [P] Test on Chrome, Firefox, Safari, and Edge (latest versions).
-     - Verify form inputs and local storage work on all browsers.
-
-  ### Documentation & Final Touches
-
-  - [ ] T036 Create `docs/en/character-sheet/instructions.md` (user guide in English).
-  - [ ] T037 Create `docs/fr/character-sheet/instructions.md` (user guide in French).
-  - [ ] T038 [P] Update root `README.md` with a "Character Sheet" section and link to instructions.
-  - [ ] T039 Final code review: check code style (Prettier/ESLint), test coverage, performance.
-  - [ ] T040 Run `npm run build` and verify production bundle size is reasonable (< 500 KB).
-
-  **Checkpoint**: Feature complete, tested, documented, and ready for production.
-
-  ---
-
-  ## Dependencies & Execution Order
-
-  ### Critical Path (Blocking)
-
-  1. **Phase 1** (T001–T010): Foundation setup. **No story work until complete.**
-  2. **Phase 2** (T011–T016): Utility tests + implementation.
-  3. **Phase 3** (T017–T022): US1 (Character Info) – MVP foundation.
-
-  ### Parallel Opportunities (After Phase 1 Complete)
-
-  - **Phase 2 & 3 can overlap**: Utilities can be developed in parallel with US1.
-  - **US2–US4** can proceed in any order after Phase 3 completes (independent stories).
-  - **Phase 7 (Polish)** runs after US1–US4 complete.
-
-  ### Suggested Execution Timeline
-
-  - **Week 1**: Phase 1 (setup), Phase 2 (utilities), start Phase 3 (US1).
-  - **Week 2**: Finish US1; start US2 and US3 in parallel.
-  - **Week 3**: US4 (notes), Phase 7 (polish, accessibility, testing, documentation).
-
-  ---
-
-  ## Testing Philosophy: TDD
-
-  - **RED**: Write test; watch it fail.
-  - **GREEN**: Implement code; watch test pass.
-  - **REFACTOR**: Clean up; ensure all tests still pass.
-
-  Example (US1):
-  1. Write test for CharacterForm rendering (RED).
-  2. Implement CharacterForm component (GREEN).
-  3. Refactor component for clarity (tests still pass).
-
-  ---
-
-  ## Notes
-
-  - **[P]** = parallel-safe (no file conflicts, independent).
-  - **[US#]** = user story label for traceability.
-  - Each user story is independently testable and deployable.
-  - Commit after each completed task or logical group.
-  - Use conventional commit format: `test(component): add test for X` or `feat(component): implement X`.

@@ -95,7 +95,7 @@ Load the page; see all basic moves listed with descriptions; scroll through spec
 **Acceptance Scenarios:**
 
 1. **Given** the character sheet page, **When** I scroll to Moves, **Then** I see all 8 basic moves (Hack and Slash, Volley, Defy Danger, Defend, Spout Lore, Discern Realities, Parley, Aid or Interfere) with descriptions.
-2. **Given** I scroll further, **When** I see Special Moves section, **Then** I see all special moves (Make Camp, Take Watch, Undertake a Perilous Journey, Level Up, End of Session, Carouse, Supply, Recover, Recruit, Outstanding Warrants, Bolster) with descriptions.
+2. **Given** I scroll further, **When** I see Special Moves section, **Then** I see all special moves (Last Breath, Encumbrance, Make Camp, Take Watch, Undertake a Perilous Journey, Level Up, End of Session, Carouse, Supply, Recover, Recruit, Outstanding Warrants, Bolster) with descriptions.
 3. **Given** a move displayed, **When** I read the description, **Then** the trigger/condition matches the official Dungeon World SRD.
 4. **Given** any move on the sheet, **When** I look for checkboxes or selection controls, **Then** I see none; moves are read-only reference material.
 
@@ -124,7 +124,6 @@ Type text into the notes area; refresh the page; confirm the text persists (stor
 
 - What happens if I enter an attribute value outside the range 1–20? (Clamp to range 1–20 automatically.)
 - What happens if health exceeds max health? (Reject input and show inline validation error below the field until corrected.)
-- What happens if health exceeds max health? (Reject input and show inline validation error below the field until corrected.)
 - What are valid health ranges? (Current health is 0..Max (inclusive); Max health must be >= 1.)
 - What values are allowed for Damage Die? (Restrict to standard dice: d4, d6, d8, d10, d12.)
 - What if I try to save a character with no name? (Name is required; show inline validation error below the field.)
@@ -137,7 +136,8 @@ Type text into the notes area; refresh the page; confirm the text persists (stor
 
 ### Functional Requirements
 
-- **FR-001**: System MUST display a form header with the following character info fields: Character Name, Player Name, Campaign, Class (display text), Current Health, Max Health, Damage Die (display text). Header takes full width of the page. For first-time users with no saved data, all fields MUST be empty with helpful placeholder text.
+- **FR-001**: System MUST display a form header with the following character info fields: Character Name, Player Name, Campaign, Class (dropdown), Current Health, Max Health, Damage Die (dropdown). Header takes full width of the page. For first-time users with no saved data, all fields MUST be empty with helpful placeholder text.
+- **FR-001d**: System MUST use the following placeholders: "Enter character name", "Enter player name", "Enter campaign", "Bard", "0", "1", "d6".
 - **FR-001c**: System MUST present Class as a dropdown restricted to the 8 standard classes (Fighter, Wizard, Thief, Cleric, Ranger, Paladin, Bard, Druid).
 - **FR-001b**: System MUST validate Damage Die values as one of: d4, d6, d8, d10, d12.
 - **FR-001a**: System MUST validate health ranges: Current Health is allowed from 0 to Max Health (inclusive); Max Health MUST be at least 1.
@@ -167,8 +167,8 @@ Type text into the notes area; refresh the page; confirm the text persists (stor
 
 - **SC-001**: Character sheet loads in under 2 seconds on a typical internet connection (measured via Lighthouse or similar).
 - **SC-002**: All form fields are editable and persist changes automatically to browser local storage on field blur (no manual "Save" button required).
-- **SC-003**: At least 90% of players (or reviewers) successfully enter a character's details, view attributes, and read all moves without documentation or training.
-- **SC-004**: The sheet displays correctly in Chrome, Firefox, Safari, and Edge on desktop and tablet (iPad, Android tablet) devices.
+- **SC-003**: At least 90% of players (or reviewers) successfully enter a character's details, view attributes, and read all moves without documentation or training. There will be 3 testers who have never seen the sheet before; 2 must complete the tasks successfully, and 1 may partially complete the tasks.
+- **SC-004**: The sheet displays correctly in Chrome, Firefox, Safari, and Edge on desktop.
 - **SC-005**: All UI labels and move descriptions are available in both English and French; language can be switched without page reload.
 - **SC-006**: Attribute modifiers are calculated correctly for all values 1–20 according to the DW SRD table (spot-checked: 3 → -3, 9 → 0, 15 → +1, 18 → +3).
 - **SC-007**: All interactive elements are keyboard accessible (tab navigation works, focus visible); screen readers can navigate and announce all content correctly (tested with NVDA or JAWS); no WCAG 2.1 Level AA violations.
