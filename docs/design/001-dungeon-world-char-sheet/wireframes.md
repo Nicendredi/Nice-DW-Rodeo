@@ -106,10 +106,10 @@
 - Character Name (text)
 - Player Name (text)
 - Campaign (text)
-- Class (display as text; no user selection in MVP)
+- Class (dropdown of the 8 standard DW classes: Fighter, Wizard, Cleric, Thief, Ranger, Paladin, Druid, Bard)
 - Current Health (number)
 - Max Health (number, shows as current/max)
-- Damage Die (display; d6 standard for most classes)
+- Damage Die (dropdown of the standard DW damage dice: d4, d6, d8, d10, d12)
 
 **Notes:**
 - Header spans the full width of the container.
