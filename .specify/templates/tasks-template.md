@@ -5,8 +5,8 @@ description: "Task list template for feature implementation"
 
 # Tasks: [FEATURE NAME]
 
-**Input**: Design documents from `/specs/[###-feature-name]/`
-**Prerequisites**: plan.md (required), spec.md (required for user stories), research.md, data-model.md, contracts/
+**Input**: Design documents from `/docs/design/[feature-name]/` and spec files from `/specs/[feature]/`
+**Prerequisites**: plan.md (required), spec.md (required for user stories), research.md, data-model.md, contracts/, localization files (`docs/en/`, `docs/fr/`) when UI is affected
 
 **Tests**: The examples below include test tasks. Tests are OPTIONAL - only include them if explicitly requested in the feature specification.
 
@@ -68,6 +68,7 @@ Examples of foundational tasks (adjust based on your project):
 - [ ] T007 Create base models/entities that all stories depend on
 - [ ] T008 Configure error handling and logging infrastructure
 - [ ] T009 Setup environment configuration management
+ - [ ] T009a Verify dependency licenses and document replacement prerequisites (create `specs/[feature]/dependency-licenses.md` when non-OSS deps exist)
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 

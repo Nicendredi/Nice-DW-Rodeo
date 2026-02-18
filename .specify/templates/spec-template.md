@@ -5,6 +5,16 @@
 **Status**: Draft  
 **Input**: User description: "$ARGUMENTS"
 
+## Design & Data Model Requirements (CONSTITUTION)
+
+- If the feature includes a human interface, attach a design document and wireframes under `docs/design/[feature-name]/`.
+- Define the feature data model in `specs/[feature]/data-model.md` and include field names, types, invariants, and example payloads.
+- Indicate localization requirements (English/French) and where translations will live.
+- Declare dependency licensing and replacement plan:
+  - List all direct runtime and build dependencies with name, version, license, and URL to license text.
+  - If any dependency is non-open-source or has a restrictive license, include a documented replacement strategy and the interface/abstraction requirements needed to swap it.
+
+
 ## User Scenarios & Testing *(mandatory)*
 
 <!--

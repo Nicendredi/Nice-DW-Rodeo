@@ -31,7 +31,13 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+The plan MUST verify the following items from the project constitution before Phase 0 completes:
+
+  
+- Dependency license check: list all direct runtime and build dependencies and their licenses. If any dependency is non-open-source or non-redistributable, the plan MUST include a documented replacement path and the interface abstraction required to enable replacement.
+
+
+If any gate is not met, record the mitigation and schedule for completion before implementation proceeds.
 
 ## Project Structure
 
