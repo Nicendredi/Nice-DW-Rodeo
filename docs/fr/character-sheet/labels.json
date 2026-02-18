@@ -24,7 +24,7 @@
     "wisdom": "SAG",
     "charisma": "CHA",
     "modifier": "mod",
-    "modifierTooltip": "Modificateur = plancher((attribut - 10) / 2)"
+    "modifierTooltip": "Modificateur vérifie le score d'attribut dans la table du SRD de DW"
   },
   "basicMoves": {
     "title": "Actions de Base",

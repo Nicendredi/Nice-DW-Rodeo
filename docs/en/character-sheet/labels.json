@@ -24,7 +24,7 @@
     "wisdom": "WIS",
     "charisma": "CHA",
     "modifier": "mod",
-    "modifierTooltip": "Modifier = floor((attribute - 10) / 2)"
+    "modifierTooltip": "Modifier looks up the attribute score in the DW SRD table"
   },
   "basicMoves": {
     "title": "Basic Moves",
