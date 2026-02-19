@@ -76,10 +76,13 @@ Entering an attribute value (e.g., 16) automatically calculates and displays the
 
 **Acceptance Scenarios:**
 
-1. **Given** a character with Strength 16, **When** I look at the attributes section, **Then** I see "STR" above "+2", with "Strength" and "16" below on the same column.
-2. **Given** a character with Dexterity 9, **When** I look at the Dexterity column, **Then** I see "DEX" above "-1" with the modifier in red (negative).
-3. **Given** a character with Constitution 13, **When** I look at the Constitution column, **Then** I see "CON" above "+1" with "Constitution" and "13" below.
+1. **Given** a character with Charisma 16, **When** I look at the attributes section, **Then** I see "CHA" above "+2", with "Charisma" and "16" below on the same column.
+2. **Given** a character with Intelligence 9, **When** I look at the Intelligence column, **Then** I see "INT" above "-1" with the modifier in red (negative).
+3. **Given** a character with Wisdom 13, **When** I look at the Wisdom column, **Then** I see "WIS" above "+1" with "Wisdom" and "13" below.
 4. **Given** I edit an attribute from 12 to 15 in the form, **When** the field updates, **Then** the modifier changes from 0 to +1 automatically per DW SRD.
+
+**Placeholder Values (First-Time User):**
+For first-time users with no saved data, attributes display with placeholder values in order (Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma): 8, 12, 15, 9, 13, 16. These values showcase the modifier range across the DW SRD table and provide a sensible starting point for players to edit.
 
 ---
 
@@ -142,14 +145,14 @@ Type text into the notes area; refresh the page; confirm the text persists (stor
 - **FR-001**: System MUST display a form header with the following character info fields: Character Name, Player Name, Campaign, Class (dropdown), Current Health, Max Health, Damage Die (dropdown). Header takes full width of the page. For first-time users with no saved data, all fields MUST be empty with helpful placeholder text.
 - **FR-001d**: System MUST use the following placeholders: "Enter character name", "Enter player name", "Enter campaign", "Bard", "0", "1", "d6".
 - **FR-001c**: System MUST present Class as a dropdown restricted to the 8 standard classes (Fighter, Wizard, Thief, Cleric, Ranger, Paladin, Bard, Druid).
-- **FR-001b**: System MUST validate Damage Die values as one of: d4, d6, d8, d10, d12.
+- **FR-001b**: System MUST present Damage Die as a dropdown (select control) restricted to: d4, d6, d8, d10, d12. (See FR-001c for Class dropdown pattern precedent.)
 - **FR-001a**: System MUST validate health ranges: Current Health is allowed from 0 to Max Health (inclusive); Max Health MUST be at least 1.
 - **FR-002**: System MUST display the 6 core attributes (Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma) on a single line across the full width. Each attribute shows full name as label, value (1–20), three-letter abbreviation (STR, DEX, CON, INT, WIS, CHA), and calculated modifier. For first-time users, attribute values should be empty with placeholders; modifiers display when values are entered.
 - **FR-003**: System MUST calculate and display attribute modifiers using the Dungeon World SRD table: 1–3 → -3, 4–5 → -2, 6–8 → -1, 9–12 → 0, 13–15 → +1, 16–17 → +2, 18 → +3.
 - **FR-004**: System MUST display all 8 basic moves (per DW SRD) with names and full descriptions. NO checkboxes or selection controls.
-- **FR-005**: System MUST display all special moves (per DW SRD: Make Camp, Take Watch, Undertake a Perilous Journey, Level Up, End of Session, Carouse, Supply, Recover, Recruit, Outstanding Warrants, Bolster) with names and full descriptions. These moves apply to all characters; no class-specific filtering.
+- **FR-005**: System MUST display all 13 special moves (per DW SRD: Last Breath, Encumbrance, Make Camp, Take Watch, Undertake a Perilous Journey, Level Up, End of Session, Carouse, Supply, Recover, Recruit, Outstanding Warrants, Bolster) with names and full descriptions. These moves apply to all characters; no class-specific filtering.
 - **FR-006**: System MUST provide a large text area for free-form notes (no character limit enforced; UI may scroll).
-- **FR-007**: System MUST persist a single character's data to browser local storage so that refreshing the page retains all entered data. Only one character is supported; editing replaces the existing character. Changes MUST be saved automatically on field blur (when user leaves a field).
+- **FR-007**: System MUST persist a single character's data to browser local storage so that refreshing the page retains all entered data. Only one character is supported; editing replaces the existing character. Changes MUST be saved automatically on field blur (when user leaves a field). **CRITICAL**: If a field is invalid, the save is blocked and an inline error message displays below the field until the user corrects the value. Valid data only is persisted.
 - **FR-008**: System MUST support English and French labels, move descriptions, and all UI strings; localization strings MUST be stored separately (i18n files); user can switch languages without page reload; missing translation keys MUST fall back to English; selected language MUST persist in local storage.
 - **FR-008a**: System MUST provide a language selector control (dropdown or toggle button) in the top-right of the page header. Selecting "Français" or "English" updates all UI text, move names, and descriptions immediately without page reload. Selected language persists in local storage.
 - **FR-009**: System MUST be built using Vite for development and production builds.

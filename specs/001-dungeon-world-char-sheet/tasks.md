@@ -22,6 +22,8 @@ A# Tasks: Dungeon World Character Sheet
 
 ⚠️ **CRITICAL**: No user story work starts until Phase 1 is complete.
 
+**📌 Constitution Note**: Per "Test-First (TDD, NON-NEGOTIABLE)" principle, T001 includes a failing test before implementation. Infrastructure tasks T002–T005 and T009 (Vite init, directory structure, entry point) are one-time setup operations and may be completed without explicit RED→GREEN tests. Configuration tasks T006–T008 (i18n, CSS, etc.) do not require failing tests first but MUST be verified to work correctly after implementation (e.g., "verify i18n loads correctly" after T006 completes).
+
 ### Tests for Phase 1
 
 - [ ] T000 Create PR draft for Phase 1 setup; link to plan.md and spec.md for reference.
@@ -293,9 +295,8 @@ A# Tasks: Dungeon World Character Sheet
 
 ### Responsive Design
 
-- [ ] T034 [P] Implement `src/styles/responsive.css` for tablet (768px–1199px).
-   - Test layout on iPad (landscape/portrait).
-   - Stack attributes into a 3x2 grid on tablets; allow moves sections to scroll.
+- [ ] T034 [P] Implement `src/styles/responsive.css` for desktop viewports (1920px+).
+   - Deferred: Tablet/iPad responsive layout (768px–1199px) deferred to Phase 2+ per platform scope exception.
 
 ### Cross-Browser Testing
 
