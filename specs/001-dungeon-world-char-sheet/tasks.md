@@ -31,11 +31,11 @@ A# Tasks: Dungeon World Character Sheet
 
 ### Implementation for Phase 1
 
-- [ ] T002 Initialize Vite project with `npm create vite@latest -- --template react character-sheet`.
+- [ ] T002 Initialize Vite project at repo root with `npm create vite@latest . -- --template react`.
 - [ ] T003 [P] Install dependencies: React, React DOM, react-i18next, TypeScript types.
 - [ ] T004 [P] Configure ESLint and Prettier for code style consistency.
-- [ ] T005 Create directory structure per plan.md: `src/components/`, `src/data/`, `src/i18n/`, `src/styles/`, `src/utils`, `tests/`.
-- [ ] T006 [P] Create `src/localization/i18n.ts` with i18next config; set up language detection (en/fr).
+- [ ] T005 Create directory structure per plan.md: `src/components/`, `src/data/`, `src/i18n/`, `src/styles/`, `src/utils`, `src/pages/Character/`, `tests/`.
+- [ ] T006 [P] Create `src/localization/i18n.ts` with i18next config; set up language detection (en/fr), English fallback, and missing-key logging (console warning).
 - [ ] T007 [P] Copy the i18n JSON files from `docs/en/character-sheet/` and `docs/fr/character-sheet/` into `src/localization/en/` and `src/localization/fr/` respectively:
   - `src/localization/en/labels.json` (field labels, button text)
   - `src/localization/en/moves.json` (move names and descriptions)
@@ -68,8 +68,9 @@ A# Tasks: Dungeon World Character Sheet
   - Test: `validateCharacterName("Valid Name")` returns `{valid: true}`.
   - Test: `validateHealth(0, 100)` returns `{valid: true}` (0 is valid).
   - Test: `validateHealth(101, 100)` returns `{valid: false, error: "i18n:error.health-exceeds-max"}`.
-  - Test: `validateAttributeValue(5)` returns `{valid: true}`.
-  - Test: `validateAttributeValue(25)` returns `{valid: false, error: "i18n:error.attribute-out-of-range"}`.
+  - Test: `validateAttributeValue(5)` returns `{valid: true, value: 5}`.
+  - Test: `validateAttributeValue(25)` returns `{valid: true, value: 18}` (clamped).
+  - Test: `validateAttributeValue(0)` returns `{valid: true, value: 1}` (clamped).
   - **Localization**: All error messages use i18n keys; tests verify keys are resolved to English/French strings.
   - **THESE TESTS MUST FAIL** before implementation.
 
@@ -100,7 +101,7 @@ A# Tasks: Dungeon World Character Sheet
 - [ ] T015 Implement `src/utils/validation.ts`:
   - Export `validateCharacterName(name: string): {valid: boolean; error?: string}`.
   - Export `validateHealth(current: number, max: number): {valid: boolean; error?: string}`.
-  - Export `validateAttributeValue(value: number): {valid: boolean; error?: string}`.
+  - Export `validateAttributeValue(value: number): {valid: boolean; value: number; error?: string}` (clamps to [1, 18]).
   - Return i18n error keys (e.g., `error: "i18n:error.name-required"`) for use in component error display.
   - Tests T012 and T012a MUST PASS after implementation.
 
@@ -130,6 +131,7 @@ A# Tasks: Dungeon World Character Sheet
   - Test: Changing damage die from "d6" to "d10" updates the display immediately.
   - Test: Class dropdown renders exactly 8 options (Fighter, Wizard, Thief, Cleric, Ranger, Paladin, Bard, Druid).
   - Test: Form displays placeholder text: Character Name = "Enter character name", Damage Die = "d6", etc. per FR-001d.
+  - Test: Character Name, Player Name, and Campaign inputs enforce `maxLength=100`.
   - **THESE TESTS MUST FAIL** before implementation.
 
 - [ ] T017a [P] [US1] Add test case to `tests/integration/CharacterForm.test.tsx`:
@@ -165,18 +167,19 @@ A# Tasks: Dungeon World Character Sheet
   - Render form with fields: Character Name, Player Name, Campaign, Class (dropdown), Health (two inputs), Damage Die (dropdown).
   - Class dropdown restricted to 8 standard classes (Fighter, Wizard, Thief, Cleric, Ranger, Paladin, Bard, Druid).
   - All fields display placeholder text per FR-001d (e.g., "Enter character name", "d6" for Damage Die).
+  - Enforce maxLength=100 on Character Name, Player Name, and Campaign inputs.
   - Include language selector dropdown in the form header (top-right position); enable on-the-fly language switching; persist selection to local storage.
   - Accessibility: All inputs have associated `<label>` elements with `htmlFor`; tab order is logical (top-to-bottom, left-to-right); all elements have visible focus indicators (outline or underline).
   - Use `useCharacterStore()` to get/set data.
   - Use i18n for labels.
   - Tests T017, T017a, and T017b MUST PASS.
 
-- [ ] T021 Implement `src/components/CharacterSheet.tsx` (main container):
+- [ ] T021 Implement `src/pages/Character/CharacterSheet.tsx` (main container):
   - Render `<CharacterForm />` at the top.
   - Render placeholder sections for Attributes, Moves, Special Moves, Notes (to be implemented in later stories).
   - Tests covered by T017 (CharacterForm) and integration test.
 
-- [ ] T022 [P] [US1] Update `src/App.tsx` to render `<CharacterSheet />`.
+- [ ] T022 [P] [US1] Update `src/App.tsx` to render the character page (`<CharacterSheet />`).
 
 **Checkpoint**: At this point, User Story 1 is fully functional. Users can fill out character info and it persists. Proceed to US2 independently.
 
@@ -195,6 +198,7 @@ A# Tasks: Dungeon World Character Sheet
   - Test: Each column shows abbreviation, modifier, full attribute name, and value.
   - Test: Entering STR 16 displays modifier "+2" (per DW SRD, not D&D).
   - Test: Changing CON from 14 (mod: +1) to 9 (mod: 0) updates modifier display.
+  - Test: Entering STR 25 clamps to 18 and displays modifier "+3".
   - Test: Modifier for STR 3 displays "-3" in red (negative).
   - Test: Modifier for STR 10 displays "0" in gray (neutral).
   - Test: Modifier for STR 16 displays "+2" in green (positive).
@@ -206,6 +210,7 @@ A# Tasks: Dungeon World Character Sheet
   - Render a single-row, 6-column grid (per wireframes).
   - Each column: abbreviation (top; read-only), modifier (middle, visually dominant; read-only), full name (below; read-only), value (bottom; editable).
   - Use `calculateModifier()` from utils; update on change.
+  - Clamp attribute values to [1, 18] on blur before saving.
   - Apply color coding: positive (green), negative (red), zero (gray) for modifier row.
   - Use i18n for attribute labels.
   - Connect to `useCharacterStore()` to persist changes.
@@ -311,6 +316,7 @@ A# Tasks: Dungeon World Character Sheet
 - [ ] T039 Final code review: check code style (Prettier/ESLint), test coverage, performance.
 - [ ] T040 Run `npm run build` and verify production bundle size is reasonable (< 500 KB).
 - [ ] T041 Run Lighthouse performance audit; verify load time < 2s per SC-001.
+- [ ] T041a [P] Verify interactive feedback timing (modifier updates, validation messages) is <= 100 ms on desktop browser (SC-008).
 - [ ] T042 Document platform scope exception: Create `docs/changes/001-platform-scope.md` explaining the MVP decision to run Windows-only development and defer cross-platform CI/testing (Linux, macOS) and tablet responsive design to Phase 2 or later. Include compliance note linking to constitution override and justification. Add a PR compliance statement referencing this document.
 
 **Checkpoint**: Feature complete, tested, documented, and ready for production.

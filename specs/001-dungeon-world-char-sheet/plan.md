@@ -25,6 +25,7 @@ Build a Vite + React character sheet page that renders editable character info, 
 **Project Type**: Web application (single Vite app)  
 **Performance Goals**: Initial load under 2 seconds (SC-001)  
 **Constraints**: On-blur auto-save, inline validation, bilingual UI, WCAG 2.1 AA accessibility  
+**Responsive Scope**: MVP targets desktop layout only; tablet/smaller layouts are deferred. Attributes remain a single row at desktop widths; if smaller viewports are encountered, horizontal scrolling is acceptable.
 **Scale/Scope**: Single-page sheet, single character, no backend
 
 ## Constitution Check
