@@ -3,6 +3,7 @@
 **Feature Branch**: `001-dungeon-world-char-sheet`  
 **Created**: 2026-02-18  
 **Status**: Draft  
+**Design Record**: [GitHub PR #21](https://github.com/Nicendredi/Nice-DW-Rodeo/pull/21) (design discussion and acceptance)  
 **Input**: User description: "Build a simple page that will display a Dungeon World Character Sheet using Vite. Display the character name, player name, campaign, class, health points, damage die, the 6 attributes with their modifiers (per DW SRD), all basic moves, all special moves, and a notes area."
 
 ---
@@ -124,12 +125,13 @@ Type text into the notes area; refresh the page; confirm the text persists (stor
 ### Edge Cases
 
 - What happens if I enter an attribute value outside the range 1–20? (Clamp to range 1–20 automatically.)
-- What happens if health exceeds max health? (Reject input and show inline validation error below the field until corrected.)
+- What happens if health exceeds max health? (Reject input and show inline validation error below the field. Form-level auto-save on blur MUST NOT occur if field is invalid; error persists and blocks save until user corrects the value.)
 - What are valid health ranges? (Current health is 0..Max (inclusive); Max health must be >= 1.)
 - What values are allowed for Damage Die? (Restrict to standard dice: d4, d6, d8, d10, d12.)
 - What if I try to save a character with no name? (Name is required; show inline validation error below the field.)
 - How are unsaved changes handled if I navigate away? (Auto-save to browser storage on field blur; no warning needed.)
 - How are validation errors displayed? (Inline error messages appear directly below/beside the invalid field when user leaves the field or on submit attempt.)
+- How are moves displayed if no ordering is specified? (Moves display in the order defined in moves.json; if order changes in JSON, displayed order updates accordingly.)
 
 ---
 

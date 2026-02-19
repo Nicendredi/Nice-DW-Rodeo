@@ -25,7 +25,7 @@ A# Tasks: Dungeon World Character Sheet
 ### Tests for Phase 1
 
 - [ ] T000 Create PR draft for Phase 1 setup; link to plan.md and spec.md for reference.
-- [ ] T001 [P] Set up Vitest + React Testing Library; verify test runner works (create a test that checks if the Vite project has been initialized correctly : the test must fail initially).
+- [ ] T001 [P] Set up Vitest + React Testing Library; verify test runner works. Create test `tests/integration/app-setup.test.tsx` that checks: (a) React test environment is initialized, (b) test utilities are available (@testing-library/react), (c) at least one component can be rendered and assertions can be made. Test must fail before Vite setup (T002-T003) is complete.
 
 ### Implementation for Phase 1
 
@@ -137,6 +137,14 @@ A# Tasks: Dungeon World Character Sheet
   - Test: Language preference persists after page refresh (stored in localStorage).
   - **THESE TESTS MUST FAIL** before implementation.
 
+- [ ] T017b [P] [US1] Add accessibility tests to `tests/integration/CharacterForm.test.tsx`:
+  - Test: All form inputs have associated `<label>` or `aria-label` attributes.
+  - Test: Tab order navigates through fields in logical sequence (left-to-right, top-to-bottom).
+  - Test: All inputs have visible focus indicators when focused (outline, border, or highlight).
+  - Test: No keyboard traps; user can tab away from any field.
+  - **Aligns with FR-010 (MANDATORY accessibility); tests during component development per constitution TDD requirement.**
+  - **THESE TESTS MUST FAIL** before implementation.
+
 - [ ] T018 [P] [US1] Create test file `tests/hooks/useCharacterStore.test.ts`:
   - Test: `useCharacterStore()` initializes with default character (empty name, default class, etc.).
   - Test: `updateCharacter()` updates the store and triggers re-render.
@@ -156,9 +164,10 @@ A# Tasks: Dungeon World Character Sheet
   - Class dropdown restricted to 8 standard classes (Fighter, Wizard, Thief, Cleric, Ranger, Paladin, Bard, Druid).
   - All fields display placeholder text per FR-001d (e.g., "Enter character name", "d6" for Damage Die).
   - Include language selector dropdown in the form header (top-right position); enable on-the-fly language switching; persist selection to local storage.
+  - Accessibility: All inputs have associated `<label>` elements with `htmlFor`; tab order is logical (top-to-bottom, left-to-right); all elements have visible focus indicators (outline or underline).
   - Use `useCharacterStore()` to get/set data.
   - Use i18n for labels.
-  - Tests T017 and T017a MUST PASS.
+  - Tests T017, T017a, and T017b MUST PASS.
 
 - [ ] T021 Implement `src/components/CharacterSheet.tsx` (main container):
   - Render `<CharacterForm />` at the top.
@@ -264,12 +273,23 @@ A# Tasks: Dungeon World Character Sheet
 
 ## Phase 7: Cross-Cutting Concerns & Polish
 
-**Purpose**: Accessibility, responsive design, cross-browser testing, documentation.
+**Purpose**: Full-system accessibility audit, responsive design, cross-browser testing, documentation.
 
-### Integration & Accessibility
+**Note**: Component-level accessibility testing (keyboard nav, focus indicators, ARIA labels) is performed in Phase 3 (T017b). Phase 7 focuses on integration-level audit and cross-browser compatibility.
 
-- [ ] T032 [P] Accessibility audit: test with NVDA (Windows) or VoiceOver (Mac) to ensure screen reader compatibility.
-- [ ] T033 [P] Add ARIA labels to form fields and text areas for accessibility : aria-live="polite" for dynamic content like modifiers; role="alert" for error messages; ensure all inputs have associated labels.
+### Integration & Accessibility Audit
+
+-- [ ] T032 [P] Full-system accessibility audit: test complete character sheet with NVDA (Windows) or VoiceOver (Mac) to ensure all content is screen-reader compatible and accessible.
+  - Verify error messages are announced when displayed.
+  - Verify attribute modifiers and dynamic content updates are announced (aria-live regions).
+  - Verify move descriptions are readable and properly structured.
+  - Document any issues found; rework components if needed.
+
+- [ ] T033 [P] Accessibility integration check: ensure ARIA attributes and focus management work across all components (CharacterForm, AttributesDisplay, MovesSection, NotesSection).
+  - Verify all form inputs have labels and error messages are associated (aria-describedby).
+  - Verify alert notifications use role="alert" and are announced by screen readers.
+  - Verify live regions (aria-live) work correctly when attributes or dynamic content updates.
+  - Test on at least two browsers per SC-004.
 
 ### Responsive Design
 
@@ -311,9 +331,9 @@ A# Tasks: Dungeon World Character Sheet
 
 ### Suggested Execution Timeline
 
-- **Week 1**: Phase 1 (setup), Phase 2 (utilities), start Phase 3 (US1).
-- **Week 2**: Finish US1; start US2 and US3 in parallel.
-- **Week 3**: US4 (notes), Phase 7 (polish, accessibility, testing, documentation).
+- **Week 1**: Phase 1 (setup), Phase 2 (utilities), start Phase 3 (US1). Component-level accessibility testing (T017b) starts during Phase 3.
+- **Week 2**: Finish US1; start US2 and US3 in parallel. Accessibility implementation in each component (T020, T024, T027, T030).
+- **Week 3**: US4 (notes), Phase 7 (full-system accessibility audit, cross-browser testing, documentation).
 
 ---
 
