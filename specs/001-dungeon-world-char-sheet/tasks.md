@@ -279,7 +279,7 @@ A# Tasks: Dungeon World Character Sheet
 
 ### Integration & Accessibility Audit
 
--- [ ] T032 [P] Full-system accessibility audit: test complete character sheet with NVDA (Windows) or VoiceOver (Mac) to ensure all content is screen-reader compatible and accessible.
+- [ ] T032 [P] Full-system accessibility audit: test complete character sheet with NVDA (Windows screen reader) to ensure all content is screen-reader compatible and accessible.
   - Verify error messages are announced when displayed.
   - Verify attribute modifiers and dynamic content updates are announced (aria-live regions).
   - Verify move descriptions are readable and properly structured.
@@ -310,6 +310,7 @@ A# Tasks: Dungeon World Character Sheet
 - [ ] T039 Final code review: check code style (Prettier/ESLint), test coverage, performance.
 - [ ] T040 Run `npm run build` and verify production bundle size is reasonable (< 500 KB).
 - [ ] T041 Run Lighthouse performance audit; verify load time < 2s per SC-001.
+- [ ] T042 Document platform scope exception: Create `docs/changes/001-platform-scope.md` explaining the MVP decision to run Windows-only development and defer cross-platform CI/testing (Linux, macOS) and tablet responsive design to Phase 2 or later. Include compliance note linking to constitution override and justification. Add a PR compliance statement referencing this document.
 
 **Checkpoint**: Feature complete, tested, documented, and ready for production.
 
