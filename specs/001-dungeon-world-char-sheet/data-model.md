@@ -22,12 +22,12 @@ Represents a single Dungeon World player character.
     },
     "damageDie": "enum (required)",
     "attributes": {
-      "strength": "integer (required, 1–20)",
-      "dexterity": "integer (required, 1–20)",
-      "constitution": "integer (required, 1–20)",
-      "intelligence": "integer (required, 1–20)",
-      "wisdom": "integer (required, 1–20)",
-      "charisma": "integer (required, 1–20)"
+      "strength": "integer (required, 1–18)",
+      "dexterity": "integer (required, 1–18)",
+      "constitution": "integer (required, 1–18)",
+      "intelligence": "integer (required, 1–18)",
+      "wisdom": "integer (required, 1–18)",
+      "charisma": "integer (required, 1–18)"
     },
     "moves": "static resources (not persisted with character)",
     "notes": "string (optional, unlimited, for inventory, story notes, etc.)"
@@ -131,7 +131,7 @@ Score   Modifier
 4. **Health:**
    - `current` ≥ 0 and ≤ `max`.
    - `max` ≥ 1.
-5. **Attributes:** each in range [1, 20]; values are clamped to this range on input.
+5. **Attributes:** each in range [1, 18]; values are clamped to this range on input.
 6. **Class:** must be one of the predefined enums.
 7. **Damage die:** must be one of the predefined enums (d4–d12).
 8. **Notes:** no character limit (practical: 5000+ chars supported).

@@ -161,27 +161,27 @@ components:
             strength:
               type: integer
               minimum: 1
-              maximum: 20
+              maximum: 18
             dexterity:
               type: integer
               minimum: 1
-              maximum: 20
+              maximum: 18
             constitution:
               type: integer
               minimum: 1
-              maximum: 20
+              maximum: 18
             intelligence:
               type: integer
               minimum: 1
-              maximum: 20
+              maximum: 18
             wisdom:
               type: integer
               minimum: 1
-              maximum: 20
+              maximum: 18
             charisma:
               type: integer
               minimum: 1
-              maximum: 20
+              maximum: 18
         notes:
           type: string
     Settings:

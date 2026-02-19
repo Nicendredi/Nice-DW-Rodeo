@@ -17,7 +17,7 @@
 - Alternatives considered: Relying on browser language only (does not persist user choice).
 
 ## Decision: Validation model aligns with clarified constraints
-- Rationale: Health and damage die constraints were clarified; attributes clamp to 1..20; name required; errors shown inline on blur.
+- Rationale: Health and damage die constraints were clarified; attributes clamp to 1..18; name required; errors shown inline on blur.
 - Alternatives considered: Allowing free-form values with warnings only (rejected by clarified requirements).
 
 ## Decision: Static moves and labels loaded from localized JSON
