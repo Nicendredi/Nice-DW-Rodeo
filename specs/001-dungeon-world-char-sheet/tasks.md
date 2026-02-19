@@ -62,12 +62,22 @@ A# Tasks: Dungeon World Character Sheet
   - **THESE TESTS MUST FAIL** before implementation.
 
 - [ ] T012 [P] [UTIL] Create test file `tests/unit/validation.test.ts`:
-  - Test: `validateCharacterName("")` returns error.
-  - Test: `validateCharacterName("Valid Name")` returns success.
-  - Test: `validateHealth(0, 100)` returns success (0 is valid).
-  - Test: `validateHealth(101, 100)` returns error (exceeds max).
-  - Test: `validateAttributeValue(5)` returns success.
-  - Test: `validateAttributeValue(25)` returns error.
+  - Test: `validateCharacterName("")` returns `{valid: false, error: "i18n:error.name-required"}`.
+  - Test: `validateCharacterName("Valid Name")` returns `{valid: true}`.
+  - Test: `validateHealth(0, 100)` returns `{valid: true}` (0 is valid).
+  - Test: `validateHealth(101, 100)` returns `{valid: false, error: "i18n:error.health-exceeds-max"}`.
+  - Test: `validateAttributeValue(5)` returns `{valid: true}`.
+  - Test: `validateAttributeValue(25)` returns `{valid: false, error: "i18n:error.attribute-out-of-range"}`.
+  - **Localization**: All error messages use i18n keys; tests verify keys are resolved to English/French strings.
+  - **THESE TESTS MUST FAIL** before implementation.
+
+- [ ] T012a [P] [UTIL] Create test file `tests/integration/ValidationErrorDisplay.test.tsx`:
+  - Test: When CharacterName field receives focus and loses focus with empty value, an error message "Character name is required" appears below the field.
+  - Test: Error message is translated to French when language is "Français".
+  - Test: Error element has `aria-live="polite"` attribute; screen readers announce error when displayed.
+  - Test: Error has `role="alert"` and associates with input via `aria-describedby`.
+  - Test: Error displays in red or warning color per accessibility contrast (WCAG AA: 4.5:1 ratio).
+  - Test: Correcting the value (entering text) removes the error immediately.
   - **THESE TESTS MUST FAIL** before implementation.
 
 - [ ] T013 [P] [UTIL] Create test file `tests/unit/moves.test.ts`:
@@ -89,7 +99,8 @@ A# Tasks: Dungeon World Character Sheet
   - Export `validateCharacterName(name: string): {valid: boolean; error?: string}`.
   - Export `validateHealth(current: number, max: number): {valid: boolean; error?: string}`.
   - Export `validateAttributeValue(value: number): {valid: boolean; error?: string}`.
-  - Tests T012 MUST PASS after implementation.
+  - Return i18n error keys (e.g., `error: "i18n:error.name-required"`) for use in component error display.
+  - Tests T012 and T012a MUST PASS after implementation.
 
 - [ ] T016 Implement `src/utils/moves.ts`:
   - Export `getBasicMoves(): Move[]` returning exactly 8 core DW moves (no filtering).
@@ -115,6 +126,15 @@ A# Tasks: Dungeon World Character Sheet
   - Test: Editing Character Name field updates the displayed value.
   - Test: Entering max health as 30 and current health as 27 displays "27 / 30".
   - Test: Changing damage die from "d6" to "d10" updates the display immediately.
+  - Test: Class dropdown renders exactly 8 options (Fighter, Wizard, Thief, Cleric, Ranger, Paladin, Bard, Druid).
+  - Test: Form displays placeholder text: Character Name = "Enter character name", Damage Die = "d6", etc. per FR-001d.
+  - **THESE TESTS MUST FAIL** before implementation.
+
+- [ ] T017a [P] [US1] Add test case to `tests/integration/CharacterForm.test.tsx`:
+  - Test: Language selector renders in the top-right of the CharacterForm header.
+  - Test: Clicking selector and choosing "Français" updates all visible labels to French.
+  - Test: Switching back to "English" reverts labels correctly.
+  - Test: Language preference persists after page refresh (stored in localStorage).
   - **THESE TESTS MUST FAIL** before implementation.
 
 - [ ] T018 [P] [US1] Create test file `tests/hooks/useCharacterStore.test.ts`:
@@ -133,9 +153,12 @@ A# Tasks: Dungeon World Character Sheet
 
 - [ ] T020 Implement `src/components/CharacterForm.tsx`:
   - Render form with fields: Character Name, Player Name, Campaign, Class (dropdown), Health (two inputs), Damage Die (dropdown).
+  - Class dropdown restricted to 8 standard classes (Fighter, Wizard, Thief, Cleric, Ranger, Paladin, Bard, Druid).
+  - All fields display placeholder text per FR-001d (e.g., "Enter character name", "d6" for Damage Die).
+  - Include language selector dropdown in the form header (top-right position); enable on-the-fly language switching; persist selection to local storage.
   - Use `useCharacterStore()` to get/set data.
   - Use i18n for labels.
-  - Tests T017 MUST PASS.
+  - Tests T017 and T017a MUST PASS.
 
 - [ ] T021 Implement `src/components/CharacterSheet.tsx` (main container):
   - Render `<CharacterForm />` at the top.
@@ -250,9 +273,9 @@ A# Tasks: Dungeon World Character Sheet
 
 ### Responsive Design
 
-- [ ] T034 [P] Implement `src/styles/responsive.css` for tablet (768px–1199px) and mobile (< 768px).
-   - Test layout on iPad (landscape/portrait) and Android tablet.
-   - Stack attributes into a 3x2 grid on smaller screens; allow moves sections to scroll.
+- [ ] T034 [P] Implement `src/styles/responsive.css` for tablet (768px–1199px).
+   - Test layout on iPad (landscape/portrait).
+   - Stack attributes into a 3x2 grid on tablets; allow moves sections to scroll.
 
 ### Cross-Browser Testing
 

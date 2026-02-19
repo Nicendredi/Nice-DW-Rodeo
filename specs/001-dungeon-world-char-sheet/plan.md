@@ -21,7 +21,7 @@ Build a Vite + React character sheet page that renders editable character info, 
 **Primary Dependencies**: Vite, React, react-i18next, Vitest, React Testing Library  
 **Storage**: Browser localStorage (single character + language preference)  
 **Testing**: Vitest + React Testing Library  
-**Target Platform**: Modern browsers (Chrome, Firefox, Safari, Edge) on desktop + tablet  
+**Target Platform**: Modern browsers (Chrome, Firefox, Safari, Edge) on desktop (1920px+) and tablet (768px–1199px)  
 **Project Type**: Web application (single Vite app)  
 **Performance Goals**: Initial load under 2 seconds (SC-001)  
 **Constraints**: On-blur auto-save, inline validation, bilingual UI, WCAG 2.1 AA accessibility  

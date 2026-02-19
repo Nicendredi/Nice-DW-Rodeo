@@ -58,6 +58,7 @@ The character sheet renders with all header fields populated and editable; savin
 1. **Given** a first-time user with no saved data, **When** I load the page, **Then** I see a form with empty fields and placeholder text for Character Name, Player Name, Campaign, Class, Health, and Damage Die.
 2. **Given** I fill in "Thorgrim Ironfoot" in Character Name, **When** I click elsewhere (blur), **Then** the name persists to local storage and displays at the top of the page.
 3. **Given** I change the Class field, **When** I blur the field, **Then** the class name saves to local storage and displays correctly.
+4. **Given** I open the page in English, **When** I click the language selector in the top-right and choose "Français", **Then** all labels, move names, and descriptions update to French without page reload.
 
 ---
 
@@ -148,6 +149,7 @@ Type text into the notes area; refresh the page; confirm the text persists (stor
 - **FR-006**: System MUST provide a large text area for free-form notes (no character limit enforced; UI may scroll).
 - **FR-007**: System MUST persist a single character's data to browser local storage so that refreshing the page retains all entered data. Only one character is supported; editing replaces the existing character. Changes MUST be saved automatically on field blur (when user leaves a field).
 - **FR-008**: System MUST support English and French labels, move descriptions, and all UI strings; localization strings MUST be stored separately (i18n files); user can switch languages without page reload; missing translation keys MUST fall back to English; selected language MUST persist in local storage.
+- **FR-008a**: System MUST provide a language selector control (dropdown or toggle button) in the top-right of the page header. Selecting "Français" or "English" updates all UI text, move names, and descriptions immediately without page reload. Selected language persists in local storage.
 - **FR-009**: System MUST be built using Vite for development and production builds.
 - **FR-010**: System MUST support full accessibility: keyboard navigation (tab order, focus indicators), screen reader compatibility (ARIA labels, roles, live regions for dynamic content), and proper focus management (no keyboard traps, logical tab order).
 - **FR-011**: System MUST display validation errors inline (directly below or beside the invalid field) when the user leaves the field (on blur) or attempts to submit. Error messages MUST be localized and accessible to screen readers.
