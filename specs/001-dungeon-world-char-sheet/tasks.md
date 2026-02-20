@@ -127,7 +127,7 @@ A# Tasks: Dungeon World Character Sheet
 - [x] T017 [P] [US1] Create test file `tests/integration/CharacterForm.test.tsx`:
   - Test: Form renders with fields: Character Name, Player Name, Campaign, Class, Health (current/max), Damage Die.
   - Test: Editing Character Name field updates the displayed value.
-  - Test: Entering max health as 30 and current health as 27 displays "27 / 30".
+  - Test: Entering max health as 30 and current health as 27 updates the input field values to 27 and 30 respectively.
   - Test: Changing damage die from "d6" to "d10" updates the display immediately.
   - Test: Class dropdown renders exactly 8 options (Fighter, Wizard, Thief, Cleric, Ranger, Paladin, Bard, Druid).
   - Test: Form displays placeholder text: Character Name = "Enter character name", Damage Die = "d6", etc. per FR-001d.
