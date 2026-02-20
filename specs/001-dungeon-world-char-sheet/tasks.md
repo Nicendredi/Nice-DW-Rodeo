@@ -54,7 +54,7 @@ A# Tasks: Dungeon World Character Sheet
 
 ### Tests for Utilities
 
-- [ ] T011 [P] [UTIL] Create test file `tests/unit/calculateModifier.test.ts`:
+- [x] T011 [P] [UTIL] Create test file `tests/unit/calculateModifier.test.ts`:
   - Test: `calculateModifier(10)` returns `0`.
   - Test: `calculateModifier(16)` returns `+2`.
   - Test: `calculateModifier(9)` returns `0`.
@@ -63,7 +63,7 @@ A# Tasks: Dungeon World Character Sheet
   - **Uses DW SRD table, not D&D formula.**
   - **THESE TESTS MUST FAIL** before implementation.
 
-- [ ] T012 [P] [UTIL] Create test file `tests/unit/validation.test.ts`:
+- [x] T012 [P] [UTIL] Create test file `tests/unit/validation.test.ts`:
   - Test: `validateCharacterName("")` returns `{valid: false, error: "i18n:error.name-required"}`.
   - Test: `validateCharacterName("Valid Name")` returns `{valid: true}`.
   - Test: `validateHealth(0, 100)` returns `{valid: true}` (0 is valid).
@@ -74,7 +74,7 @@ A# Tasks: Dungeon World Character Sheet
   - **Localization**: All error messages use i18n keys; tests verify keys are resolved to English/French strings.
   - **THESE TESTS MUST FAIL** before implementation.
 
-- [ ] T012a [P] [UTIL] Create test file `tests/integration/ValidationErrorDisplay.test.tsx`:
+- [x] T012a [P] [UTIL] Create test file `tests/integration/ValidationErrorDisplay.test.tsx`:
   - Test: When CharacterName field receives focus and loses focus with empty value, an error message "Character name is required" appears below the field.
   - Test: Error message is translated to French when language is "Français".
   - Test: Error element has `aria-live="polite"` attribute; screen readers announce error when displayed.
@@ -83,7 +83,7 @@ A# Tasks: Dungeon World Character Sheet
   - Test: Correcting the value (entering text) removes the error immediately.
   - **THESE TESTS MUST FAIL** before implementation.
 
-- [ ] T013 [P] [UTIL] Create test file `tests/unit/moves.test.ts`:
+- [x] T013 [P] [UTIL] Create test file `tests/unit/moves.test.ts`:
   - Test: `getBasicMoves()` returns array of exactly 8 moves with id, name, description.
   - Test: `getSpecialMoves()` returns array of exactly 13 universal moves.
   - Test: Basic moves include: Hack and Slash, Volley, Defy Danger, Defend, Spout Lore, Discern Realities, Parley, Aid or Interfere.
