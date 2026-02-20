@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
-import { useCharacterStore } from '../../src/hooks/useCharacterStore';
+import { useCharacterStore, CharacterStoreProvider } from '../../src/hooks/useCharacterStore.tsx';
+import { createElement } from 'react';
 
 /**
  * useCharacterStore hook tests
@@ -10,6 +11,10 @@ import { useCharacterStore } from '../../src/hooks/useCharacterStore';
  *
  * All tests intentionally FAIL before hook implementation (TDD RED phase)
  */
+
+// Wrapper component for testing (using createElement to avoid JSX in .ts file)
+const wrapper = ({ children }: { children: React.ReactNode }) =>
+  createElement(CharacterStoreProvider, null, children);
 
 describe('useCharacterStore (T018)', () => {
   beforeEach(() => {
@@ -23,7 +28,7 @@ describe('useCharacterStore (T018)', () => {
   });
 
   it('initializes with default character (empty name, default class, etc.)', () => {
-    const { result } = renderHook(() => useCharacterStore());
+    const { result } = renderHook(() => useCharacterStore(), { wrapper });
 
     expect(result.current.character).toBeDefined();
     expect(result.current.character.name).toBe('');
@@ -33,7 +38,7 @@ describe('useCharacterStore (T018)', () => {
   });
 
   it('has updateCharacter function that updates the store', () => {
-    const { result } = renderHook(() => useCharacterStore());
+    const { result } = renderHook(() => useCharacterStore(), { wrapper });
 
     expect(typeof result.current.updateCharacter).toBe('function');
 
@@ -52,7 +57,7 @@ describe('useCharacterStore (T018)', () => {
     const { result, rerender } = renderHook(() => {
       renderCount++;
       return useCharacterStore();
-    });
+    }, { wrapper });
 
     const initialRenderCount = renderCount;
 
@@ -70,7 +75,7 @@ describe('useCharacterStore (T018)', () => {
   });
 
   it('persists character data to localStorage on update', () => {
-    const { result } = renderHook(() => useCharacterStore());
+    const { result } = renderHook(() => useCharacterStore(), { wrapper });
 
     const testCharacter = {
       ...result.current.character,
@@ -114,7 +119,7 @@ describe('useCharacterStore (T018)', () => {
     // Pre-populate localStorage
     localStorage.setItem('dw-character', JSON.stringify(initialCharacter));
 
-    const { result } = renderHook(() => useCharacterStore());
+    const { result } = renderHook(() => useCharacterStore(), { wrapper });
 
     expect(result.current.character.name).toBe('Frodo');
     expect(result.current.character.player).toBe('Sam');
@@ -122,7 +127,7 @@ describe('useCharacterStore (T018)', () => {
   });
 
   it('can update individual character fields', () => {
-    const { result } = renderHook(() => useCharacterStore());
+    const { result } = renderHook(() => useCharacterStore(), { wrapper });
 
     act(() => {
       result.current.updateCharacter({
@@ -135,7 +140,7 @@ describe('useCharacterStore (T018)', () => {
   });
 
   it('can update attributes within character store', () => {
-    const { result } = renderHook(() => useCharacterStore());
+    const { result } = renderHook(() => useCharacterStore(), { wrapper });
 
     act(() => {
       result.current.updateCharacter({
@@ -156,7 +161,7 @@ describe('useCharacterStore (T018)', () => {
   });
 
   it('persists character data across multiple updates', async () => {
-    const { result } = renderHook(() => useCharacterStore());
+    const { result } = renderHook(() => useCharacterStore(), { wrapper });
 
     const update1 = {
       ...result.current.character,
@@ -187,7 +192,7 @@ describe('useCharacterStore (T018)', () => {
 
   it('survives full refresh cycle (localStorage persistence)', async () => {
     // First hook instance - create and save data
-    let { result, unmount } = renderHook(() => useCharacterStore());
+    let { result, unmount } = renderHook(() => useCharacterStore(), { wrapper });
 
     const testCharacter = {
       ...result.current.character,
@@ -203,7 +208,7 @@ describe('useCharacterStore (T018)', () => {
     unmount();
 
     // Second hook instance - should load persisted data
-    ({ result } = renderHook(() => useCharacterStore()));
+    ({ result } = renderHook(() => useCharacterStore(), { wrapper }));
 
     await waitFor(() => {
       expect(result.current.character.name).toBe('Gimli');
