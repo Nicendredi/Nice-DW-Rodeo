@@ -1,5 +1,164 @@
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+/* Desktop - Extra Large (1920px+) */
 @media (min-width: 1920px) {
   .character-sheet {
     max-width: 1600px;
+  }
+}
+
+/* Desktop - Large (1200px+) */
+@media (min-width: 1200px) {
+  .form-row {
+    flex-direction: row;
+  }
+  
+  .attributes-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+/* Tablet - Medium (768px - 1199px) */
+@media (max-width: 1199px) {
+  .character-sheet {
+    max-width: 100%;
+    padding: 16px;
+  }
+  
+  .form-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .form-field {
+    min-width: 200px;
+  }
+  
+  .attributes-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  
+  .form-header h2 {
+    font-size: 18px;
+  }
+}
+
+/* Mobile - Small (< 768px) */
+@media (max-width: 767px) {
+  .character-sheet {
+    padding: 12px;
+  }
+  
+  .form-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .form-header h2 {
+    font-size: 16px;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .form-field {
+    width: 100%;
+  }
+  
+  .health-inputs {
+    justify-content: center;
+  }
+  
+  .attributes-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  
+  .attribute-item {
+    padding: 8px;
+  }
+  
+  .attribute-modifier {
+    font-size: 20px;
+  }
+  
+  .moves-list {
+    max-height: 400px;
+  }
+  
+  .notes-section textarea {
+    min-height: 150px;
+  }
+}
+
+/* Mobile - Extra Small (< 480px) */
+@media (max-width: 479px) {
+  .character-sheet {
+    padding: 8px;
+  }
+  
+  .form-header h2 {
+    font-size: 14px;
+  }
+  
+  .form-field input[type="text"],
+  .form-field input[type="number"],
+  .form-field select {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+  
+  .attributes-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .moves-section,
+  .notes-section,
+  .attributes-section {
+    padding: 12px;
+  }
+  
+  .move-name {
+    font-size: 11px;
+  }
+  
+  .move-description {
+    font-size: 10px;
+  }
+}
+
+/* Print styles */
+@media print {
+  .character-sheet {
+    max-width: 100%;
+    padding: 0;
+  }
+  
+  .form-header select,
+  .form-header label[for="language-selector"] {
+    display: none;
+  }
+  
+  .form-field input,
+  .form-field select {
+    border: none;
+    border-bottom: 1px solid #333;
+    background: transparent;
+  }
+  
+  .moves-list {
+    max-height: none;
+    overflow: visible;
+  }
+  
+  .notes-section textarea {
+    border: 1px solid #333;
+    background: transparent;
   }
 }

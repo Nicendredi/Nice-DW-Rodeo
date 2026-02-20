@@ -1,5 +1,6 @@
-import React from 'react';
 import { CharacterForm } from '../../components/CharacterForm.tsx';
+import '../../styles/CharacterSheet.css';
+import '../../styles/responsive.css';
 
 /**
  * CharacterSheet Page

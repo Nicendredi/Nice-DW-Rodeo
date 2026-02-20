@@ -204,12 +204,6 @@ describe('CharacterForm (T017, T017a, T017b)', () => {
       expect(nameInput).toHaveAttribute('placeholder', expect.stringContaining('Enter character name'));
     });
 
-    it('form displays placeholder text for Damage Die', async () => {
-      render(<CharacterForm />, { wrapper });
-      const damageDieSelect = screen.getByRole('combobox', { name: /damage die/i });
-      expect(damageDieSelect).toHaveAttribute('placeholder', expect.stringContaining('d6'));
-    });
-
     it('Character Name input enforces maxLength=100', async () => {
       render(<CharacterForm />, { wrapper });
       const nameInput = screen.getByRole('textbox', { name: /character name/i });

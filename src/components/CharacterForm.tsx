@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCharacterStore } from '../hooks/useCharacterStore.tsx';
 
@@ -143,7 +143,6 @@ export function CharacterForm() {
             <select
               id="damage-die"
               aria-label={t('characterInfo.damageDie')}
-              placeholder="d6"
               value={character.damageDie}
               onChange={handleChange('damageDie')}
             >

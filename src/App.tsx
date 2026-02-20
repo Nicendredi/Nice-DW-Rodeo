@@ -1,3 +1,4 @@
+import './App.css';
 import { CharacterStoreProvider } from './hooks/useCharacterStore.tsx';
 import { CharacterSheet } from './pages/Character/CharacterSheet.tsx';
 

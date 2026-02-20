@@ -1,5 +1,381 @@
+/* ========================================
+   CHARACTER SHEET - MAIN CONTAINER
+   ======================================== */
+
 .character-sheet {
   margin: 0 auto;
   max-width: 1200px;
   padding: 24px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  color: #333;
+  background-color: #fff;
+}
+
+/* ========================================
+   FORM HEADER
+   ======================================== */
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #ddd;
+}
+
+.form-header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+}
+
+.form-header label {
+  font-size: 12px;
+  color: #666;
+  margin-right: 8px;
+}
+
+.form-header select {
+  font-size: 12px;
+  padding: 4px 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+}
+
+.form-header select:focus {
+  outline: 2px solid #4a90e2;
+  outline-offset: 2px;
+}
+
+/* ========================================
+   FORM LAYOUT
+   ======================================== */
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 6px;
+}
+
+.form-field label {
+  font-size: 12px;
+  font-weight: normal;
+  color: #666;
+  margin: 0;
+}
+
+/* ========================================
+   INPUT FIELDS
+   ======================================== */
+
+.form-field input[type="text"],
+.form-field input[type="number"],
+.form-field select {
+  padding: 8px 12px;
+  font-size: 14px;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  transition: border-color 0.2s ease;
+}
+
+.form-field input[type="text"]:focus,
+.form-field input[type="number"]:focus,
+.form-field select:focus {
+  outline: 2px solid #4a90e2;
+  outline-offset: 2px;
+  border-color: #4a90e2;
+}
+
+.form-field input[type="text"]:hover,
+.form-field input[type="number"]:hover,
+.form-field select:hover {
+  border-color: #999;
+}
+
+.form-field select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 32px;
+}
+
+/* ========================================
+   HEALTH INPUTS
+   ======================================== */
+
+.health-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.health-inputs input[type="number"] {
+  flex: 1;
+  max-width: 80px;
+  text-align: center;
+}
+
+.health-inputs span {
+  font-size: 14px;
+  color: #666;
+  font-weight: normal;
+}
+
+.health-display {
+  font-size: 11px;
+  color: #999;
+  margin-top: 4px;
+  text-align: center;
+}
+
+/* ========================================
+   ATTRIBUTES SECTION
+   ======================================== */
+
+.attributes-section {
+  margin-top: 32px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fafafa;
+}
+
+.attributes-section h3 {
+  margin: 0 0 16px 0;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.attributes-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+}
+
+.attribute-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  padding: 12px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.attribute-abbr {
+  font-size: 11px;
+  font-weight: bold;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.attribute-modifier {
+  font-size: 24px;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.attribute-modifier.positive {
+  color: #2ecc71;
+}
+
+.attribute-modifier.negative {
+  color: #e74c3c;
+}
+
+.attribute-modifier.neutral {
+  color: #95a5a6;
+}
+
+.attribute-name {
+  font-size: 10px;
+  color: #999;
+  text-transform: capitalize;
+}
+
+.attribute-value {
+  font-size: 14px;
+  color: #333;
+  font-weight: normal;
+}
+
+/* ========================================
+   MOVES SECTIONS
+   ======================================== */
+
+.moves-section {
+  margin-top: 32px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+.moves-section h3 {
+  margin: 0 0 16px 0;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 8px;
+}
+
+.moves-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 600px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.move-item {
+  padding: 12px;
+  background-color: #f9f9f9;
+  border-left: 3px solid #4a90e2;
+  border-radius: 2px;
+}
+
+.move-name {
+  font-size: 12px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.move-description {
+  font-size: 11px;
+  color: #555;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Scrollbar styling for moves list */
+.moves-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.moves-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.moves-list::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+.moves-list::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+/* ========================================
+   NOTES & INVENTORY SECTION
+   ======================================== */
+
+.notes-section {
+  margin-top: 32px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+.notes-section h3 {
+  margin: 0 0 16px 0;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.notes-section textarea {
+  width: 100%;
+  min-height: 200px;
+  padding: 12px;
+  font-size: 11px;
+  font-family: inherit;
+  color: #333;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.notes-section textarea:focus {
+  outline: 2px solid #4a90e2;
+  outline-offset: 2px;
+  border-color: #4a90e2;
+  background-color: #fff;
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+
+/* Focus indicators for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid #4a90e2;
+  outline-offset: 2px;
+}
+
+/* Skip to content link for screen readers */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+.text-center {
+  text-align: center;
+}
+
+.mt-4 {
+  margin-top: 16px;
+}
+
+.mb-4 {
+  margin-bottom: 16px;
 }
