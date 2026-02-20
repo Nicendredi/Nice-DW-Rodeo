@@ -157,13 +157,13 @@ A# Tasks: Dungeon World Character Sheet
 
 ### Implementation for US1
 
-- [ ] T019 Implement `src/hooks/useCharacterStore.ts`:
+- [X] T019 Implement `src/hooks/useCharacterStore.ts`:
   - Export `useCharacterStore()` hook that manages character state via React Context.
   - Persist to browser local storage on blur.
   - Restore from local storage on mount.
   - Tests T018 MUST PASS.
 
-- [ ] T020 Implement `src/components/CharacterForm.tsx`:
+- [X] T020 Implement `src/components/CharacterForm.tsx`:
   - Render form with fields: Character Name, Player Name, Campaign, Class (dropdown), Health (two inputs), Damage Die (dropdown).
   - Class dropdown restricted to 8 standard classes (Fighter, Wizard, Thief, Cleric, Ranger, Paladin, Bard, Druid).
   - All fields display placeholder text per FR-001d (e.g., "Enter character name", "d6" for Damage Die).
@@ -174,12 +174,12 @@ A# Tasks: Dungeon World Character Sheet
   - Use i18n for labels.
   - Tests T017, T017a, and T017b MUST PASS.
 
-- [ ] T021 Implement `src/pages/Character/CharacterSheet.tsx` (main container):
+- [X] T021 Implement `src/pages/Character/CharacterSheet.tsx` (main container):
   - Render `<CharacterForm />` at the top.
   - Render placeholder sections for Attributes, Moves, Special Moves, Notes (to be implemented in later stories).
   - Tests covered by T017 (CharacterForm) and integration test.
 
-- [ ] T022 [P] [US1] Update `src/App.tsx` to render the character page (`<CharacterSheet />`).
+- [X] T022 [P] [US1] Update `src/App.tsx` to render the character page (`<CharacterSheet />`).
 
 **Checkpoint**: At this point, User Story 1 is fully functional. Users can fill out character info and it persists. Proceed to US2 independently.
 
