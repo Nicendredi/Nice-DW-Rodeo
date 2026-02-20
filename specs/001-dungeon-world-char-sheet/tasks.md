@@ -93,19 +93,19 @@ A# Tasks: Dungeon World Character Sheet
 
 ### Implementation for Utilities
 
-- [ ] T014 Implement `src/utils/calculateModifier.ts`:
+- [x] T014 Implement `src/utils/calculateModifier.ts`:
   - Export `calculateModifier(attribute: number): number`.
   - Formula: Use DW SRD lookup table (1–3 → -3, 4–5 → -2, 6–8 → -1, 9–12 → 0, 13–15 → +1, 16–17 → +2, 18 → +3).
   - Tests T011 MUST PASS after implementation.
 
-- [ ] T015 Implement `src/utils/validation.ts`:
+- [x] T015 Implement `src/utils/validation.ts`:
   - Export `validateCharacterName(name: string): {valid: boolean; error?: string}`.
   - Export `validateHealth(current: number, max: number): {valid: boolean; error?: string}`.
   - Export `validateAttributeValue(value: number): {valid: boolean; value: number; error?: string}` (clamps to [1, 18]).
   - Return i18n error keys (e.g., `error: "i18n:error.name-required"`) for use in component error display.
   - Tests T012 and T012a MUST PASS after implementation.
 
-- [ ] T016 Implement `src/utils/moves.ts`:
+- [x] T016 Implement `src/utils/moves.ts`:
   - Export `getBasicMoves(): Move[]` returning exactly 8 core DW moves (no filtering).
   - Export `getSpecialMoves(): Move[]` returning exactly 13 universal special moves (no filtering).
   - Moves include: id, name, description (translate via i18n at UI layer).
