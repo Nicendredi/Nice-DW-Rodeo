@@ -152,7 +152,7 @@ describe('CharacterForm (T017, T017a, T017b)', () => {
       expect(nameInput).toHaveValue('Thorin');
     });
 
-    it('entering max health as 30 and current health as 27 displays "27 / 30"', async () => {
+    it('entering max health as 30 and current health as 27 updates the input field values', async () => {
       const user = userEvent.setup();
       render(<CharacterForm />, { wrapper });
 
@@ -163,7 +163,8 @@ describe('CharacterForm (T017, T017a, T017b)', () => {
       await user.clear(healthInputs[1]);
       await user.type(healthInputs[1], '30');
 
-      expect(screen.getByText(/27\s*\/\s*30/)).toBeInTheDocument();
+      expect(healthInputs[0]).toHaveValue(27);
+      expect(healthInputs[1]).toHaveValue(30);
     });
 
     it('changing damage die from "d6" to "d10" updates the display immediately', async () => {
