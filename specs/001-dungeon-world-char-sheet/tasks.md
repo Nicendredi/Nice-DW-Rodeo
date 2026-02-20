@@ -124,7 +124,7 @@ A# Tasks: Dungeon World Character Sheet
 
 ### Tests for US1
 
-- [ ] T017 [P] [US1] Create test file `tests/integration/CharacterForm.test.tsx`:
+- [x] T017 [P] [US1] Create test file `tests/integration/CharacterForm.test.tsx`:
   - Test: Form renders with fields: Character Name, Player Name, Campaign, Class, Health (current/max), Damage Die.
   - Test: Editing Character Name field updates the displayed value.
   - Test: Entering max health as 30 and current health as 27 displays "27 / 30".
@@ -134,14 +134,14 @@ A# Tasks: Dungeon World Character Sheet
   - Test: Character Name, Player Name, and Campaign inputs enforce `maxLength=100`.
   - **THESE TESTS MUST FAIL** before implementation.
 
-- [ ] T017a [P] [US1] Add test case to `tests/integration/CharacterForm.test.tsx`:
+- [x] T017a [P] [US1] Add test case to `tests/integration/CharacterForm.test.tsx`:
   - Test: Language selector renders in the top-right of the CharacterForm header.
   - Test: Clicking selector and choosing "Français" updates all visible labels to French.
   - Test: Switching back to "English" reverts labels correctly.
   - Test: Language preference persists after page refresh (stored in localStorage).
   - **THESE TESTS MUST FAIL** before implementation.
 
-- [ ] T017b [P] [US1] Add accessibility tests to `tests/integration/CharacterForm.test.tsx`:
+- [x] T017b [P] [US1] Add accessibility tests to `tests/integration/CharacterForm.test.tsx`:
   - Test: All form inputs have associated `<label>` or `aria-label` attributes.
   - Test: Tab order navigates through fields in logical sequence (left-to-right, top-to-bottom).
   - Test: All inputs have visible focus indicators when focused (outline, border, or highlight).
@@ -149,7 +149,7 @@ A# Tasks: Dungeon World Character Sheet
   - **Aligns with FR-010 (MANDATORY accessibility); tests during component development per constitution TDD requirement.**
   - **THESE TESTS MUST FAIL** before implementation.
 
-- [ ] T018 [P] [US1] Create test file `tests/hooks/useCharacterStore.test.ts`:
+- [x] T018 [P] [US1] Create test file `tests/hooks/useCharacterStore.test.ts`:
   - Test: `useCharacterStore()` initializes with default character (empty name, default class, etc.).
   - Test: `updateCharacter()` updates the store and triggers re-render.
   - Test: Persisting to local storage: after `updateCharacter()`, refresh and verify data is restored.
