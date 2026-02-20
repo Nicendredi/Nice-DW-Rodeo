@@ -1,0 +1,5 @@
+@media (min-width: 1920px) {
+  .character-sheet {
+    max-width: 1600px;
+  }
+}

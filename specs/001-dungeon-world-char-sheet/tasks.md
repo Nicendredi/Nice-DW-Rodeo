@@ -27,22 +27,22 @@ A# Tasks: Dungeon World Character Sheet
 ### Tests for Phase 1
 
 - [ ] T000 Create PR draft for Phase 1 setup; link to plan.md and spec.md for reference.
-- [ ] T001 [P] Set up Vitest + React Testing Library; verify test runner works. Create test `tests/integration/app-setup.test.tsx` that checks: (a) React test environment is initialized, (b) test utilities are available (@testing-library/react), (c) at least one component can be rendered and assertions can be made. Test must fail before Vite setup (T002-T003) is complete.
+- [x] T001 [P] Set up Vitest + React Testing Library; verify test runner works. Create test `tests/integration/app-setup.test.tsx` that checks: (a) React test environment is initialized, (b) test utilities are available (@testing-library/react), (c) at least one component can be rendered and assertions can be made. Test must fail before Vite setup (T002-T003) is complete.
 
 ### Implementation for Phase 1
 
-- [ ] T002 Initialize Vite project at repo root with `npm create vite@latest . -- --template react`.
-- [ ] T003 [P] Install dependencies: React, React DOM, react-i18next, TypeScript types.
-- [ ] T004 [P] Configure ESLint and Prettier for code style consistency.
-- [ ] T005 Create directory structure per plan.md: `src/components/`, `src/data/`, `src/i18n/`, `src/styles/`, `src/utils`, `src/pages/Character/`, `tests/`.
-- [ ] T006 [P] Create `src/localization/i18n.ts` with i18next config; set up language detection (en/fr), English fallback, and missing-key logging (console warning).
-- [ ] T007 [P] Copy the i18n JSON files from `docs/en/character-sheet/` and `docs/fr/character-sheet/` into `src/localization/en/` and `src/localization/fr/` respectively:
+- [x] T002 Initialize Vite project at repo root with `npm create vite@latest . -- --template react`.
+- [x] T003 [P] Install dependencies: React, React DOM, react-i18next, TypeScript types.
+- [x] T004 [P] Configure ESLint and Prettier for code style consistency.
+- [x] T005 Create directory structure per plan.md: `src/components/`, `src/data/`, `src/i18n/`, `src/styles/`, `src/utils`, `src/pages/Character/`, `tests/`.
+- [x] T006 [P] Create `src/localization/i18n.ts` with i18next config; set up language detection (en/fr), English fallback, and missing-key logging (console warning).
+- [x] T007 [P] Copy the i18n JSON files from `docs/en/character-sheet/` and `docs/fr/character-sheet/` into `src/localization/en/` and `src/localization/fr/` respectively:
   - `src/localization/en/labels.json` (field labels, button text)
   - `src/localization/en/moves.json` (move names and descriptions)
   - `src/localization/fr/labels.json` (French translations)
   - `src/localization/fr/moves.json` (French move descriptions)
-- [ ] T008 [P] Set up CSS structure: `src/styles/CharacterSheet.css`, `src/styles/responsive.css`.
-- [ ] T009 Create base `src/App.tsx` and `src/main.tsx` entry point; confirm Vite dev server starts.
+- [x] T008 [P] Set up CSS structure: `src/styles/CharacterSheet.css`, `src/styles/responsive.css`.
+- [x] T009 Create base `src/App.tsx` and `src/main.tsx` entry point; confirm Vite dev server starts.
 
 **Checkpoint**: Vite project running, dependencies installed, i18n configured, directory structure ready. Any developer can start writing tests for user stories.
 
