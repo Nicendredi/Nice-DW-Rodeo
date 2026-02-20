@@ -133,9 +133,6 @@ export function CharacterForm() {
                 min={0}
               />
             </div>
-            <div className="health-display">
-              {character.healthCurrent} / {character.healthMax}
-            </div>
           </div>
 
           <div className="form-field">
