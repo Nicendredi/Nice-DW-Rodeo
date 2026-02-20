@@ -1,7 +1,8 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 /**
  * ValidationErrorDisplay test component
@@ -24,6 +25,7 @@ vi.mock('react-i18next', () => ({
       // Simple translations for testing
       const translations: Record<string, string> = {
         'characterInfo.characterName': 'Character Name',
+        'i18n:validationErrors.nameRequired': 'Character name is required',
         'validationErrors.nameRequired': 'Character name is required',
       };
       return translations[key] || key;
@@ -36,7 +38,7 @@ const validateInput = (value: string) => {
   if (!value.trim()) {
     return { valid: false, error: 'validationErrors.nameRequired' };
   }
-  return { valid: true };
+  return { valid: true, error: null };
 };
 
 // Actual component with proper useState
@@ -86,6 +88,10 @@ const ValidationTestComponent = () => {
 describe('ValidationErrorDisplay', () => {
   beforeEach(() => {
     // Reset component state before each test
+  });
+
+  afterEach(() => {
+    cleanup();
   });
 
   it('displays error message when field is blurred with empty value', async () => {
