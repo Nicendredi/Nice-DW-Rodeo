@@ -170,6 +170,7 @@ A# Tasks: Dungeon World Character Sheet
   - Enforce maxLength=100 on Character Name, Player Name, and Campaign inputs.
   - Include language selector dropdown in the form header (top-right position); enable on-the-fly language switching; persist selection to local storage.
   - Accessibility: All inputs have associated `<label>` elements with `htmlFor`; tab order is logical (top-to-bottom, left-to-right); all elements have visible focus indicators (outline or underline).
+  - **Validation & Persistence**: On blur of any field, validate that field (if applicable). If validation passes, save the entire form state to localStorage via `useCharacterStore()`. If validation fails, display inline error and do NOT save the form until the error is corrected. This ensures consistent persistence behavior across all fields.
   - Use `useCharacterStore()` to get/set data.
   - Use i18n for labels.
   - Tests T017, T017a, and T017b MUST PASS.

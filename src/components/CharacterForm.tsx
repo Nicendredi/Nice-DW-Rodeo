@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCharacterStore } from '../hooks/useCharacterStore.tsx';
-import { validateCharacterName } from '../utils/validation.ts';
+import { validateCharacterName, validateHealth } from '../utils/validation.ts';
 
 /**
  * CharacterForm Component
@@ -21,10 +21,12 @@ export function CharacterForm() {
   // Local form state for immediate UI feedback (updates on change)
   const [formData, setFormData] = useState(() => ({ ...character }));
 
-  // Sync local form state when store character changes (e.g., on page load)
+  // Only sync from store on initial mount - after that, formData is the source of truth
+  // This prevents the form from resetting when we save valid fields (excluding invalid ones)
   React.useEffect(() => {
     setFormData({ ...character });
-  }, [character]);
+  }, []); // Empty deps - only run once on mount
+  // eslint-disable-next-line react-hooks/exhaustive-deps
 
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newLang = e.target.value;
@@ -47,18 +49,44 @@ export function CharacterForm() {
     if (errorKeys[field]) {
       setErrorKeys({ ...errorKeys, [field]: '' });
     }
+    // Clear health error when either health field changes
+    if ((field === 'healthCurrent' || field === 'healthMax') && errorKeys.health) {
+      setErrorKeys({ ...errorKeys, health: '' });
+    }
   };
 
   /**
-   * Save field to store on blur (persists to localStorage)
-   * Generic blur handler for any field
+   * Generic blur handler for fields without validation
+   * Saves entire form to localStorage (excluding invalid fields)
    */
   const handleFieldBlur = (field: string) => () => {
-    updateCharacter({
-      ...character,
-      [field]: formData[field as keyof typeof formData],
-    });
-  };
+    // Start with current character data
+    const dataToSave: Character = { ...character };
+
+    // Validate and include each field only if valid
+    // Name validation
+    const nameValidation = validateCharacterName(formData.name);
+    if (nameValidation.valid) {
+      dataToSave.name = formData.name;
+    }
+
+    // Health validation (both fields together)
+    const healthValidation = validateHealth(formData.healthCurrent, formData.healthMax);
+    if (healthValidation.valid) {
+      dataToSave.healthCurrent = formData.healthCurrent;
+      dataToSave.healthMax = formData.healthMax;
+    }
+
+    // Fields without validation - always save
+    dataToSave.player = formData.player;
+    dataToSave.campaign = formData.campaign;
+    dataToSave.class = formData.class;
+    dataToSave.damageDie = formData.damageDie;
+    if (formData.notes !== undefined) dataToSave.notes = formData.notes;
+    if (formData.attributes) dataToSave.attributes = formData.attributes;
+
+    updateCharacter(dataToSave);
+  };;
   
   const handleNameBlur = () => {
     const validation = validateCharacterName(formData.name);
@@ -66,12 +94,36 @@ export function CharacterForm() {
       // Extract i18n key from error message (e.g., "i18n:validationErrors.nameRequired" -> "validationErrors.nameRequired")
       const i18nKey = validation.error?.replace('i18n:', '') || 'validationErrors.nameRequired';
       setErrorKeys({ ...errorKeys, name: i18nKey });
-    } else if (errorKeys.name) {
+    } else {
       // Clear error if now valid
-      setErrorKeys({ ...errorKeys, name: '' });
+      if (errorKeys.name) {
+        setErrorKeys({ ...errorKeys, name: '' });
+      }
     }
-    // Save to store after validation
+    // Always save form - saveFormToStore will validate and only save valid fields
     handleFieldBlur('name')();
+  };
+
+  /**
+   * Health validation handler for both current and max health
+   * Validates that current health <= max health
+   * Always saves form - saveFormToStore will only persist valid fields
+   */
+  const handleHealthBlur = () => {
+    // Validate that current <= max
+    const validation = validateHealth(formData.healthCurrent, formData.healthMax);
+    if (!validation.valid) {
+      // Extract i18n key from error message
+      const i18nKey = validation.error?.replace('i18n:', '') || 'validationErrors.healthInvalid';
+      setErrorKeys({ ...errorKeys, health: i18nKey });
+    } else {
+      // Clear error if now valid
+      if (errorKeys.health) {
+        setErrorKeys({ ...errorKeys, health: '' });
+      }
+    }
+    // Always save form - saveFormToStore will validate and only save valid fields
+    handleFieldBlur('health')();
   };
 
   /**
@@ -190,23 +242,25 @@ export function CharacterForm() {
                 type="number"
                 id="health-current"
                 aria-label={`${t('characterInfo.health')} ${t('characterInfo.currentHealth')}`}
+                aria-describedby={errorKeys.health ? 'error-health' : undefined}
                 value={formData.healthCurrent}
                 onChange={handleChange('healthCurrent')}
-                onBlur={handleFieldBlur('healthCurrent')}
+                onBlur={handleHealthBlur}
                 min={0}
-                max={formData.healthMax}
               />
               <span> / </span>
               <input
                 type="number"
                 id="health-max"
                 aria-label={`${t('characterInfo.health')} ${t('characterInfo.maxHealth')}`}
+                aria-describedby={errorKeys.health ? 'error-health' : undefined}
                 value={formData.healthMax}
                 onChange={handleChange('healthMax')}
-                onBlur={handleFieldBlur('healthMax')}
+                onBlur={handleHealthBlur}
                 min={1}
               />
             </div>
+            {renderError('health', errorKeys.health)}
           </div>
 
           <div className="form-field">

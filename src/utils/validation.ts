@@ -27,7 +27,7 @@ export function validateHealth(
   max: number
 ): { valid: boolean; error?: string } {
   if (current > max) {
-    return { valid: false, error: 'i18n:validationErrors.healthExceedsMax' };
+    return { valid: false, error: 'i18n:validationErrors.healthInvalid' };
   }
   return { valid: true };
 }

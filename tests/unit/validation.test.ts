@@ -53,13 +53,13 @@ describe('validation', () => {
     it('returns invalid when current exceeds max', () => {
       const result = validateHealth(101, 100);
       expect(result.valid).toBe(false);
-      expect(result.error).toBe('i18n:validationErrors.healthExceedsMax');
+      expect(result.error).toBe('i18n:validationErrors.healthInvalid');
     });
 
     it('returns invalid when current exceeds max by large amount', () => {
       const result = validateHealth(50, 30);
       expect(result.valid).toBe(false);
-      expect(result.error).toBe('i18n:validationErrors.healthExceedsMax');
+      expect(result.error).toBe('i18n:validationErrors.healthInvalid');
     });
   });
 
