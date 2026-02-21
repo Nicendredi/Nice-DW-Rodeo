@@ -1,0 +1,111 @@
+{
+  "basicMoves": [
+    {
+      "id": "bm-001",
+      "name": "Taillader et Trancher",
+      "description": "Quand vous attaquez un ennemi au combat rapproché avec une arme, lancez+FOR. Sur un 10+, vous touchez et infligez vos dégâts. Sur 7–9, vous touchez mais l'ennemi obtient une attaque libre contre vous ou vous devez choisir : subir l'attaque de l'ennemi ou infliger les dégâts normalement."
+    },
+    {
+      "id": "bm-002",
+      "name": "Volée",
+      "description": "Quand vous attaquez un ennemi à distance avec une arme de projectile, lancez+DEX. Sur un 10+, vous touchez et infligez vos dégâts. Sur 7–9, vous touchez mais vous êtes dans une pire position; le MJ dit comment."
+    },
+    {
+      "id": "bm-003",
+      "name": "Braver le Danger",
+      "description": "Quand vous agissez malgré une menace imminente ou subissez une calamité, dites comment vous essayez de l'éviter et lancez. Si vous le faites avec... +FOR, +DEX, +CON, +INT, +SAG ou +CHA, selon l'action. Sur un 10+, vous y parvenez. Sur 7–9, vous le faites mais choisissez une conséquence que le MJ imposera."
+    },
+    {
+      "id": "bm-004",
+      "name": "Défendre",
+      "description": "Quand un allié effectue une move, vous pouvez dépenser une Prise pour annuler l'effet d'une attaque contre lui ou contre vous. Peut être utilisée une seule fois par instance."
+    },
+    {
+      "id": "bm-005",
+      "name": "Débiter des Savoirs",
+      "description": "Quand vous consultez vos connaissances accumulées sur quelque chose, lancez+INT. Sur un 10+, le MJ vous dira quelque chose d'intéressant et utile à ce sujet. Sur 7–9, le MJ vous dira quelque chose d'intéressant à ce sujet, mais ce pourrait être obscur, incomplet ou douteux."
+    },
+    {
+      "id": "bm-006",
+      "name": "Discerner la Réalité",
+      "description": "Quand vous étudiez attentivement une situation ou une personne, lancez+SAG. Sur un 10+, posez 3 questions au MJ de la liste ci-dessous. Sur 7–9, posez 1 question. Dans les deux cas, prenez +1 en avant en agissant selon les réponses."
+    },
+    {
+      "id": "bm-007",
+      "name": "Partager des Faveurs",
+      "description": "Quand vous avez un avantage sur quelqu'un et faites une demande, lancez+CHA. Sur un 10+, il fait ce que vous demandez si vous promettez d'abord quelque chose qu'il trouve utile. Sur 7–9, il demande d'abord quelque chose en retour. Indépendamment du résultat, si vous ne pouvez pas lui offrir quelque chose qu'il veut, l'action échoue."
+    },
+    {
+      "id": "bm-008",
+      "name": "Aider ou Entraver",
+      "description": "Quand vous aidez ou entravez quelqu'un dans une move, lancez+la stat pertinente liée à la move. Sur un 10+, il prend +1 ou -2 à son lancer (de votre choix). Sur 7–9, il prend +1 ou -1 à son lancer (de votre choix)."
+    }
+  ],
+  "specialMoves": [
+    {
+      "id": "sm-001",
+      "name": "Dernier Souffle",
+      "description": "Quand vous êtes mourant, vous apercevez ce qui se trouve au-delà du dernier rideau. Vous voyez des visions des morts et de l'au-delà. Prenez +1 à votre prochain lancer si vous choisissez de revenir de la brink of death."
+    },
+    {
+      "id": "sm-002",
+      "name": "Encombrement",
+      "description": "Quand vous effectuez une move en transportant un poids égal ou supérieur à FOR+CON, vous subissez -1 aux lancers pour toute move impliquant de se déplacer. Si votre poids est supérieur à FOR+CON + 4, vous ne pouvez pas du tout vous déplacer en le transportant."
+    },
+    {
+      "id": "sm-003",
+      "name": "Faire Camp",
+      "description": "Quand vous vous installez pour vous reposer et consommez une ration, retirez une Fatigue. Si vous êtes quelque part de dangereux, décidez aussi l'ordre de garde. Quand vous vous réveillez après au moins quelques heures de sommeil ininterrompu, récupérez des dégâts égaux à la moitié de vos PV max."
+    },
+    {
+      "id": "sm-004",
+      "name": "Prendre Garde",
+      "description": "Quand vous êtes de garde et quelque chose s'approche du camp, lancez+SAG. Sur un 10+, vous êtes capable de réveiller tout le monde et préparer une réponse, tous prennent +1 en avant. Sur 7–9, vous réagissez juste un moment trop tard; vos compagnons au camp sont réveillés mais n'ont pas eu le temps de se préparer. Sur un raté, ce qui se cache à l'extérieur de la lumière du feu a l'avantage sur vous."
+    },
+    {
+      "id": "sm-005",
+      "name": "Entreprendre un Voyage Périlleux",
+      "description": "Quand vous voyagez en territoire hostile, choisissez un membre du groupe pour agir comme éclaireur, l'un comme éclaireur d'avant, et l'un comme quartermaster. Chacun lance+SAG. Sur un 10+, le groupe progresse bien et ne rencontre pas de problème. Sur 7–9, vous y arrivez, mais le MJ choisit une complication."
+    },
+    {
+      "id": "sm-006",
+      "name": "Fin de Session",
+      "description": "Quand le groupe atteint un point de repos ou un tournant majeur, chaque personnage répond à ces questions: Avons-nous appris quelque chose de nouveau et d'important? Avons-nous accomplir ce que nous avons entrepris? Avons-nous vaincu un ennemi ou un monstre notable? Avons-nous découvert la réponse à une question importante? Avons-nous découvert un trésor de valeur? Avons-nous mené à bien une quête? Pour chaque oui, Expérience. À 5 Exp, montez de niveau."
+    },
+    {
+      "id": "sm-007",
+      "name": "Montée en Niveau",
+      "description": "Quand vous avez 5 points d'Expérience, vous montez de niveau. Quand vous montez de niveau, dépensez ces 5 Exp et choisissez une option de la liste d'améliorations de votre classe."
+    },
+    {
+      "id": "sm-008",
+      "name": "Faire la Fête",
+      "description": "Quand vous revenez triomphant et jetez de l'argent à profusion, vous attirez des parasites et des suivants indésirables. Perdez 1d4 × 10 pièces. Si vous dépensez 50 pièces ou plus, perdez 1d4 × 10 pièces supplémentaires, vous acquérez la compagnie de 1d4 gens indésirables. Vous vous réveillez : meurtri et endolori, manquant d'une partie du corps (généralement pas une partie vitale), et soit ruiné, soit avec un nouvel ami."
+    },
+    {
+      "id": "sm-009",
+      "name": "Provisions",
+      "description": "Quand vous allez dans un établissement et achetez des provisions, de la nourriture, des outils, une armure et d'autres objets courants, marquez-le sur votre carte ou dans vos notes. Les Provisions sont un enregistrement de l'armure, des armes et du ravitaillement que vous transportez à l'aventure."
+    },
+    {
+      "id": "sm-010",
+      "name": "Se Rétablir",
+      "description": "Quand vous ne faites rien d'autre que vous reposer, récupérez jusqu'à la moitié de vos PV max. Si vous avez accès à une grande bibliothèque ou à une puissante magie de guérison à votre disposition, récupérez tous vos PV à la place."
+    },
+    {
+      "id": "sm-011",
+      "name": "Recruter",
+      "description": "Quand vous vous employez à recruter des relayeurs professionnels, qu'ils soient mercenaires, sages ou artisans, effectuez avec eux deux lancers de Partager des Faveurs. Le premier établit leur aide. Le second établit ce qu'ils vous demandent en retour. Payez-les en tant que PNJs, en leur donnant une part du trésor ou 1d4 pièces par session."
+    },
+    {
+      "id": "sm-012",
+      "name": "Mandats Exceptionnels",
+      "description": "Quand vous voyagez dans un établissement englobé par votre passé, si vous ne rencontrerez pas de problème avec d'anciens ennemis, d'anciens amants, ou la loi, marquez Exp. Vous pouvez dépenser 50 pièces pour tout éliminer, au moins pour un moment."
+    },
+    {
+      "id": "sm-013",
+      "name": "Renforcer",
+      "description": "Quand vous aidez quelqu'un qui fait face à un danger, lancez+CON. Sur un 10+, il prend +1 à son prochain lancer contre ce danger. Sur 7–9, il prend +1 mais vous faites aussi face au danger d'une certaine manière. Sur un raté, le danger se tourne vers vous."
+    }
+  ]
+}

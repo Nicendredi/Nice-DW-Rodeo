@@ -1,0 +1,230 @@
+openapi: 3.0.3
+info:
+  title: Dungeon World Character Sheet
+  version: 1.0.0
+  description: Contract for character persistence and localized reference data.
+servers:
+  - url: /
+paths:
+  /api/character:
+    get:
+      summary: Load the single character record
+      responses:
+        "200":
+          description: Character record
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Character"
+    put:
+      summary: Replace the single character record
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Character"
+      responses:
+        "200":
+          description: Character record saved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Character"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationError"
+  /api/settings:
+    get:
+      summary: Load application settings
+      responses:
+        "200":
+          description: Settings payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Settings"
+    put:
+      summary: Replace application settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Settings"
+      responses:
+        "200":
+          description: Settings saved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Settings"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationError"
+  /api/i18n/{lang}/labels:
+    get:
+      summary: Load UI label translations
+      parameters:
+        - $ref: "#/components/parameters/Lang"
+      responses:
+        "200":
+          description: Label map
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LabelMap"
+  /api/i18n/{lang}/moves/basic:
+    get:
+      summary: Load basic moves
+      parameters:
+        - $ref: "#/components/parameters/Lang"
+      responses:
+        "200":
+          description: Basic move list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MoveList"
+  /api/i18n/{lang}/moves/special:
+    get:
+      summary: Load special moves
+      parameters:
+        - $ref: "#/components/parameters/Lang"
+      responses:
+        "200":
+          description: Special move list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MoveList"
+components:
+  parameters:
+    Lang:
+      name: lang
+      in: path
+      required: true
+      schema:
+        $ref: "#/components/schemas/LanguageCode"
+  schemas:
+    LanguageCode:
+      type: string
+      enum: [en, fr]
+    Character:
+      type: object
+      required:
+        - name
+        - class
+        - health
+        - damageDie
+        - attributes
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+        playerName:
+          type: string
+          maxLength: 100
+        campaign:
+          type: string
+          maxLength: 100
+        class:
+          type: string
+          enum: [Fighter, Wizard, Thief, Cleric, Ranger, Paladin, Bard, Druid]
+        health:
+          type: object
+          required: [current, max]
+          properties:
+            current:
+              type: integer
+              minimum: 0
+              description: Must be less than or equal to max.
+            max:
+              type: integer
+              minimum: 1
+        damageDie:
+          type: string
+          enum: [d4, d6, d8, d10, d12]
+        attributes:
+          type: object
+          required: [strength, dexterity, constitution, intelligence, wisdom, charisma]
+          properties:
+            strength:
+              type: integer
+              minimum: 1
+              maximum: 18
+            dexterity:
+              type: integer
+              minimum: 1
+              maximum: 18
+            constitution:
+              type: integer
+              minimum: 1
+              maximum: 18
+            intelligence:
+              type: integer
+              minimum: 1
+              maximum: 18
+            wisdom:
+              type: integer
+              minimum: 1
+              maximum: 18
+            charisma:
+              type: integer
+              minimum: 1
+              maximum: 18
+        notes:
+          type: string
+    Settings:
+      type: object
+      required: [language]
+      properties:
+        language:
+          $ref: "#/components/schemas/LanguageCode"
+    Move:
+      type: object
+      required: [id, name, description]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+    MoveList:
+      type: object
+      required: [moves]
+      properties:
+        moves:
+          type: array
+          items:
+            $ref: "#/components/schemas/Move"
+    LabelMap:
+      type: object
+      additionalProperties:
+        type: string
+    ValidationError:
+      type: object
+      required: [message, fields]
+      properties:
+        message:
+          type: string
+        fields:
+          type: array
+          items:
+            type: object
+            required: [field, reason]
+            properties:
+              field:
+                type: string
+              reason:
+                type: string

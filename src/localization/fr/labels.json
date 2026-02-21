@@ -1,0 +1,73 @@
+{
+  "characterInfo": {
+    "title": "Feuille de Personnage Dungeon World",
+    "characterName": "Nom du Personnage",
+    "characterNamePlaceholder": "Entrez le nom du personnage",
+    "playerName": "Nom du Joueur",
+    "playerNamePlaceholder": "Entrez votre nom",
+    "campaign": "Campagne / Monde",
+    "campaignPlaceholder": "Entrez le nom de la campagne",
+    "class": "Classe",
+    "classPlaceholder": "Sélectionnez une classe",
+    "health": "Santé",
+    "currentHealth": "Actuellement",
+    "maxHealth": "Maximum",
+    "damageDie": "Dé de Dégâts",
+    "damageDiePlaceholder": "Sélectionnez un dé"
+  },
+  "attributes": {
+    "title": "Attributs",
+    "strength": "FOR",
+    "dexterity": "DEX",
+    "constitution": "CON",
+    "intelligence": "INT",
+    "wisdom": "SAG",
+    "charisma": "CHA",
+    "modifier": "mod",
+    "modifierTooltip": "Modificateur vérifie le score d'attribut dans la table du SRD de DW"
+  },
+  "basicMoves": {
+    "title": "Actions de Base",
+    "selectMove": "Sélectionner cette action",
+    "unselectMove": "Désélectionner cette action"
+  },
+  "specialMoves": {
+    "title": "Actions Spéciales / Capacités",
+    "selectAbility": "Sélectionner cette capacité",
+    "unselectAbility": "Désélectionner cette capacité"
+  },
+  "notes": {
+    "title": "Notes et Inventaire",
+    "placeholder": "Écrivez des notes, l'inventaire ou les détails de l'histoire ici..."
+  },
+  "buttons": {
+    "print": "Imprimer",
+    "save": "Enregistrer",
+    "reset": "Réinitialiser les Valeurs par Défaut",
+    "language": "Langue"
+  },
+  "validationErrors": {
+    "nameRequired": "Le nom du personnage est requis",
+    "playerNameRequired": "Le nom du joueur est requis",
+    "classRequired": "La classe est requise",
+    "healthInvalid": "La santé actuelle ne peut pas dépasser la santé maximale",
+    "attributeInvalid": "L'attribut doit être entre 1 et 20"
+  },
+  "classOptions": {
+    "Fighter": "Guerrier",
+    "Wizard": "Magicien",
+    "Thief": "Voleur",
+    "Cleric": "Prêtre",
+    "Ranger": "Rôdeur",
+    "Paladin": "Paladin",
+    "Bard": "Barde",
+    "Druid": "Druide"
+  },
+  "damageDieOptions": {
+    "d4": "d4",
+    "d6": "d6",
+    "d8": "d8",
+    "d10": "d10",
+    "d12": "d12"
+  }
+}
