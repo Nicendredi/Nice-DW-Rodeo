@@ -3,6 +3,8 @@ import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { CharacterForm } from '../../src/components/CharacterForm.tsx';
 import { CharacterStoreProvider } from '../../src/hooks/useCharacterStore.tsx';
+import { I18nextProvider } from 'react-i18next';
+import i18n from '../../src/localization/i18n.ts';
 import { createElement } from 'react';
 
 /**
@@ -23,13 +25,21 @@ import { createElement } from 'react';
  * implemented in CharacterForm. Implementation will be added to make tests pass (GREEN).
  */
 
-// Wrapper for CharacterStoreProvider
+// Wrapper for CharacterStoreProvider + i18n
 const wrapper = ({ children }: { children: React.ReactNode }) =>
-  createElement(CharacterStoreProvider, null, children);
+  createElement(
+    I18nextProvider,
+    { i18n },
+    createElement(CharacterStoreProvider, null, children)
+  );
 
 describe('ValidationErrorDisplay', () => {
   beforeEach(() => {
     localStorage.clear();
+    // Reset i18n to English before each test
+    if (i18n.language !== 'en') {
+      i18n.changeLanguage('en');
+    }
   });
 
   afterEach(() => {
@@ -158,12 +168,12 @@ describe('ValidationErrorDisplay', () => {
     const user = userEvent.setup();
     render(<CharacterForm />, { wrapper });
 
-    // Switch to French
-    const languageSelector = screen.getByRole('combobox', { name: /language/i });
+    // Switch to French (use alternation to match both "Language" and "Langue")
+    const languageSelector = screen.getByRole('combobox', { name: /langue|language/i });
     await user.selectOptions(languageSelector, 'fr');
 
-    // Trigger error in French
-    const nameInput = screen.getByRole('textbox', { name: /nom du personnage/i });
+    // Trigger error in French (use alternation to match both "Character Name" and "Nom du personnage")
+    const nameInput = screen.getByRole('textbox', { name: /nom du personnage|character name/i });
     await user.click(nameInput);
     await user.tab();
 
@@ -179,13 +189,13 @@ describe('ValidationErrorDisplay', () => {
     const user = userEvent.setup();
     render(<CharacterForm />, { wrapper });
 
-    const languageSelector = screen.getByRole('combobox', { name: /language/i });
+    const languageSelector = screen.getByRole('combobox', { name: /langue|language/i });
 
     // Switch to French
     await user.selectOptions(languageSelector, 'fr');
 
-    // Trigger error
-    const nameInput = screen.getByRole('textbox', { name: /nom du personnage/i });
+    // Trigger error (use alternation to match both "Character Name" and "Nom du personnage")
+    const nameInput = screen.getByRole('textbox', { name: /nom du personnage|character name/i });
     await user.click(nameInput);
     await user.tab();
 

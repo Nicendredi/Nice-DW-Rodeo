@@ -122,6 +122,7 @@ export function CharacterForm() {
                 value={character.healthCurrent}
                 onChange={handleChange('healthCurrent')}
                 min={0}
+                max={character.healthMax}
               />
               <span> / </span>
               <input
@@ -130,7 +131,7 @@ export function CharacterForm() {
                 aria-label={`${t('characterInfo.health')} ${t('characterInfo.maxHealth')}`}
                 value={character.healthMax}
                 onChange={handleChange('healthMax')}
-                min={0}
+                min={1}
               />
             </div>
           </div>
