@@ -18,6 +18,13 @@ export function CharacterForm() {
   const [currentLang, setCurrentLang] = useState(i18n.language);
   // Store i18n keys instead of translated text so they update when language changes
   const [errorKeys, setErrorKeys] = useState<{ [key: string]: string }>({});
+  // Local form state for immediate UI feedback (updates on change)
+  const [formData, setFormData] = useState(() => ({ ...character }));
+
+  // Sync local form state when store character changes (e.g., on page load)
+  React.useEffect(() => {
+    setFormData({ ...character });
+  }, [character]);
 
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newLang = e.target.value;
@@ -26,10 +33,14 @@ export function CharacterForm() {
     localStorage.setItem('dw-language', newLang);
   };
 
+  /**
+   * Update local form state on change (immediate visual feedback)
+   * Does NOT save to store yet - that happens on blur
+   */
   const handleChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const value = e.target.type === 'number' ? Number(e.target.value) : e.target.value;
-    updateCharacter({
-      ...character,
+    setFormData({
+      ...formData,
       [field]: value,
     });
     // Clear error for this field when user starts typing
@@ -37,9 +48,20 @@ export function CharacterForm() {
       setErrorKeys({ ...errorKeys, [field]: '' });
     }
   };
+
+  /**
+   * Save field to store on blur (persists to localStorage)
+   * Generic blur handler for any field
+   */
+  const handleFieldBlur = (field: string) => () => {
+    updateCharacter({
+      ...character,
+      [field]: formData[field as keyof typeof formData],
+    });
+  };
   
   const handleNameBlur = () => {
-    const validation = validateCharacterName(character.name);
+    const validation = validateCharacterName(formData.name);
     if (!validation.valid) {
       // Extract i18n key from error message (e.g., "i18n:validationErrors.nameRequired" -> "validationErrors.nameRequired")
       const i18nKey = validation.error?.replace('i18n:', '') || 'validationErrors.nameRequired';
@@ -48,6 +70,8 @@ export function CharacterForm() {
       // Clear error if now valid
       setErrorKeys({ ...errorKeys, name: '' });
     }
+    // Save to store after validation
+    handleFieldBlur('name')();
   };
 
   /**
@@ -101,7 +125,7 @@ export function CharacterForm() {
               aria-label={t('characterInfo.characterName')}
               aria-describedby={errorKeys.name ? 'error-name' : undefined}
               placeholder={t('characterInfo.characterNamePlaceholder')}
-              value={character.name}
+              value={formData.name}
               onChange={handleChange('name')}
               onBlur={handleNameBlur}
               maxLength={100}
@@ -116,8 +140,9 @@ export function CharacterForm() {
               id="player-name"
               aria-label={t('characterInfo.playerName')}
               placeholder={t('characterInfo.playerNamePlaceholder')}
-              value={character.player}
+              value={formData.player}
               onChange={handleChange('player')}
+              onBlur={handleFieldBlur('player')}
               maxLength={100}
             />
           </div>
@@ -129,8 +154,9 @@ export function CharacterForm() {
               id="campaign"
               aria-label={t('characterInfo.campaign')}
               placeholder={t('characterInfo.campaignPlaceholder')}
-              value={character.campaign}
+              value={formData.campaign}
               onChange={handleChange('campaign')}
+              onBlur={handleFieldBlur('campaign')}
               maxLength={100}
             />
           </div>
@@ -142,8 +168,9 @@ export function CharacterForm() {
             <select
               id="class"
               aria-label={t('characterInfo.class')}
-              value={character.class}
+              value={formData.class}
               onChange={handleChange('class')}
+              onBlur={handleFieldBlur('class')}
             >
               <option value="Fighter">{t('classOptions.Fighter')}</option>
               <option value="Wizard">{t('classOptions.Wizard')}</option>
@@ -163,18 +190,20 @@ export function CharacterForm() {
                 type="number"
                 id="health-current"
                 aria-label={`${t('characterInfo.health')} ${t('characterInfo.currentHealth')}`}
-                value={character.healthCurrent}
+                value={formData.healthCurrent}
                 onChange={handleChange('healthCurrent')}
+                onBlur={handleFieldBlur('healthCurrent')}
                 min={0}
-                max={character.healthMax}
+                max={formData.healthMax}
               />
               <span> / </span>
               <input
                 type="number"
                 id="health-max"
                 aria-label={`${t('characterInfo.health')} ${t('characterInfo.maxHealth')}`}
-                value={character.healthMax}
+                value={formData.healthMax}
                 onChange={handleChange('healthMax')}
+                onBlur={handleFieldBlur('healthMax')}
                 min={1}
               />
             </div>
@@ -185,8 +214,9 @@ export function CharacterForm() {
             <select
               id="damage-die"
               aria-label={t('characterInfo.damageDie')}
-              value={character.damageDie}
+              value={formData.damageDie}
               onChange={handleChange('damageDie')}
+              onBlur={handleFieldBlur('damageDie')}
             >
               <option value="d4">{t('damageDieOptions.d4')}</option>
               <option value="d6">{t('damageDieOptions.d6')}</option>
