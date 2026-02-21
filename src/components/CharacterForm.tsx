@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCharacterStore } from '../hooks/useCharacterStore.tsx';
+import { validateCharacterName } from '../utils/validation.ts';
 
 /**
  * CharacterForm Component
@@ -9,11 +10,14 @@ import { useCharacterStore } from '../hooks/useCharacterStore.tsx';
  * Displays form fields for character name, player, campaign, class, health, damage die
  * Includes language selector in header
  * Fully accessible with labels, tab order, focus indicators
+ * Includes validation error display with ARIA attributes
  */
 export function CharacterForm() {
   const { character, updateCharacter } = useCharacterStore();
   const { t, i18n } = useTranslation();
   const [currentLang, setCurrentLang] = useState(i18n.language);
+  // Store i18n keys instead of translated text so they update when language changes
+  const [errorKeys, setErrorKeys] = useState<{ [key: string]: string }>({});
 
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newLang = e.target.value;
@@ -28,6 +32,43 @@ export function CharacterForm() {
       ...character,
       [field]: value,
     });
+    // Clear error for this field when user starts typing
+    if (errorKeys[field]) {
+      setErrorKeys({ ...errorKeys, [field]: '' });
+    }
+  };
+  
+  const handleNameBlur = () => {
+    const validation = validateCharacterName(character.name);
+    if (!validation.valid) {
+      // Extract i18n key from error message (e.g., "i18n:validationErrors.nameRequired" -> "validationErrors.nameRequired")
+      const i18nKey = validation.error?.replace('i18n:', '') || 'validationErrors.nameRequired';
+      setErrorKeys({ ...errorKeys, name: i18nKey });
+    } else if (errorKeys.name) {
+      // Clear error if now valid
+      setErrorKeys({ ...errorKeys, name: '' });
+    }
+  };
+
+  /**
+   * Renders error message with proper ARIA attributes
+   * @param fieldName - Field key for error tracking
+   * @param errorKey - i18n key for error message (translates dynamically)
+   * @returns JSX element or null
+   */
+  const renderError = (fieldName: string, errorKey: string | undefined) => {
+    if (!errorKey) return null;
+    
+    return (
+      <div
+        id={`error-${fieldName}`}
+        role="alert"
+        aria-live="polite"
+        style={{ color: '#d32f2f', fontSize: '0.875rem', marginTop: '4px' }}
+      >
+        {t(errorKey)}
+      </div>
+    );
   };
 
   return (
@@ -58,11 +99,14 @@ export function CharacterForm() {
               type="text"
               id="character-name"
               aria-label={t('characterInfo.characterName')}
+              aria-describedby={errorKeys.name ? 'error-name' : undefined}
               placeholder={t('characterInfo.characterNamePlaceholder')}
               value={character.name}
               onChange={handleChange('name')}
+              onBlur={handleNameBlur}
               maxLength={100}
             />
+            {renderError('name', errorKeys.name)}
           </div>
 
           <div className="form-field">
