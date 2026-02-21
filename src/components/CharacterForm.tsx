@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useCharacterStore } from '../hooks/useCharacterStore.tsx';
+import { useCharacterStore, type Character } from '../hooks/useCharacterStore.tsx';
 import { validateCharacterName, validateHealth } from '../utils/validation.ts';
 
 /**
@@ -60,6 +60,8 @@ export function CharacterForm() {
    * Saves entire form to localStorage (excluding invalid fields)
    */
   const handleFieldBlur = (field: string) => () => {
+    console.log(`Field blurred: ${field}. Validating and saving form...`);
+
     // Start with current character data
     const dataToSave: Character = { ...character };
 
